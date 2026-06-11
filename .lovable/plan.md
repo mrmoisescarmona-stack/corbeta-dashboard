@@ -1,27 +1,31 @@
 ## Goal
 
-Refine the right-side brand panel on `/login` with a more polished abstract visual, keeping the rest of the page intact.
+Refine the brand-panel slider on `/login` so the photos read more clearly, slides advance faster, and transitions feel more polished.
 
 ## Changes (scoped to `src/routes/login.tsx` + `src/styles.css`)
 
-**Abstract element in the blue panel:**
+### 1. Increase image visibility
 
-- Add a layered abstract composition in the upper/center area of the right panel:
-  - A large soft orb (radial gradient using `--success` teal) bleeding from top-right.
-  - A second smaller orb (warm `--warning` orange) bleeding from bottom-left for color tension.
-  - A subtle dotted/grid SVG overlay at ~8% opacity for texture (pure inline SVG, no asset).
-  - A thin animated conic-gradient ring (CSS only, slow rotate) behind the headline as a "hero" focal element — evokes a shield/loop motif fitting an approvals portal.
-  - Soft noise via `bg-[radial-gradient]` layered with `mix-blend-overlay` for premium depth.
+- Raise photo opacity from `0.35` → `0.65`.
+- Lighten the blue tint overlay so the image shows through: drop from `linear-gradient(135deg, primary 70% → 55%)` to a softer `linear-gradient(160deg, primary 45% → primary 25%)` plus a bottom-anchored `linear-gradient(to top, primary 70%, transparent 60%)` so the text area at the bottom stays legible while the upper image area is bright.
+- Add a subtle `saturate(1.1) contrast(1.05)` filter on the image layer for punch.
 
-**Refinements:**
+### 2. Faster cadence
 
-- Tighten typography: slightly larger headline (`text-[44px] leading-[1.05]`), add a thin uppercase eyebrow above it.
-- Replace the 3 stat cards with a single elegant glass card showing one hero metric ("98% SLA cumplido") + 2 tiny inline stats — cleaner, less competing with the abstract art.
-- Add a subtle `motion-safe:animate-[float_8s_ease-in-out_infinite]` on one orb for life.
+- `SLIDE_DURATION`: `12000ms` → `7000ms` (full cycle ~21s across 3 slides).
 
-**Out of scope:** left form column, auth logic, colors tokens, routing.
+### 3. Better animation
 
-## Technical
+Replace the current crossfade + translateY with a more cinematic transition:
 
-- New `@keyframes float` and `@keyframes spin-slow` in `src/styles.css`.
-- All visuals are CSS/SVG inline — no new image assets, no new dependencies.
+- **Image layer**: crossfade (1200ms ease) + slow Ken Burns zoom on the active slide — `transform: scale(1) → scale(1.08)` over the slide's full 7s lifetime via a new `@keyframes kenburns`. Inactive slides reset to `scale(1)`.
+- **Text layer**: replace single-block fade with staggered child reveal — eyebrow, headline, body, stat card each animate in with `translateY(14px) → 0` + opacity `0 → 1`, delays `0 / 80 / 160 / 240ms`, duration 600ms, `cubic-bezier(0.22, 1, 0.36, 1)`. Exiting slide fades out faster (300ms) with a small `translateY(-6px)`.
+- **Progress bar**: keep linear fill, but soften height to `1.5px` and add a faint glow (`box-shadow: 0 0 8px white/40`) on the active fill so it reads as "live".
+- Respect `prefers-reduced-motion` — disable ken-burns and stagger, keep only opacity crossfade.
+
+### 4. Technical
+
+- Add keyframes in `src/styles.css`: `kenburns`, `slide-reveal` (the staggered text in), and extend the existing reduced-motion block.
+- In `login.tsx`, wrap each text element with a `slide-reveal` animation keyed on `index` so it re-runs on slide change, with inline `animationDelay`.
+
+**Out of scope:** form column, copy, slide content, colors tokens.
