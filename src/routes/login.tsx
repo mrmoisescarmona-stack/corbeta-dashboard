@@ -148,32 +148,94 @@ function LoginPage() {
 
       {/* Right: brand panel */}
       <aside className="hidden lg:flex flex-1 relative overflow-hidden bg-primary text-primary-foreground">
+        {/* Abstract layers */}
         <div
-          className="absolute inset-0 opacity-30"
+          className="absolute -top-32 -right-32 h-[520px] w-[520px] rounded-full blur-3xl opacity-60 animate-float"
           style={{
             background:
-              "radial-gradient(circle at 20% 20%, color-mix(in oklab, var(--success) 60%, transparent), transparent 50%), radial-gradient(circle at 80% 80%, color-mix(in oklab, var(--warning) 50%, transparent), transparent 55%)",
+              "radial-gradient(circle, color-mix(in oklab, var(--success) 80%, transparent), transparent 65%)",
           }}
         />
+        <div
+          className="absolute -bottom-40 -left-24 h-[440px] w-[440px] rounded-full blur-3xl opacity-50"
+          style={{
+            background:
+              "radial-gradient(circle, color-mix(in oklab, var(--warning) 70%, transparent), transparent 65%)",
+          }}
+        />
+
+        {/* Dotted grid texture */}
+        <svg
+          className="absolute inset-0 h-full w-full opacity-[0.08]"
+          xmlns="http://www.w3.org/2000/svg"
+          aria-hidden
+        >
+          <defs>
+            <pattern id="dotgrid" width="22" height="22" patternUnits="userSpaceOnUse">
+              <circle cx="1" cy="1" r="1" fill="currentColor" />
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#dotgrid)" />
+        </svg>
+
+        {/* Slow rotating conic ring */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-[58%] h-[460px] w-[460px] pointer-events-none">
+          <div
+            className="absolute inset-0 rounded-full animate-spin-slow opacity-40"
+            style={{
+              background:
+                "conic-gradient(from 0deg, transparent 0deg, color-mix(in oklab, var(--success) 70%, transparent) 90deg, transparent 180deg, color-mix(in oklab, var(--warning) 60%, transparent) 270deg, transparent 360deg)",
+              mask: "radial-gradient(circle, transparent 58%, black 59%, black 62%, transparent 63%)",
+              WebkitMask:
+                "radial-gradient(circle, transparent 58%, black 59%, black 62%, transparent 63%)",
+            }}
+          />
+          <div
+            className="absolute inset-12 rounded-full border border-white/10"
+            style={{
+              boxShadow:
+                "inset 0 0 80px color-mix(in oklab, var(--success) 30%, transparent)",
+            }}
+          />
+        </div>
+
         <div className="relative z-10 flex flex-col justify-between p-12 w-full">
           <div className="flex items-center gap-2 text-xs font-medium uppercase tracking-widest opacity-80">
-            <span className="h-1.5 w-1.5 rounded-full bg-success" />
-            Plataforma interna
+            <span className="h-1.5 w-1.5 rounded-full bg-success animate-pulse" />
+            Plataforma interna · v2.4
           </div>
 
-          <div className="space-y-6 max-w-md">
-            <h2 className="text-4xl font-semibold leading-tight tracking-tight">
-              Aprobaciones más rápidas, decisiones más claras.
+          <div className="space-y-8 max-w-md">
+            <p className="text-[11px] uppercase tracking-[0.25em] opacity-70">
+              Portal de aprobaciones
+            </p>
+            <h2 className="text-[44px] font-semibold leading-[1.05] tracking-tight">
+              Aprobaciones más rápidas,{" "}
+              <span className="italic font-light opacity-80">decisiones</span> más claras.
             </h2>
             <p className="text-base opacity-80 leading-relaxed">
               Centraliza solicitudes, da seguimiento a proveedores y mantén tus
               operaciones en movimiento desde un solo lugar.
             </p>
 
-            <div className="grid grid-cols-3 gap-4 pt-4">
-              <Stat value="98%" label="SLA cumplido" />
-              <Stat value="12.4h" label="Tiempo interno" />
-              <Stat value="240+" label="Solicitudes/sem" />
+            <div className="rounded-2xl bg-white/10 backdrop-blur-md border border-white/15 p-5 flex items-center gap-5">
+              <div>
+                <p className="text-3xl font-semibold leading-none">98%</p>
+                <p className="text-[11px] opacity-70 mt-2 uppercase tracking-wider">
+                  SLA cumplido
+                </p>
+              </div>
+              <div className="h-10 w-px bg-white/15" />
+              <div className="flex-1 grid grid-cols-2 gap-3 text-xs">
+                <div>
+                  <p className="font-medium">12.4h</p>
+                  <p className="opacity-60">Tiempo interno</p>
+                </div>
+                <div>
+                  <p className="font-medium">240+</p>
+                  <p className="opacity-60">Solicitudes/sem</p>
+                </div>
+              </div>
             </div>
           </div>
 
