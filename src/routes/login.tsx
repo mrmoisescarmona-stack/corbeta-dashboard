@@ -1,7 +1,8 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { Eye, EyeOff, Lock, Mail, ShieldCheck } from "lucide-react";
-import logo from "@/assets/logo_corbeta.png";
+import logoAsset from "@/assets/logo_corbeta.png.asset.json";
+const logo = logoAsset.url;
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
