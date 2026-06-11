@@ -1,7 +1,10 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Eye, EyeOff, Lock, Mail, ShieldCheck } from "lucide-react";
 import logoAsset from "@/assets/logo_corbeta.png.asset.json";
+import slideCartagena from "@/assets/slide-cartagena.jpg.asset.json";
+import slideFlag from "@/assets/slide-flag.jpg.asset.json";
+import slidePanoramic from "@/assets/slide-panoramic.jpg.asset.json";
 const logo = logoAsset.url;
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -9,6 +12,59 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+
+const SLIDE_DURATION = 12000;
+
+const slides = [
+  {
+    image: slideCartagena.url,
+    eyebrow: "Aprobaciones de descuentos",
+    title: (
+      <>
+        Descuentos comerciales,{" "}
+        <span className="italic font-light opacity-80">aprobados</span> en horas.
+      </>
+    ),
+    body: "Solicita, justifica y autoriza descuentos especiales con trazabilidad completa por cliente y región.",
+    stat: { value: "98%", label: "SLA cumplido" },
+    micro: [
+      { value: "12.4h", label: "Tiempo interno" },
+      { value: "240+", label: "Solicitudes/sem" },
+    ],
+  },
+  {
+    image: slideFlag.url,
+    eyebrow: "Operación nacional",
+    title: (
+      <>
+        Cobertura en todo{" "}
+        <span className="italic font-light opacity-80">Colombia</span>, en un flujo.
+      </>
+    ),
+    body: "Centraliza aprobaciones de sucursales, distribuidores y aliados desde la costa hasta el interior del país.",
+    stat: { value: "32", label: "Departamentos activos" },
+    micro: [
+      { value: "1.8k", label: "Usuarios activos" },
+      { value: "24/7", label: "Disponibilidad" },
+    ],
+  },
+  {
+    image: slidePanoramic.url,
+    eyebrow: "Proveedores y compras",
+    title: (
+      <>
+        Proveedores nuevos{" "}
+        <span className="italic font-light opacity-80">validados</span> sin fricción.
+      </>
+    ),
+    body: "Onboarding documental, comité y aprobaciones financieras conectadas en un mismo expediente digital.",
+    stat: { value: "3.2d", label: "Onboarding promedio" },
+    micro: [
+      { value: "560+", label: "Proveedores" },
+      { value: "100%", label: "Trazabilidad" },
+    ],
+  },
+];
 
 export const Route = createFileRoute("/login")({
   head: () => ({
