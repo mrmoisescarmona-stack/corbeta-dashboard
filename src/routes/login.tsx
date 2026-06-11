@@ -221,28 +221,47 @@ function BrandSlider() {
 
   return (
     <aside className="hidden lg:flex flex-1 relative overflow-hidden bg-primary text-primary-foreground">
-      {/* Background images (crossfade) */}
+      {/* Background images (crossfade + ken burns) */}
       {slides.map((s, i) => (
         <div
           key={i}
-          className="absolute inset-0 bg-cover bg-center transition-opacity duration-[1500ms] ease-in-out"
-          style={{
-            backgroundImage: `url(${s.image})`,
-            opacity: i === index ? 0.35 : 0,
-          }}
+          className="absolute inset-0 overflow-hidden transition-opacity duration-[1200ms] ease-out"
+          style={{ opacity: i === index ? 0.65 : 0 }}
           aria-hidden
-        />
+        >
+          <div
+            key={`img-${i}-${i === index ? index : "idle"}`}
+            className="absolute inset-0 bg-cover bg-center"
+            style={{
+              backgroundImage: `url(${s.image})`,
+              filter: "saturate(1.1) contrast(1.05)",
+              animation:
+                i === index
+                  ? `kenburns ${SLIDE_DURATION + 1500}ms ease-out forwards`
+                  : "none",
+            }}
+          />
+        </div>
       ))}
 
-      {/* Primary blue tint overlay to keep brand color dominant */}
+      {/* Blue tints — softer top, stronger bottom for text legibility */}
       <div
         className="absolute inset-0"
         style={{
           background:
-            "linear-gradient(135deg, color-mix(in oklab, var(--primary) 70%, transparent), color-mix(in oklab, var(--primary) 55%, transparent))",
+            "linear-gradient(160deg, color-mix(in oklab, var(--primary) 45%, transparent), color-mix(in oklab, var(--primary) 25%, transparent))",
         }}
         aria-hidden
       />
+      <div
+        className="absolute inset-0"
+        style={{
+          background:
+            "linear-gradient(to top, color-mix(in oklab, var(--primary) 75%, transparent) 0%, color-mix(in oklab, var(--primary) 40%, transparent) 35%, transparent 65%)",
+        }}
+        aria-hidden
+      />
+
 
       {/* Dotted grid texture */}
       <svg
