@@ -13,7 +13,8 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
-const SLIDE_DURATION = 12000;
+const SLIDE_DURATION = 7000;
+const REVEAL_FIELDS = ["eyebrow", "title", "body", "stat"] as const;
 
 const slides = [
   {
