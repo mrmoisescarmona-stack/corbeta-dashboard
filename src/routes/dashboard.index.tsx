@@ -159,7 +159,7 @@ function DashboardOverview() {
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
           <h2 className="text-2xl md:text-3xl font-semibold tracking-tight">
-            ¡Bienvenida, Ana Carolina! <span className="inline-block">👋</span>
+            ¡Bienvenido, Moises Carmona! <span className="inline-block">👋</span>
           </h2>
           <p className="mt-1 text-sm text-muted-foreground">
             Aquí tienes el resumen de tus solicitudes y aprobaciones.

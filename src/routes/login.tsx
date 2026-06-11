@@ -128,7 +128,7 @@ function LoginPage() {
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="nombre@corbeta.com"
+                  placeholder="nombre@corbeta.com.co"
                   className="pl-9 h-11"
                   autoComplete="email"
                 />
@@ -196,8 +196,8 @@ function LoginPage() {
 
           <p className="mt-10 text-xs text-muted-foreground text-center">
             ¿Problemas para acceder? Contacta a{" "}
-            <a href="mailto:soporte@corbeta.com" className="text-primary hover:underline">
-              soporte@corbeta.com
+            <a href="mailto:soporte@corbeta.com.co" className="text-primary hover:underline">
+              soporte@corbeta.com.co
             </a>
           </p>
         </div>

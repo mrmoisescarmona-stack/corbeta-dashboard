@@ -99,10 +99,10 @@ function DashboardLayout() {
               </button>
               <div className="flex items-center gap-3 rounded-lg border border-border bg-card pl-1 pr-3 py-1">
                 <div className="flex h-8 w-8 items-center justify-center rounded-md bg-primary text-primary-foreground text-xs font-semibold">
-                  AC
+                  MC
                 </div>
                 <div className="hidden sm:block leading-tight">
-                  <div className="text-xs font-semibold">Ana Carolina</div>
+                  <div className="text-xs font-semibold">Moises Carmona</div>
                   <div className="text-[11px] text-muted-foreground">
                     Aprobador Interno
                   </div>

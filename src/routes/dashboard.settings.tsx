@@ -15,8 +15,8 @@ const sections = [
     title: "Perfil",
     description: "Información personal asociada a tu cuenta.",
     fields: [
-      ["Nombre", "Ana Carolina"],
-      ["Correo", "ana.carolina@corbeta.com"],
+      ["Nombre", "Moises Carmona"],
+      ["Correo", "kpaz@corbeta.com.co"],
       ["Cargo", "Aprobador Interno"],
       ["Zona", "Centro"],
     ],
