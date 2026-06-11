@@ -13,7 +13,8 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
-const SLIDE_DURATION = 12000;
+const SLIDE_DURATION = 7000;
+const REVEAL_FIELDS = ["eyebrow", "title", "body", "stat"] as const;
 
 const slides = [
   {
@@ -220,28 +221,47 @@ function BrandSlider() {
 
   return (
     <aside className="hidden lg:flex flex-1 relative overflow-hidden bg-primary text-primary-foreground">
-      {/* Background images (crossfade) */}
+      {/* Background images (crossfade + ken burns) */}
       {slides.map((s, i) => (
         <div
           key={i}
-          className="absolute inset-0 bg-cover bg-center transition-opacity duration-[1500ms] ease-in-out"
-          style={{
-            backgroundImage: `url(${s.image})`,
-            opacity: i === index ? 0.35 : 0,
-          }}
+          className="absolute inset-0 overflow-hidden transition-opacity duration-[1200ms] ease-out"
+          style={{ opacity: i === index ? 0.65 : 0 }}
           aria-hidden
-        />
+        >
+          <div
+            key={`img-${i}-${i === index ? index : "idle"}`}
+            className="absolute inset-0 bg-cover bg-center"
+            style={{
+              backgroundImage: `url(${s.image})`,
+              filter: "saturate(1.1) contrast(1.05)",
+              animation:
+                i === index
+                  ? `kenburns ${SLIDE_DURATION + 1500}ms ease-out forwards`
+                  : "none",
+            }}
+          />
+        </div>
       ))}
 
-      {/* Primary blue tint overlay to keep brand color dominant */}
+      {/* Blue tints — softer top, stronger bottom for text legibility */}
       <div
         className="absolute inset-0"
         style={{
           background:
-            "linear-gradient(135deg, color-mix(in oklab, var(--primary) 70%, transparent), color-mix(in oklab, var(--primary) 55%, transparent))",
+            "linear-gradient(160deg, color-mix(in oklab, var(--primary) 45%, transparent), color-mix(in oklab, var(--primary) 25%, transparent))",
         }}
         aria-hidden
       />
+      <div
+        className="absolute inset-0"
+        style={{
+          background:
+            "linear-gradient(to top, color-mix(in oklab, var(--primary) 75%, transparent) 0%, color-mix(in oklab, var(--primary) 40%, transparent) 35%, transparent 65%)",
+        }}
+        aria-hidden
+      />
+
 
       {/* Dotted grid texture */}
       <svg
@@ -264,44 +284,72 @@ function BrandSlider() {
         </div>
 
         <div className="relative max-w-md min-h-[380px]">
-          {slides.map((s, i) => (
-            <div
-              key={i}
-              className="absolute inset-0 space-y-7 transition-all duration-700 ease-out"
-              style={{
-                opacity: i === index ? 1 : 0,
-                transform: i === index ? "translateY(0)" : "translateY(8px)",
-                pointerEvents: i === index ? "auto" : "none",
-              }}
-              aria-hidden={i !== index}
-            >
-              <p className="text-[11px] uppercase tracking-[0.25em] opacity-70">
-                {s.eyebrow}
-              </p>
-              <h2 className="text-[44px] font-semibold leading-[1.05] tracking-tight">
-                {s.title}
-              </h2>
-              <p className="text-base opacity-80 leading-relaxed">{s.body}</p>
+          {slides.map((s, i) => {
+            const active = i === index;
+            const reveal = (order: number) =>
+              active
+                ? {
+                    animation: `slide-reveal 700ms cubic-bezier(0.22,1,0.36,1) both`,
+                    animationDelay: `${order * 90}ms`,
+                  }
+                : { opacity: 0, transform: "translateY(-6px)" };
+            return (
+              <div
+                key={i}
+                className="absolute inset-0 space-y-7"
+                style={{
+                  opacity: active ? 1 : 0,
+                  transition: active ? "none" : "opacity 300ms ease-out",
+                  pointerEvents: active ? "auto" : "none",
+                }}
+                aria-hidden={!active}
+              >
+                <p
+                  key={`eb-${i}-${index}`}
+                  className="text-[11px] uppercase tracking-[0.25em] opacity-70"
+                  style={reveal(0)}
+                >
+                  {s.eyebrow}
+                </p>
+                <h2
+                  key={`ti-${i}-${index}`}
+                  className="text-[44px] font-semibold leading-[1.05] tracking-tight"
+                  style={reveal(1)}
+                >
+                  {s.title}
+                </h2>
+                <p
+                  key={`bo-${i}-${index}`}
+                  className="text-base opacity-85 leading-relaxed"
+                  style={reveal(2)}
+                >
+                  {s.body}
+                </p>
 
-              <div className="rounded-2xl bg-white/10 backdrop-blur-md border border-white/15 p-5 flex items-center gap-5">
-                <div>
-                  <p className="text-3xl font-semibold leading-none">{s.stat.value}</p>
-                  <p className="text-[11px] opacity-70 mt-2 uppercase tracking-wider">
-                    {s.stat.label}
-                  </p>
-                </div>
-                <div className="h-10 w-px bg-white/15" />
-                <div className="flex-1 grid grid-cols-2 gap-3 text-xs">
-                  {s.micro.map((m) => (
-                    <div key={m.label}>
-                      <p className="font-medium">{m.value}</p>
-                      <p className="opacity-60">{m.label}</p>
-                    </div>
-                  ))}
+                <div
+                  key={`st-${i}-${index}`}
+                  className="rounded-2xl bg-white/10 backdrop-blur-md border border-white/15 p-5 flex items-center gap-5"
+                  style={reveal(3)}
+                >
+                  <div>
+                    <p className="text-3xl font-semibold leading-none">{s.stat.value}</p>
+                    <p className="text-[11px] opacity-70 mt-2 uppercase tracking-wider">
+                      {s.stat.label}
+                    </p>
+                  </div>
+                  <div className="h-10 w-px bg-white/15" />
+                  <div className="flex-1 grid grid-cols-2 gap-3 text-xs">
+                    {s.micro.map((m) => (
+                      <div key={m.label}>
+                        <p className="font-medium">{m.value}</p>
+                        <p className="opacity-60">{m.label}</p>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
 
         {/* Slider progress loaders */}
@@ -311,14 +359,16 @@ function BrandSlider() {
               <button
                 key={i}
                 onClick={() => setIndex(i)}
-                className="relative h-1 flex-1 max-w-[80px] rounded-full bg-white/15 overflow-hidden"
+                className="relative h-[2px] flex-1 max-w-[80px] rounded-full bg-white/15 overflow-hidden"
                 aria-label={`Ir al slide ${i + 1}`}
               >
                 <span
                   key={`${i}-${index}`}
-                  className="absolute inset-y-0 left-0 bg-white/85 rounded-full"
+                  className="absolute inset-y-0 left-0 bg-white rounded-full"
                   style={{
                     width: i < index ? "100%" : "0%",
+                    boxShadow:
+                      i === index ? "0 0 8px rgba(255,255,255,0.55)" : "none",
                     animation:
                       i === index
                         ? `slideProgress ${SLIDE_DURATION}ms linear forwards`

@@ -165,11 +165,25 @@
   to { width: 100%; }
 }
 
+@keyframes kenburns {
+  from { transform: scale(1.02) translate(0, 0); }
+  to   { transform: scale(1.12) translate(-1.5%, -1%); }
+}
+
+@keyframes slide-reveal {
+  from { opacity: 0; transform: translateY(14px); filter: blur(4px); }
+  to   { opacity: 1; transform: translateY(0);    filter: blur(0); }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .shimmer::after,
   .animate-float,
   .animate-spin-slow {
-    animation: none;
+    animation: none !important;
+  }
+  [style*="kenburns"],
+  [style*="slide-reveal"] {
+    animation: none !important;
   }
 }
 
