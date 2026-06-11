@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { FileText, Search, Filter, ChevronDown, Plus, Eye, MoreHorizontal } from "lucide-react";
 import { RequestsSkeleton } from "@/components/dashboard/skeleton";
 import { useFakeLoading } from "@/hooks/use-fake-loading";
@@ -102,7 +102,7 @@ function RequestsPage() {
                   <td className="px-3 py-3.5 text-right font-medium tabular-nums">{r.value}</td>
                   <td className="px-5 py-3.5">
                     <div className="flex justify-end gap-1">
-                      <button className="rounded-md p-1.5 hover:bg-accent"><Eye className="h-4 w-4" /></button>
+                      <Link to="/dashboard/requests/$id" params={{ id: r.id }} className="rounded-md p-1.5 hover:bg-accent" aria-label="Ver detalle"><Eye className="h-4 w-4" /></Link>
                       <button className="rounded-md p-1.5 hover:bg-accent"><MoreHorizontal className="h-4 w-4" /></button>
                     </div>
                   </td>
