@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { ClipboardList, Search, Filter, ChevronDown, Eye, MoreHorizontal, CheckCircle2, Clock, XCircle, ListChecks } from "lucide-react";
 import { ApprovalsSkeleton } from "@/components/dashboard/skeleton";
 import { useFakeLoading } from "@/hooks/use-fake-loading";
