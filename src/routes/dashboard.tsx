@@ -1,0 +1,122 @@
+import { createFileRoute, Link, Outlet, useRouterState } from "@tanstack/react-router";
+import {
+  LayoutDashboard,
+  CheckSquare,
+  FileText,
+  BarChart3,
+  Users,
+  Settings,
+  ShieldCheck,
+  Bell,
+  Search,
+  Menu,
+  ChevronDown,
+} from "lucide-react";
+import logoAsset from "@/assets/logo_corbeta.png.asset.json";
+
+export const Route = createFileRoute("/dashboard")({
+  component: DashboardLayout,
+});
+
+const navItems = [
+  { icon: LayoutDashboard, label: "Dashboard", to: "/dashboard" as const, exact: true },
+  { icon: CheckSquare, label: "Mis aprobaciones", to: "/dashboard/approvals" as const },
+  { icon: FileText, label: "Solicitudes", to: "/dashboard/requests" as const },
+  { icon: BarChart3, label: "Reportes", to: "/dashboard/reports" as const },
+  { icon: Users, label: "Proveedores", to: "/dashboard/providers" as const },
+  { icon: Settings, label: "Configuración", to: "/dashboard/settings" as const },
+  { icon: ShieldCheck, label: "Auditoría", to: "/dashboard/audit" as const },
+  { icon: Bell, label: "Notificaciones", to: "/dashboard/notifications" as const },
+];
+
+function DashboardLayout() {
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+
+  const isActive = (to: string, exact?: boolean) =>
+    exact ? pathname === to : pathname === to || pathname.startsWith(to + "/");
+
+  return (
+    <div className="min-h-screen bg-background text-foreground">
+      <div className="flex">
+        <aside className="hidden md:flex sticky top-0 h-screen w-64 shrink-0 flex-col border-r border-sidebar-border bg-sidebar">
+          <div className="flex h-16 items-center px-6 border-b border-sidebar-border">
+            <img src={logoAsset.url} alt="Corbeta" className="h-6 w-auto" />
+          </div>
+          <nav className="flex-1 px-3 py-5 space-y-0.5">
+            {navItems.map((item) => {
+              const Icon = item.icon;
+              const active = isActive(item.to, item.exact);
+              return (
+                <Link
+                  key={item.label}
+                  to={item.to}
+                  className={`group flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors ${
+                    active
+                      ? "bg-sidebar-accent text-sidebar-accent-foreground"
+                      : "text-sidebar-foreground hover:bg-sidebar-accent/60"
+                  }`}
+                >
+                  <Icon
+                    className={`h-4 w-4 ${
+                      active ? "text-primary" : "text-muted-foreground"
+                    }`}
+                  />
+                  <span className="flex-1 text-left">{item.label}</span>
+                </Link>
+              );
+            })}
+          </nav>
+          <div className="px-6 py-4 border-t border-sidebar-border">
+            <div className="text-xs font-medium text-foreground">Corbeta S.A.</div>
+            <div className="text-[11px] text-muted-foreground">Versión 1.0.0</div>
+          </div>
+        </aside>
+
+        <div className="flex-1 min-w-0">
+          <header className="sticky top-0 z-10 flex h-16 items-center gap-4 border-b border-border bg-background/80 px-4 md:px-8 backdrop-blur">
+            <button className="md:hidden -ml-1 p-2 text-muted-foreground hover:text-foreground">
+              <Menu className="h-5 w-5" />
+            </button>
+            <h1 className="text-sm md:text-base font-semibold text-foreground truncate">
+              Gestor de Aprobaciones de Descuentos Puntuales
+            </h1>
+            <div className="ml-auto flex items-center gap-3">
+              <div className="hidden lg:flex relative w-80">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <input
+                  placeholder="Buscar preorden, cliente o proveedor…"
+                  className="w-full rounded-lg border border-input bg-card pl-9 pr-14 py-2 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring/30"
+                />
+                <kbd className="absolute right-2 top-1/2 -translate-y-1/2 rounded border border-border bg-muted px-1.5 py-0.5 text-[10px] font-medium text-muted-foreground">
+                  ⌘K
+                </kbd>
+              </div>
+              <button className="relative rounded-lg p-2 text-muted-foreground hover:bg-accent hover:text-foreground">
+                <Bell className="h-5 w-5" />
+                <span className="absolute top-1 right-1 flex h-4 w-4 items-center justify-center rounded-full bg-warning text-[10px] font-semibold text-warning-foreground">
+                  3
+                </span>
+              </button>
+              <div className="flex items-center gap-3 rounded-lg border border-border bg-card pl-1 pr-3 py-1">
+                <div className="flex h-8 w-8 items-center justify-center rounded-md bg-primary text-primary-foreground text-xs font-semibold">
+                  AC
+                </div>
+                <div className="hidden sm:block leading-tight">
+                  <div className="text-xs font-semibold">Ana Carolina</div>
+                  <div className="text-[11px] text-muted-foreground">
+                    Aprobador Interno
+                  </div>
+                </div>
+                <ChevronDown className="h-4 w-4 text-muted-foreground" />
+              </div>
+            </div>
+          </header>
+
+          <main className="px-4 md:px-8 py-6 md:py-8">
+            <Outlet />
+          </main>
+        </div>
+      </div>
+    </div>
+  );
+}
