@@ -124,7 +124,13 @@ function DashboardLayout() {
                 </div>
                 <ChevronDown className="h-4 w-4 text-muted-foreground" />
               </div>
-            </div>
+              <button
+                onClick={handleLogout}
+                title="Cerrar sesión"
+                className="rounded-lg p-2 text-muted-foreground hover:bg-accent hover:text-foreground"
+              >
+                <LogOut className="h-5 w-5" />
+              </button>
           </header>
 
           <main className="px-4 md:px-8 py-6 md:py-8">
