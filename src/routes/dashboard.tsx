@@ -1,4 +1,4 @@
-import { createFileRoute, Link, Outlet, useRouterState } from "@tanstack/react-router";
+import { createFileRoute, Link, Outlet, redirect, useNavigate, useRouterState } from "@tanstack/react-router";
 import {
   LayoutDashboard,
   CheckSquare,
@@ -11,10 +11,18 @@ import {
   Search,
   Menu,
   ChevronDown,
+  LogOut,
 } from "lucide-react";
 import logoAsset from "@/assets/logo_corbeta.png.asset.json";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/dashboard")({
+  ssr: false,
+  beforeLoad: async () => {
+    const { data } = await supabase.auth.getSession();
+    if (!data.session) throw redirect({ to: "/login" });
+  },
   component: DashboardLayout,
 });
 
