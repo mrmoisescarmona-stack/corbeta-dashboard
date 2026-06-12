@@ -131,6 +131,7 @@ function DashboardLayout() {
               >
                 <LogOut className="h-5 w-5" />
               </button>
+            </div>
           </header>
 
           <main className="px-4 md:px-8 py-6 md:py-8">
