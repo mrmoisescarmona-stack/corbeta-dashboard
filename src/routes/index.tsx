@@ -5,7 +5,11 @@ export const Route = createFileRoute("/")({
   ssr: false,
   beforeLoad: async () => {
     const { data } = await supabase.auth.getSession();
-    if (!data.session) throw redirect({ to: "/login" });
-    throw redirect({ to: "/dashboard" });
+    throw redirect({ to: data.session ? "/dashboard" : "/login" });
   },
+  component: () => (
+    <div className="flex min-h-screen items-center justify-center bg-background text-sm text-muted-foreground">
+      Redirigiendo…
+    </div>
+  ),
 });
