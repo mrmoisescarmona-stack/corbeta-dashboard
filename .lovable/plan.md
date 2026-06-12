@@ -1,26 +1,27 @@
-## Cambios de dominio y usuario
+## Objetivo
 
-Aplicar dos ajustes globales en el sitio según el documento oficial del cliente ([https://www.corbeta.com.co/](https://www.corbeta.com.co/)).
+Bloquear el dashboard detrás del login. Nadie podrá ver `/dashboard/*` sin estar autenticado. Crear usuario de prueba `test@corbeta.com.co` / `123456789`.
 
-### 1. Dominio `corbeta.com` → `corbeta.com.co`
+## Cambios
 
-- `**src/routes/login.tsx**`
-  - Placeholder del campo email: `nombre@corbeta.com` → `nombre@corbeta.com.co`
-  - Link de soporte (href + texto visible): `soporte@corbeta.com` → `soporte@corbeta.com.co`
-- `**src/routes/dashboard.settings.tsx**`
-  - Campo "Correo" del perfil: `ana.carolina@corbeta.com` → `kpaz@corbeta.com.co`
+### 1. Redirigir raíz al login cuando no hay sesión
+- `src/routes/index.tsx`: hoy redirige a `/dashboard`. Cambiarlo para que verifique sesión con `supabase.auth.getSession()` en `beforeLoad` y redirija a `/login` si no hay sesión, o a `/dashboard` si la hay.
 
-### 2. Nombre del usuario actual → Moises Carmona
+### 2. Proteger toda la sección `/dashboard`
+- `src/routes/dashboard.tsx` (layout padre de todas las páginas del dashboard): añadir `beforeLoad` que verifique sesión con `supabase.auth.getUser()`. Si no hay usuario, `throw redirect({ to: "/login" })`. Esto cubre `/dashboard`, `/dashboard/approvals`, `/dashboard/requests`, `/dashboard/requests/$id`, `/dashboard/settings`, `/dashboard/audit`, etc. en un solo lugar.
+- Marcar la ruta `ssr: false` para que la verificación de sesión (que vive en `localStorage`) funcione en refresh sin loop.
 
-- `**src/routes/dashboard.tsx**` (header, esquina superior derecha)
-  - Nombre mostrado: `Ana Carolina` → `Moises Carmona`
-  - Iniciales del avatar: `AC` → `MC`
-- `**src/routes/dashboard.index.tsx**`
-  - Saludo del home: `¡Bienvenida, Ana Carolina!` → `¡Bienvenido, Moises Carmona!`
-- `**src/routes/dashboard.settings.tsx**`
-  - Campo "Nombre" del perfil: `Ana Carolina` → `Moises Carmona`
+### 3. Logout funcional
+- Añadir botón "Cerrar sesión" en el header del layout `dashboard.tsx` que llame `supabase.auth.signOut()` y navegue a `/login`. Hoy no existe una salida; sin esto el gate no es útil.
 
-### Fuera de alcance
+### 4. Login → dashboard
+- `src/routes/login.tsx` ya hace `signInWithPassword` y navega a `/`. Tras el cambio (1), `/` enviará al dashboard cuando haya sesión. Si ya hay sesión al entrar a `/login`, redirigir a `/dashboard` desde `beforeLoad`.
 
-- `src/routes/dashboard.audit.tsx` mantiene "Ana Carolina" en la lista mock de usuarios del log de auditoría (representa otros usuarios del sistema, no al usuario actual).
-- No se tocan colores, layout, copy adicional ni lógica de auth/validaciones.
+### 5. Crear usuario de prueba
+- Crear el usuario `test@corbeta.com.co` con contraseña `123456789` en Lovable Cloud (Auth) con email auto-confirmado, para que pueda iniciar sesión inmediatamente sin verificar correo.
+
+## Notas
+
+- No se toca la lógica de negocio ni el UI del dashboard; solo se añade el gate y el botón de logout.
+- La contraseña `123456789` es débil; aceptable solo como credencial de prueba/demo.
+- No se agregan tablas ni roles; es únicamente auth de Lovable Cloud.

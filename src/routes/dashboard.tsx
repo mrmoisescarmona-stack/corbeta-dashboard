@@ -1,4 +1,4 @@
-import { createFileRoute, Link, Outlet, useRouterState } from "@tanstack/react-router";
+import { createFileRoute, Link, Outlet, redirect, useNavigate, useRouterState } from "@tanstack/react-router";
 import {
   LayoutDashboard,
   CheckSquare,
@@ -11,10 +11,18 @@ import {
   Search,
   Menu,
   ChevronDown,
+  LogOut,
 } from "lucide-react";
 import logoAsset from "@/assets/logo_corbeta.png.asset.json";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/dashboard")({
+  ssr: false,
+  beforeLoad: async () => {
+    const { data } = await supabase.auth.getSession();
+    if (!data.session) throw redirect({ to: "/login" });
+  },
   component: DashboardLayout,
 });
 
@@ -31,6 +39,13 @@ const navItems = [
 
 function DashboardLayout() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    toast.success("Sesión cerrada");
+    navigate({ to: "/login" });
+  };
 
   const isActive = (to: string, exact?: boolean) =>
     exact ? pathname === to : pathname === to || pathname.startsWith(to + "/");
@@ -109,6 +124,13 @@ function DashboardLayout() {
                 </div>
                 <ChevronDown className="h-4 w-4 text-muted-foreground" />
               </div>
+              <button
+                onClick={handleLogout}
+                title="Cerrar sesión"
+                className="rounded-lg p-2 text-muted-foreground hover:bg-accent hover:text-foreground"
+              >
+                <LogOut className="h-5 w-5" />
+              </button>
             </div>
           </header>
 
