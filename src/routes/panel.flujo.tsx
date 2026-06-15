@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/dialog";
 
 export const Route = createFileRoute("/panel/flujo")({
-  head: () => ({ meta: [{ title: "Parametrización del Flujo · Corbeta" }] }),
+  head: () => ({ meta: [{ title: "Parametrización del Workflow · Corbeta" }] }),
   component: ApprovalsPage,
   pendingComponent: ApprovalsSkeleton,
 });
@@ -405,7 +405,7 @@ function ScopeActionCard({
               </span>
             </div>
             <p className="text-xs text-muted-foreground">
-              Los soportes son obligatorios para continuar con el flujo de aprobación.
+              Los soportes son obligatorios para continuar con el workflow de aprobación.
             </p>
             <FileDropzone
               onFiles={(fl) => {
@@ -599,7 +599,7 @@ function ApprovalsPage() {
   return (
     <div className="space-y-6 animate-fade-in">
       <div>
-        <h2 className="text-2xl md:text-3xl font-semibold tracking-tight">Parametrización del Flujo</h2>
+        <h2 className="text-2xl md:text-3xl font-semibold tracking-tight">Parametrización del Workflow</h2>
         <p className="mt-1 text-sm text-muted-foreground">
           Configuración de reglas, aprobadores, sustitutos y proveedores
         </p>
