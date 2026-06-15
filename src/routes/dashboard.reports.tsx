@@ -1,5 +1,5 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { BarChart3, ChevronDown, TrendingUp } from "lucide-react";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { BarChart3, ChevronDown, TrendingUp, Search, Download } from "lucide-react";
 import { ReportsSkeleton } from "@/components/dashboard/skeleton";
 import { useFakeLoading } from "@/hooks/use-fake-loading";
 
@@ -111,6 +111,167 @@ function ReportsPage() {
           <ChartCard title="Tendencia de aprobaciones vs rechazos" />
         </div>
       </section>
+
+      <TraceabilitySection />
+    </div>
+  );
+}
+
+const traceResults = [
+  {
+    id: "PO-2026-004510",
+    client: "Tiendas del Pacífico",
+    nit: "901567890",
+    ean: "8806074567894",
+    product: "Nevera Whirlpool WRE57 450L",
+    qty: 4,
+    prov: "3.5%",
+    corb: "2.5%",
+    total: "6.0%",
+    status: "Aprobada" as const,
+    approver: "María González",
+    supplier: "Whirlpool Andina",
+    reception: "7/06/2026, 9:01 a. m.",
+    management: "7/06/2026, 11:35 a. m.",
+  },
+  {
+    id: "PO-2026-004505",
+    client: "Almacenes del Centro",
+    nit: "800234567",
+    ean: "8806094567891",
+    product: "Refrigerador Samsung RT38 380L",
+    qty: 2,
+    prov: "0.0%",
+    corb: "0.0%",
+    total: "0.0%",
+    status: "Rechazada" as const,
+    approver: "Pedro Martínez",
+    supplier: "Samsung Colombia S.A.",
+    reception: "6/06/2026, 3:20 p. m.",
+    management: "6/06/2026, 4:10 p. m.",
+  },
+];
+
+function TraceabilitySection() {
+  return (
+    <section className="space-y-6 pt-2">
+      <div>
+        <h2 className="text-2xl md:text-3xl font-semibold tracking-tight">Reportes y Trazabilidad</h2>
+        <p className="mt-1 text-sm text-muted-foreground">
+          Consulta histórica y descarga de reportes de descuentos puntuales.
+        </p>
+      </div>
+
+      <div className="rounded-xl border border-border bg-card">
+        <div className="p-5 border-b border-border">
+          <h3 className="text-base font-semibold">Filtros de consulta</h3>
+        </div>
+        <div className="p-5 grid gap-4 md:grid-cols-3">
+          <Field label="Fecha inicio" required>
+            <input type="date" defaultValue="2026-06-01" className="w-full rounded-lg border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring/30" />
+          </Field>
+          <Field label="Fecha fin" required>
+            <input type="date" defaultValue="2026-06-30" className="w-full rounded-lg border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring/30" />
+          </Field>
+          <Field label="Aprobador">
+            <select className="w-full rounded-lg border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring/30">
+              <option>Seleccionar…</option>
+              <option>María González</option>
+              <option>Pedro Martínez</option>
+            </select>
+          </Field>
+          <Field label="Proveedor">
+            <select className="w-full rounded-lg border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring/30">
+              <option>Seleccionar…</option>
+              <option>Whirlpool Andina</option>
+              <option>Samsung Colombia S.A.</option>
+            </select>
+          </Field>
+          <Field label="Zona">
+            <input type="text" placeholder="Ej: Bogotá Norte" className="w-full rounded-lg border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring/30" />
+          </Field>
+        </div>
+        <div className="px-5 pb-5 flex flex-wrap items-center gap-2">
+          <button className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:opacity-90">
+            <Search className="h-4 w-4" /> Consultar
+          </button>
+          <button className="inline-flex items-center gap-2 rounded-lg border border-border bg-background px-4 py-2 text-sm font-medium hover:bg-accent">
+            <Download className="h-4 w-4" /> Exportar Excel (CSV)
+          </button>
+        </div>
+      </div>
+
+      <div className="rounded-xl border border-border bg-card">
+        <div className="p-5 border-b border-border">
+          <h3 className="text-base font-semibold">Resultados ({traceResults.length})</h3>
+          <p className="mt-1 text-xs text-muted-foreground">Información actualizada a la fecha de gestión de cada solicitud</p>
+        </div>
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="text-left text-xs text-muted-foreground border-b border-border bg-muted/30">
+                <th className="px-5 py-3 font-medium">Preorden</th>
+                <th className="px-5 py-3 font-medium">Cliente</th>
+                <th className="px-5 py-3 font-medium">EAN</th>
+                <th className="px-5 py-3 font-medium">Producto</th>
+                <th className="px-5 py-3 font-medium">Cant.</th>
+                <th className="px-5 py-3 font-medium">% Prov.</th>
+                <th className="px-5 py-3 font-medium">% Corb.</th>
+                <th className="px-5 py-3 font-medium">% Total</th>
+                <th className="px-5 py-3 font-medium">Estado</th>
+                <th className="px-5 py-3 font-medium">Aprobador</th>
+                <th className="px-5 py-3 font-medium">Proveedor</th>
+                <th className="px-5 py-3 font-medium">Recepción</th>
+                <th className="px-5 py-3 font-medium">Gestión</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-border">
+              {traceResults.map((r) => (
+                <tr key={r.id} className="hover:bg-muted/40">
+                  <td className="px-5 py-4 whitespace-nowrap">
+                    <Link to="/dashboard/preorders/$id" params={{ id: r.id }} className="font-medium text-primary hover:underline">
+                      {r.id}
+                    </Link>
+                  </td>
+                  <td className="px-5 py-4">
+                    <div className="font-medium">{r.client}</div>
+                    <div className="text-xs text-muted-foreground">{r.nit}</div>
+                  </td>
+                  <td className="px-5 py-4 text-muted-foreground tabular-nums">{r.ean}</td>
+                  <td className="px-5 py-4">{r.product}</td>
+                  <td className="px-5 py-4 tabular-nums">{r.qty}</td>
+                  <td className="px-5 py-4 tabular-nums">{r.prov}</td>
+                  <td className="px-5 py-4 tabular-nums">{r.corb}</td>
+                  <td className="px-5 py-4 tabular-nums font-medium">{r.total}</td>
+                  <td className="px-5 py-4">
+                    {r.status === "Aprobada" ? (
+                      <span className="inline-flex items-center rounded-full bg-success/15 px-2.5 py-1 text-[11px] font-medium text-success ring-1 ring-success/30">Aprobada</span>
+                    ) : (
+                      <span className="inline-flex items-center rounded-full bg-destructive/10 px-2.5 py-1 text-[11px] font-medium text-destructive ring-1 ring-destructive/20">Rechazada</span>
+                    )}
+                  </td>
+                  <td className="px-5 py-4 whitespace-nowrap">{r.approver}</td>
+                  <td className="px-5 py-4 whitespace-nowrap">{r.supplier}</td>
+                  <td className="px-5 py-4 text-muted-foreground tabular-nums whitespace-nowrap">{r.reception}</td>
+                  <td className="px-5 py-4 text-muted-foreground tabular-nums whitespace-nowrap">{r.management}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Field({ label, required, children }: { label: string; required?: boolean; children: React.ReactNode }) {
+  return (
+    <div>
+      <label className="text-xs font-medium text-muted-foreground">
+        {label}
+        {required && <span className="ml-0.5 text-destructive">*</span>}
+      </label>
+      <div className="mt-1.5">{children}</div>
     </div>
   );
 }
