@@ -56,7 +56,7 @@ const navGroups: NavGroup[] = [
   {
     title: "Aprobadores",
     items: [
-      { icon: CheckSquare, label: "Mis aprobaciones", to: "/dashboard/approvals" },
+      { icon: CheckSquare, label: "Workflow", to: "/dashboard/approvals" },
       { icon: User, label: "Vista vendedor", to: "/dashboard/sales-rep" },
     ],
   },
