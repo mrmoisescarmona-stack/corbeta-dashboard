@@ -22,7 +22,7 @@ import logoAsset from "@/assets/logo_corbeta.png.asset.json";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
-export const Route = createFileRoute("/dashboard")({
+export const Route = createFileRoute("/panel")({
   ssr: false,
   beforeLoad: async () => {
     const { data } = await supabase.auth.getSession();
