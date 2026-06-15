@@ -1,5 +1,11 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { BarChart3, ChevronDown, TrendingUp, Search, Download } from "lucide-react";
+import { BarChart3, ChevronDown, TrendingUp, Search, Download, CalendarIcon } from "lucide-react";
+import { useState } from "react";
+import { format } from "date-fns";
+import { es } from "date-fns/locale";
+import { Calendar } from "@/components/ui/calendar";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { cn } from "@/lib/utils";
 import { ReportsSkeleton } from "@/components/dashboard/skeleton";
 import { useFakeLoading } from "@/hooks/use-fake-loading";
 
@@ -170,10 +176,10 @@ function TraceabilitySection() {
         </div>
         <div className="p-5 grid gap-4 md:grid-cols-3">
           <Field label="Fecha inicio" required>
-            <input type="date" defaultValue="2026-06-01" className="w-full rounded-lg border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring/30" />
+            <DateField defaultDate={new Date(2026, 5, 1)} />
           </Field>
           <Field label="Fecha fin" required>
-            <input type="date" defaultValue="2026-06-30" className="w-full rounded-lg border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring/30" />
+            <DateField defaultDate={new Date(2026, 5, 30)} />
           </Field>
           <Field label="Aprobador">
             <select className="w-full rounded-lg border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring/30">
@@ -275,5 +281,35 @@ function Field({ label, required, children }: { label: string; required?: boolea
       </label>
       <div className="mt-1.5">{children}</div>
     </div>
+  );
+}
+
+function DateField({ defaultDate }: { defaultDate?: Date }) {
+  const [date, setDate] = useState<Date | undefined>(defaultDate);
+  return (
+    <Popover>
+      <PopoverTrigger asChild>
+        <button
+          type="button"
+          className={cn(
+            "flex w-full items-center justify-between rounded-lg border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring/30",
+            !date && "text-muted-foreground",
+          )}
+        >
+          <span>{date ? format(date, "dd/MM/yyyy", { locale: es }) : "Seleccionar fecha"}</span>
+          <CalendarIcon className="h-4 w-4 text-muted-foreground" />
+        </button>
+      </PopoverTrigger>
+      <PopoverContent className="w-auto p-0" align="start">
+        <Calendar
+          mode="single"
+          selected={date}
+          onSelect={setDate}
+          initialFocus
+          locale={es}
+          className={cn("p-3 pointer-events-auto")}
+        />
+      </PopoverContent>
+    </Popover>
   );
 }
