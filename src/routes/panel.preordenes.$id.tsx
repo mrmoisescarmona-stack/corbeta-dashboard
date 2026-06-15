@@ -136,7 +136,18 @@ function RequestDetailPage() {
         return;
       }
     }
-    setFiles((prev) => [...prev, ...arr]);
+    const now = new Date();
+    const stamp = `${now.toLocaleDateString("es-CO")} ${now.toLocaleTimeString("es-CO", { hour: "2-digit", minute: "2-digit" })}`;
+    setAttachments((prev) => [
+      ...prev,
+      ...arr.map<Attachment>((f) => ({
+        name: f.name,
+        size: f.size > 1024 * 1024 ? `${(f.size / 1024 / 1024).toFixed(1)} MB` : `${Math.round(f.size / 1024)} KB`,
+        by: "Moises Carmona",
+        date: stamp,
+        status: "Pendiente",
+      })),
+    ]);
     pushTrace(`Cargó ${arr.length} soporte(s)`, arr.map((f) => f.name).join(", "));
   }
 
