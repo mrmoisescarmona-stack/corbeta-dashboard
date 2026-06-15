@@ -19,7 +19,7 @@ import {
   History,
 } from "lucide-react";
 
-export const Route = createFileRoute("/dashboard/requests/$id")({
+export const Route = createFileRoute("/dashboard/preorders/$id")({
   head: ({ params }) => ({
     meta: [{ title: `Solicitud ${params.id} · Corbeta` }],
   }),
@@ -141,14 +141,15 @@ function RequestDetailPage() {
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
           <button
-            onClick={() => navigate({ to: "/dashboard/requests" })}
+            onClick={() => navigate({ to: "/dashboard/preorders" })}
             className="mb-2 inline-flex items-center gap-1.5 text-xs font-medium text-muted-foreground hover:text-foreground"
           >
-            <ArrowLeft className="h-3.5 w-3.5" /> Volver a Solicitudes
+            <ArrowLeft className="h-3.5 w-3.5" /> Volver a Preordenes
           </button>
-          <h2 className="text-2xl md:text-3xl font-semibold tracking-tight">Solicitud {id}</h2>
+          <span className="inline-flex items-center rounded-full bg-primary/10 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-primary">Fase 1 · Detalle</span>
+          <h2 className="mt-2 text-2xl md:text-3xl font-semibold tracking-tight">Preorden {id}</h2>
           <p className="mt-1 text-sm text-muted-foreground">
-            Evalúa cada línea con descuento puntual asignada a tu gestión.
+            Evalúa cada línea con descuento puntual. Si <span className="font-medium">% asumido por proveedor &gt; 0</span> se notifica al proveedor en paralelo.
           </p>
         </div>
         <div className="flex items-center gap-2">
