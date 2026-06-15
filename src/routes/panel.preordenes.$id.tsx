@@ -175,10 +175,15 @@ function RequestDetailPage() {
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
           <button
-            onClick={() => navigate({ to: readOnly ? "/panel/reportes" : "/panel/preordenes" })}
+            onClick={() => {
+              const dest = from === "reportes" ? "/panel/reportes" : from === "panel" ? "/panel" : "/panel/preordenes";
+              const label = from === "reportes" ? "Reportes" : from === "panel" ? "Panel" : "Preórdenes";
+              navigate({ to: dest });
+              void label;
+            }}
             className="mb-2 inline-flex items-center gap-1.5 text-xs font-medium text-muted-foreground hover:text-foreground"
           >
-            <ArrowLeft className="h-3.5 w-3.5" /> {readOnly ? "Volver a Reportes" : "Volver a Preórdenes"}
+            <ArrowLeft className="h-3.5 w-3.5" /> Volver a {from === "reportes" ? "Reportes" : from === "panel" ? "Panel" : "Preórdenes"}
           </button>
           <span className={`inline-flex items-center rounded-full px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider ${readOnly ? "bg-muted text-muted-foreground" : "bg-primary/10 text-primary"}`}>
             {readOnly ? "Solo lectura" : "Detalle"}
