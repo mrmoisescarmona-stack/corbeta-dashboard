@@ -175,9 +175,9 @@ function InfoCard({ title, rows }: { title: string; rows: { label: string; value
       <h4 className="text-base font-semibold mb-4">{title}</h4>
       <dl className="space-y-3">
         {rows.map((r) => (
-          <div key={r.label} className="grid grid-cols-2 gap-3 text-sm">
-            <dt className="text-muted-foreground">{r.label}</dt>
-            <dd className="font-medium">{r.value}</dd>
+          <div key={r.label} className="grid grid-cols-2 gap-3 text-sm min-w-0">
+            <dt className="text-muted-foreground min-w-0 break-words">{r.label}</dt>
+            <dd className="font-medium min-w-0 break-words">{r.value}</dd>
           </div>
         ))}
       </dl>
