@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { toast } from "sonner";
-import { Plus, Pencil, Trash2, ArrowLeftRight, Check, X, Ban, UploadCloud, Mail, Eye, Download } from "lucide-react";
+import { Plus, Pencil, Trash2, ArrowLeftRight, Check, X, Ban, UploadCloud, Mail, Phone, Eye, Download } from "lucide-react";
 import { ApprovalsSkeleton } from "@/components/dashboard/skeleton";
 import { useFakeLoading } from "@/hooks/use-fake-loading";
 import {
@@ -101,9 +101,9 @@ const substitutes = [
 ];
 
 const providers = [
-  { id: "900123456", name: "Samsung Colombia S.A.", category: "Electrodomésticos", email: "aprobaciones@samsung.com.co", active: true },
-  { id: "900654321", name: "LG Electronics", category: "Tecnología", email: "descuentos@lg.com.co", active: true },
-  { id: "900789012", name: "Whirlpool Andina", category: "Línea Blanca", email: "comercial@whirlpool.com.co", active: true },
+  { id: "900123456", name: "Samsung Colombia S.A.", category: "Electrodomésticos", email: "aprobaciones@samsung.com.co", phone: "+57 601 5953000", active: true },
+  { id: "900654321", name: "LG Electronics", category: "Tecnología", email: "descuentos@lg.com.co", phone: "+57 601 4327100", active: true },
+  { id: "900789012", name: "Whirlpool Andina", category: "Línea Blanca", email: "comercial@whirlpool.com.co", phone: "+57 601 6512200", active: true },
 ];
 
 function StatusBadge({ active, status }: { active: boolean; status?: "Activo" | "Inactivo" | "Pendiente" }) {
@@ -679,6 +679,22 @@ function ApprovalsPage() {
                     <td className="px-3 py-3.5"><StatusBadge active={p.active} /></td>
                     <td className="px-5 py-3.5">
                       <div className="flex justify-end gap-1">
+                        <a
+                          href={`mailto:${p.email}`}
+                          className="rounded-md p-1.5 hover:bg-accent text-primary"
+                          aria-label={`Enviar correo a ${p.name}`}
+                          title={`Enviar correo a ${p.email}`}
+                        >
+                          <Mail className="h-4 w-4" />
+                        </a>
+                        <a
+                          href={`tel:${p.phone.replace(/\s+/g, "")}`}
+                          className="rounded-md p-1.5 hover:bg-accent text-primary"
+                          aria-label={`Llamar a ${p.name}`}
+                          title={`Llamar al ${p.phone}`}
+                        >
+                          <Phone className="h-4 w-4" />
+                        </a>
                         <button className="rounded-md p-1.5 hover:bg-accent" aria-label="Editar"><Pencil className="h-4 w-4" /></button>
                       </div>
                     </td>
