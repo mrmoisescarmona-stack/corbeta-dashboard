@@ -42,12 +42,6 @@ const navGroups: NavGroup[] = [
     ],
   },
   {
-    title: "Recepción",
-    items: [
-      { icon: Inbox, label: "Preordenes recibidas", to: "/dashboard/preorders" },
-    ],
-  },
-  {
     title: "Admin",
     items: [
       { icon: Mail, label: "Portal del proveedor", to: "/dashboard/supplier-portal" },
