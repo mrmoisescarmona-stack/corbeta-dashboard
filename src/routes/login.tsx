@@ -70,7 +70,7 @@ const slides = [
 export const Route = createFileRoute("/login")({
   head: () => ({
     meta: [
-      { title: "Iniciar sesión — Corbeta Approvals" },
+      { title: "Iniciar sesión — Corbeta Aprobaciones" },
       { name: "description", content: "Accede al portal de aprobaciones de Corbeta." },
     ],
   }),
