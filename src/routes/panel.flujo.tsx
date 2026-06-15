@@ -105,14 +105,17 @@ const providers = [
   { id: "900789012", name: "Whirlpool Andina", category: "Línea Blanca", email: "comercial@whirlpool.com.co", active: true },
 ];
 
-function StatusBadge({ active }: { active: boolean }) {
+function StatusBadge({ active, status }: { active: boolean; status?: "Activo" | "Inactivo" | "Pendiente" }) {
+  const resolved = status ?? (active ? "Activo" : "Inactivo");
+  const styles =
+    resolved === "Activo"
+      ? "bg-success/20 text-success-foreground"
+      : resolved === "Pendiente"
+        ? "bg-amber-100 text-amber-800"
+        : "bg-muted text-muted-foreground";
   return (
-    <span
-      className={`inline-flex items-center rounded-full px-2.5 py-1 text-[11px] font-medium ${
-        active ? "bg-success/20 text-success-foreground" : "bg-muted text-muted-foreground"
-      }`}
-    >
-      {active ? "Activo" : "Inactivo"}
+    <span className={`inline-flex items-center rounded-full px-2.5 py-1 text-[11px] font-medium ${styles}`}>
+      {resolved}
     </span>
   );
 }
