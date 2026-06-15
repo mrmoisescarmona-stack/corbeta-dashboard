@@ -6,8 +6,7 @@ import {
   XCircle,
   Pencil,
   Ban,
-  Upload,
-  Paperclip,
+  UploadCloud,
   AlertCircle,
   Clock,
   User,
@@ -17,6 +16,11 @@ import {
   FileText,
   X,
   History,
+  Mail,
+  Eye,
+  Download,
+  Trash2,
+  Check,
 } from "lucide-react";
 
 export const Route = createFileRoute("/panel/preordenes/$id")({
@@ -70,16 +74,16 @@ function RequestDetailPage() {
     { at: "28/05/2026 09:12", who: "Sistema", action: "Asignada a Moises Carmona" },
   ]);
   const [modal, setModal] = useState<{ kind: "modify" | "reject" | "cancel"; idx: number } | null>(null);
-  const [files, setFiles] = useState<File[]>([]);
   const [fileError, setFileError] = useState<string | null>(null);
   const [dragOver, setDragOver] = useState(false);
   const fileInput = useRef<HTMLInputElement>(null);
 
-  const providerApproved = useMemo(
-    () => lines.some((l) => l.status === "Aprobada" || l.status === "Modificada"),
-    [lines]
-  );
-  const uploadEnabled = providerApproved; // HU_005
+  type Attachment = { name: string; size: string; by: string; date: string; status: "Validado" | "Pendiente" };
+  const [attachments, setAttachments] = useState<Attachment[]>([
+    { name: "Aprobacion_Castrol.msg", size: "1.2 MB", by: "Ana Carolina", date: "28/05/2024 09:15 a. m.", status: "Validado" },
+    { name: "Correo_Proveedor.eml", size: "842 KB", by: "Ana Carolina", date: "28/05/2024 09:16 a. m.", status: "Validado" },
+    { name: "Soporte_Comercial.msg", size: "2.1 MB", by: "Ana Carolina", date: "28/05/2024 09:18 a. m.", status: "Validado" },
+  ]);
 
   const visibleLines = lines; // HU_004: solo líneas de mi gestión (mock: todas)
   const summary = useMemo(() => {
@@ -131,7 +135,18 @@ function RequestDetailPage() {
         return;
       }
     }
-    setFiles((prev) => [...prev, ...arr]);
+    const now = new Date();
+    const stamp = `${now.toLocaleDateString("es-CO")} ${now.toLocaleTimeString("es-CO", { hour: "2-digit", minute: "2-digit" })}`;
+    setAttachments((prev) => [
+      ...prev,
+      ...arr.map<Attachment>((f) => ({
+        name: f.name,
+        size: f.size > 1024 * 1024 ? `${(f.size / 1024 / 1024).toFixed(1)} MB` : `${Math.round(f.size / 1024)} KB`,
+        by: "Moises Carmona",
+        date: stamp,
+        status: "Pendiente",
+      })),
+    ]);
     pushTrace(`Cargó ${arr.length} soporte(s)`, arr.map((f) => f.name).join(", "));
   }
 
@@ -246,23 +261,18 @@ function RequestDetailPage() {
 
       {/* Soportes */}
       <div className="rounded-xl border border-border bg-card p-5">
-        <div className="flex items-start justify-between gap-4">
-          <div>
-            <h3 className="text-base font-semibold">Soportes de la decisión</h3>
-            <p className="mt-1 text-xs text-muted-foreground">
-              Adjunta los correos electrónicos del proveedor (.eml, .msg). Máx 10 MB por archivo.
-            </p>
-          </div>
-          {!uploadEnabled && (
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-muted px-2.5 py-1 text-[11px] font-medium text-muted-foreground">
-              <AlertCircle className="h-3.5 w-3.5" /> Disponible al aprobar/modificar una línea
-            </span>
-          )}
+        <div className="flex items-center gap-2">
+          <h3 className="text-base font-semibold">Adjuntar evidencia del proveedor</h3>
+          <span className="inline-flex items-center rounded-full bg-destructive/10 px-2 py-0.5 text-[11px] font-medium text-destructive">
+            Obligatorio
+          </span>
         </div>
+        <p className="mt-1 text-xs text-muted-foreground">
+          Los soportes son obligatorios para continuar con el flujo de aprobación.
+        </p>
 
         <div
           onDragOver={(e) => {
-            if (!uploadEnabled) return;
             e.preventDefault();
             setDragOver(true);
           }}
@@ -270,30 +280,24 @@ function RequestDetailPage() {
           onDrop={(e) => {
             e.preventDefault();
             setDragOver(false);
-            if (!uploadEnabled) return;
             if (e.dataTransfer.files?.length) handleFiles(e.dataTransfer.files);
           }}
-          className={`mt-4 rounded-lg border-2 border-dashed p-8 text-center transition-colors ${
-            !uploadEnabled
-              ? "border-border bg-muted/30 opacity-60"
-              : dragOver
-                ? "border-primary bg-primary/5"
-                : "border-border bg-background hover:bg-muted/30"
+          onClick={() => fileInput.current?.click()}
+          className={`mt-4 rounded-lg border-2 border-dashed px-4 py-8 text-center transition-colors cursor-pointer ${
+            dragOver
+              ? "border-primary bg-primary/10"
+              : "border-primary/30 bg-primary/[0.04] hover:bg-primary/[0.08]"
           }`}
         >
-          <Upload className="mx-auto h-8 w-8 text-muted-foreground" />
-          <div className="mt-2 text-sm">
-            Arrastra los archivos aquí o{" "}
-            <button
-              type="button"
-              disabled={!uploadEnabled}
-              onClick={() => fileInput.current?.click()}
-              className="font-medium text-primary hover:underline disabled:opacity-50 disabled:no-underline"
-            >
-              selecciónalos
-            </button>
+          <UploadCloud className="mx-auto h-9 w-9 text-primary" />
+          <div className="mt-2 text-sm text-foreground">Arrastre archivos aquí</div>
+          <div className="text-xs text-muted-foreground mt-1">o</div>
+          <span className="mt-2 inline-flex items-center rounded-lg bg-primary px-5 py-2.5 text-xs font-semibold text-primary-foreground">
+            Seleccionar archivo
+          </span>
+          <div className="mt-3 text-[11px] text-muted-foreground">
+            Formatos permitidos: .msg, .eml &nbsp;|&nbsp; Tamaño máximo por archivo: 10 MB
           </div>
-          <div className="mt-1 text-[11px] text-muted-foreground">Formatos permitidos: .eml, .msg</div>
           <input
             ref={fileInput}
             type="file"
@@ -310,25 +314,73 @@ function RequestDetailPage() {
           </div>
         )}
 
-        {files.length > 0 && (
-          <ul className="mt-4 space-y-2">
-            {files.map((f, i) => (
-              <li key={i} className="flex items-center justify-between rounded-lg border border-border bg-background px-3 py-2 text-xs">
-                <span className="flex items-center gap-2">
-                  <Paperclip className="h-3.5 w-3.5 text-muted-foreground" />
-                  <span className="font-medium">{f.name}</span>
-                  <span className="text-muted-foreground">{(f.size / 1024).toFixed(0)} KB</span>
-                </span>
-                <button
-                  className="rounded-md p-1 text-muted-foreground hover:bg-accent hover:text-foreground"
-                  onClick={() => setFiles((prev) => prev.filter((_, j) => j !== i))}
-                  aria-label="Eliminar"
-                >
-                  <X className="h-3.5 w-3.5" />
-                </button>
-              </li>
-            ))}
-          </ul>
+        {attachments.length > 0 && (
+          <div className="mt-5">
+            <div className="text-sm font-semibold mb-2">Archivos adjuntos ({attachments.length})</div>
+            <div className="overflow-x-auto rounded-lg border border-border">
+              <table className="w-full text-xs">
+                <thead className="bg-muted/40 text-muted-foreground">
+                  <tr>
+                    <th className="text-left font-medium px-3 py-2">Archivo</th>
+                    <th className="text-left font-medium px-3 py-2">Subido por</th>
+                    <th className="text-left font-medium px-3 py-2">Fecha y hora</th>
+                    <th className="text-left font-medium px-3 py-2">Estado</th>
+                    <th className="text-right font-medium px-3 py-2">Acciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {attachments.map((f, i) => (
+                    <tr key={i} className="border-t border-border">
+                      <td className="px-3 py-2.5">
+                        <div className="flex items-center gap-2">
+                          <div className="rounded-md bg-primary/10 p-1.5">
+                            <Mail className="h-3.5 w-3.5 text-primary" />
+                          </div>
+                          <div>
+                            <div className="font-medium text-foreground">{f.name}</div>
+                            <div className="text-[11px] text-muted-foreground">{f.size}</div>
+                          </div>
+                        </div>
+                      </td>
+                      <td className="px-3 py-2.5 text-foreground">{f.by}</td>
+                      <td className="px-3 py-2.5 text-muted-foreground tabular-nums">{f.date}</td>
+                      <td className="px-3 py-2.5">
+                        <span
+                          className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-medium ${
+                            f.status === "Validado"
+                              ? "bg-success/10 text-success"
+                              : "bg-warning/10 text-warning"
+                          }`}
+                        >
+                          <Check className="h-3 w-3" /> {f.status}
+                        </span>
+                      </td>
+                      <td className="px-3 py-2.5">
+                        <div className="flex items-center justify-end gap-1.5">
+                          <button className="rounded-md border border-border bg-background p-1.5 hover:bg-accent" title="Ver">
+                            <Eye className="h-3.5 w-3.5 text-primary" />
+                          </button>
+                          <button className="rounded-md border border-border bg-background p-1.5 hover:bg-accent" title="Descargar">
+                            <Download className="h-3.5 w-3.5 text-primary" />
+                          </button>
+                          <button
+                            onClick={() => setAttachments((prev) => prev.filter((_, idx) => idx !== i))}
+                            className="rounded-md border border-border bg-background p-1.5 hover:bg-destructive/10"
+                            title="Eliminar"
+                          >
+                            <Trash2 className="h-3.5 w-3.5 text-destructive" />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <p className="mt-2 text-[11px] text-muted-foreground">
+              ⓘ Puede adjuntar múltiples archivos. Los archivos serán validados automáticamente.
+            </p>
+          </div>
         )}
       </div>
 
