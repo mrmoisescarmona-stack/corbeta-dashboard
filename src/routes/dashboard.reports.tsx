@@ -33,34 +33,176 @@ const stats = [
   { label: "Valor aprobado", value: "$ 184M", delta: "+22%" },
 ];
 
-function BarChart({ data }: { data: number[] }) {
-  const max = Math.max(...data);
+const MONTHS = ["Jul", "Ago", "Sep", "Oct", "Nov", "Dic", "Ene", "Feb", "Mar", "Abr", "May", "Jun"];
+
+function makeSeries(seed: number, base: number, variance: number) {
+  let s = seed;
+  const rand = () => {
+    s = (s * 9301 + 49297) % 233280;
+    return s / 233280;
+  };
+  return MONTHS.map((m) => ({ month: m, value: Math.round(base + rand() * variance) }));
+}
+
+function makeDualSeries(seed: number) {
+  let s = seed;
+  const rand = () => {
+    s = (s * 9301 + 49297) % 233280;
+    return s / 233280;
+  };
+  return MONTHS.map((m) => ({
+    month: m,
+    aprobadas: Math.round(120 + rand() * 80),
+    rechazadas: Math.round(20 + rand() * 40),
+  }));
+}
+
+function ChartTooltip({ active, payload, label, formatter }: any) {
+  if (!active || !payload?.length) return null;
   return (
-    <div className="flex h-56 items-end gap-2">
-      {data.map((v, i) => (
-        <div key={i} className="flex-1 rounded-t bg-primary/80 transition-all hover:bg-primary" style={{ height: `${(v / max) * 100}%` }} />
-      ))}
+    <div className="rounded-lg border border-border bg-popover/95 backdrop-blur px-3 py-2 shadow-lg">
+      <div className="text-[10px] uppercase tracking-wide text-muted-foreground mb-1">{label}</div>
+      <div className="space-y-1">
+        {payload.map((p: any) => (
+          <div key={p.dataKey} className="flex items-center gap-2 text-xs">
+            <span className="h-2 w-2 rounded-full" style={{ backgroundColor: p.color || p.stroke }} />
+            <span className="text-muted-foreground">{p.name}</span>
+            <span className="font-semibold tabular-nums">
+              {formatter ? formatter(p.value) : p.value}
+            </span>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
 
-function ChartCard({ title }: { title: string }) {
-  const data = Array.from({ length: 12 }).map(() => 20 + Math.random() * 80);
+function AreaChartCard({
+  title,
+  subtitle,
+  data,
+  color,
+  gradientId,
+  valueLabel,
+  formatter,
+  current,
+  delta,
+  deltaPositive = true,
+}: {
+  title: string;
+  subtitle?: string;
+  data: { month: string; value: number }[];
+  color: string;
+  gradientId: string;
+  valueLabel: string;
+  formatter?: (v: number) => string;
+  current: string;
+  delta: string;
+  deltaPositive?: boolean;
+}) {
   return (
-    <div className="rounded-xl border border-border bg-card p-5 space-y-5">
-      <div className="flex items-center justify-between">
-        <h3 className="text-base font-semibold">{title}</h3>
+    <div className="rounded-xl border border-border bg-card p-5 space-y-4">
+      <div className="flex items-start justify-between gap-4">
+        <div>
+          <h3 className="text-base font-semibold">{title}</h3>
+          {subtitle && <p className="mt-0.5 text-xs text-muted-foreground">{subtitle}</p>}
+        </div>
         <button className="inline-flex items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 text-xs font-medium hover:bg-accent">
           Últimos 12 meses <ChevronDown className="h-3.5 w-3.5 text-muted-foreground" />
         </button>
       </div>
-      <BarChart data={data} />
-      <div className="flex flex-wrap gap-4 text-xs text-muted-foreground">
-        {["Ene", "Feb", "Mar", "Abr"].map((m) => (
-          <span key={m} className="inline-flex items-center gap-1.5">
-            <span className="h-2 w-2 rounded-sm bg-primary" /> {m}
+
+      <div className="flex items-baseline gap-3">
+        <div className="text-3xl font-semibold tabular-nums">{current}</div>
+        <span
+          className={cn(
+            "inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-medium",
+            deltaPositive
+              ? "bg-success/15 text-success ring-1 ring-success/30"
+              : "bg-destructive/10 text-destructive ring-1 ring-destructive/20",
+          )}
+        >
+          {deltaPositive ? <TrendingUp className="h-3 w-3" /> : <TrendingDown className="h-3 w-3" />}
+          {delta}
+        </span>
+      </div>
+
+      <div className="h-56 -ml-2">
+        <ResponsiveContainer width="100%" height="100%">
+          <AreaChart data={data} margin={{ top: 10, right: 8, left: 0, bottom: 0 }}>
+            <defs>
+              <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor={color} stopOpacity={0.35} />
+                <stop offset="100%" stopColor={color} stopOpacity={0} />
+              </linearGradient>
+            </defs>
+            <CartesianGrid strokeDasharray="4 4" stroke="hsl(var(--border))" vertical={false} opacity={0.5} />
+            <XAxis
+              dataKey="month"
+              tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 11 }}
+              tickLine={false}
+              axisLine={false}
+            />
+            <YAxis
+              tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 11 }}
+              tickLine={false}
+              axisLine={false}
+              width={48}
+              tickFormatter={formatter}
+            />
+            <Tooltip
+              cursor={{ stroke: color, strokeWidth: 1, strokeDasharray: "4 4" }}
+              content={<ChartTooltip formatter={formatter} />}
+            />
+            <Area
+              type="monotone"
+              dataKey="value"
+              name={valueLabel}
+              stroke={color}
+              strokeWidth={2.5}
+              fill={`url(#${gradientId})`}
+              activeDot={{ r: 5, strokeWidth: 2, stroke: "hsl(var(--background))" }}
+            />
+          </AreaChart>
+        </ResponsiveContainer>
+      </div>
+    </div>
+  );
+}
+
+function DualLineChartCard({ title, subtitle }: { title: string; subtitle?: string }) {
+  const data = makeDualSeries(77);
+  const approvedColor = "oklch(0.62 0.16 155)";
+  const rejectedColor = "oklch(0.62 0.2 25)";
+  return (
+    <div className="rounded-xl border border-border bg-card p-5 space-y-4 h-full">
+      <div className="flex items-start justify-between gap-4">
+        <div>
+          <h3 className="text-base font-semibold">{title}</h3>
+          {subtitle && <p className="mt-0.5 text-xs text-muted-foreground">{subtitle}</p>}
+        </div>
+        <div className="flex items-center gap-3 text-xs">
+          <span className="inline-flex items-center gap-1.5">
+            <span className="h-2 w-2 rounded-full" style={{ backgroundColor: approvedColor }} />
+            Aprobadas
           </span>
-        ))}
+          <span className="inline-flex items-center gap-1.5">
+            <span className="h-2 w-2 rounded-full" style={{ backgroundColor: rejectedColor }} />
+            Rechazadas
+          </span>
+        </div>
+      </div>
+      <div className="h-72 -ml-2">
+        <ResponsiveContainer width="100%" height="100%">
+          <LineChart data={data} margin={{ top: 10, right: 8, left: 0, bottom: 0 }}>
+            <CartesianGrid strokeDasharray="4 4" stroke="hsl(var(--border))" vertical={false} opacity={0.5} />
+            <XAxis dataKey="month" tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 11 }} tickLine={false} axisLine={false} />
+            <YAxis tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 11 }} tickLine={false} axisLine={false} width={36} />
+            <Tooltip cursor={{ stroke: "hsl(var(--muted-foreground))", strokeWidth: 1, strokeDasharray: "4 4" }} content={<ChartTooltip />} />
+            <Line type="monotone" dataKey="aprobadas" name="Aprobadas" stroke={approvedColor} strokeWidth={2.5} dot={false} activeDot={{ r: 5, strokeWidth: 2, stroke: "hsl(var(--background))" }} />
+            <Line type="monotone" dataKey="rechazadas" name="Rechazadas" stroke={rejectedColor} strokeWidth={2.5} dot={false} activeDot={{ r: 5, strokeWidth: 2, stroke: "hsl(var(--background))" }} />
+          </LineChart>
+        </ResponsiveContainer>
       </div>
     </div>
   );
