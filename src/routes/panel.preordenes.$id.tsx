@@ -149,6 +149,11 @@ function RequestDetailPage() {
       })),
     ]);
     pushTrace(`Cargó ${arr.length} soporte(s)`, arr.map((f) => f.name).join(", "));
+    toast.success(
+      arr.length === 1
+        ? `Archivo adjuntado: ${arr[0].name}`
+        : `${arr.length} archivos adjuntados correctamente`
+    );
   }
 
   return (
