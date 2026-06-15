@@ -283,3 +283,33 @@ function Field({ label, required, children }: { label: string; required?: boolea
     </div>
   );
 }
+
+function DateField({ defaultDate }: { defaultDate?: Date }) {
+  const [date, setDate] = useState<Date | undefined>(defaultDate);
+  return (
+    <Popover>
+      <PopoverTrigger asChild>
+        <button
+          type="button"
+          className={cn(
+            "flex w-full items-center justify-between rounded-lg border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring/30",
+            !date && "text-muted-foreground",
+          )}
+        >
+          <span>{date ? format(date, "dd/MM/yyyy", { locale: es }) : "Seleccionar fecha"}</span>
+          <CalendarIcon className="h-4 w-4 text-muted-foreground" />
+        </button>
+      </PopoverTrigger>
+      <PopoverContent className="w-auto p-0" align="start">
+        <Calendar
+          mode="single"
+          selected={date}
+          onSelect={setDate}
+          initialFocus
+          locale={es}
+          className={cn("p-3 pointer-events-auto")}
+        />
+      </PopoverContent>
+    </Popover>
+  );
+}
