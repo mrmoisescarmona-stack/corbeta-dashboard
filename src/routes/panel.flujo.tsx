@@ -348,39 +348,28 @@ function ScopeActionCard({
             <p className="text-xs text-muted-foreground">
               Los soportes son obligatorios para continuar con el flujo de aprobación.
             </p>
-            <label className="mt-3 flex flex-col items-center justify-center gap-2 rounded-lg border-2 border-dashed border-primary/30 bg-primary/[0.03] px-4 py-6 text-center cursor-pointer hover:bg-primary/[0.06] transition-colors">
-              <UploadCloud className="h-7 w-7 text-primary" />
-              <div className="text-sm text-foreground">Arrastre archivos aquí</div>
-              <div className="text-xs text-muted-foreground">o</div>
-              <span className="inline-flex items-center rounded-lg bg-primary px-4 py-2 text-xs font-semibold text-primary-foreground">
-                Seleccionar archivo
-              </span>
-              <div className="text-[11px] text-muted-foreground mt-1">
-                Formatos permitidos: .msg, .eml &nbsp;|&nbsp; Tamaño máximo por archivo: 10 MB
-              </div>
-              <input
-                type="file"
-                accept=".msg,.eml"
-                multiple
-                className="hidden"
-                onChange={(e) => {
-                  const fl = Array.from(e.target.files ?? []);
-                  if (!fl.length) return;
-                  const now = new Date();
-                  const stamp = `${now.toLocaleDateString("es-CO")} ${now.toLocaleTimeString("es-CO", { hour: "2-digit", minute: "2-digit" })}`;
-                  setFiles((prev) => [
-                    ...prev,
-                    ...fl.map((f) => ({
-                      name: f.name,
-                      size: f.size > 1024 * 1024 ? `${(f.size / 1024 / 1024).toFixed(1)} MB` : `${Math.round(f.size / 1024)} KB`,
-                      by: "Usuario actual",
-                      date: stamp,
-                      status: "Pendiente" as const,
-                    })),
-                  ]);
-                }}
-              />
-            </label>
+            <FileDropzone
+              onFiles={(fl) => {
+                if (!fl.length) return;
+                const now = new Date();
+                const stamp = `${now.toLocaleDateString("es-CO")} ${now.toLocaleTimeString("es-CO", { hour: "2-digit", minute: "2-digit" })}`;
+                setFiles((prev) => [
+                  ...prev,
+                  ...fl.map((f) => ({
+                    name: f.name,
+                    size: f.size > 1024 * 1024 ? `${(f.size / 1024 / 1024).toFixed(1)} MB` : `${Math.round(f.size / 1024)} KB`,
+                    by: "Usuario actual",
+                    date: stamp,
+                    status: "Pendiente" as const,
+                  })),
+                ]);
+                toast.success(
+                  fl.length === 1
+                    ? `Archivo adjuntado: ${fl[0].name}`
+                    : `${fl.length} archivos adjuntados correctamente`
+                );
+              }}
+            />
 
             {files.length > 0 && (
               <div className="mt-4">
