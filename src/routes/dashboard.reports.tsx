@@ -248,8 +248,27 @@ function ReportsPage() {
       </section>
 
       <section className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <ChartCard title="Solicitudes por mes" />
-        <ChartCard title="Valor aprobado por mes" />
+        <AreaChartCard
+          title="Solicitudes por mes"
+          subtitle="Últimos 12 meses"
+          data={makeSeries(11, 80, 180)}
+          color="oklch(0.55 0.2 260)"
+          gradientId="grad-solicitudes"
+          valueLabel="Solicitudes"
+          current="2.847"
+          delta="+18%"
+        />
+        <AreaChartCard
+          title="Valor aprobado por mes"
+          subtitle="Últimos 12 meses"
+          data={makeSeries(29, 40, 160).map((d) => ({ ...d, value: d.value * 2 }))}
+          color="oklch(0.62 0.16 155)"
+          gradientId="grad-valor"
+          valueLabel="Valor aprobado"
+          formatter={(v: number) => `$${v}M`}
+          current="$ 184M"
+          delta="+22%"
+        />
       </section>
 
       <section className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -270,7 +289,7 @@ function ReportsPage() {
           </ul>
         </div>
         <div className="lg:col-span-2">
-          <ChartCard title="Tendencia de aprobaciones vs rechazos" />
+          <DualLineChartCard title="Tendencia de aprobaciones vs rechazos" subtitle="Últimos 12 meses" />
         </div>
       </section>
 
