@@ -375,16 +375,27 @@ function GestionModal({
           </div>
         </div>
 
-        <div className="border-t border-border p-5">
-          <button
-            disabled={!canConfirm}
-            onClick={() => onConfirm(item.id)}
-            className="w-full rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            Confirmar gestión
-          </button>
-          <p className="mt-2 text-center text-[11px] text-muted-foreground">
+        <div className="border-t border-border p-5 space-y-3">
+          <div className="flex flex-col sm:flex-row gap-2">
+            <Link
+              to="/panel/preordenes/$id"
+              params={{ id: item.id }}
+              className="inline-flex flex-1 items-center justify-center gap-2 rounded-lg border border-border bg-background px-4 py-2.5 text-sm font-medium hover:bg-accent"
+            >
+              Ver detalle completo
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+            <button
+              disabled={!canConfirm}
+              onClick={() => onConfirm(item.id)}
+              className="inline-flex flex-1 items-center justify-center rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              Confirmar gestión
+            </button>
+          </div>
+          <p className="text-center text-[11px] text-muted-foreground">
             Al confirmar, la solicitud pasa a <span className="font-medium text-foreground">Espera del proveedor</span>.
+            ¿Necesitas más contexto? Abre el detalle completo para ver cliente, vendedor, líneas y trazabilidad.
           </p>
         </div>
       </div>
