@@ -100,18 +100,18 @@ const requests: {
   status: Status;
   value: string;
 }[] = [
-  { id: "PR-2024-000245", client: "Distribuidora del Valle S.A.S.", date: "28/05/2024 09:15 a. m.", provider: "Castrol", status: "Pendiente", value: "$ 12.450.000" },
-  { id: "PR-2024-000244", client: "Moto Repuestos del Norte", date: "28/05/2024 08:47 a. m.", provider: "Castrol", status: "Espera proveedor", value: "$ 8.230.000" },
-  { id: "PR-2024-000243", client: "Comercializadora Andina", date: "28/05/2024 07:38 a. m.", provider: "Castrol", status: "Enviada a PeopleSoft", value: "$ 5.980.000" },
-  { id: "PR-2024-000242", client: "Lubricantes del Sur Ltda.", date: "27/05/2024 04:22 p. m.", provider: "Castrol", status: "Modificada", value: "$ 3.120.000" },
-  { id: "PR-2024-000241", client: "Autopartes del Caribe", date: "27/05/2024 02:11 p. m.", provider: "Castrol", status: "Error integración", value: "$ 9.760.000" },
+  { id: "PR-2026-000245", client: "Distribuidora del Valle S.A.S.", date: "28/05/2026 09:15 a. m.", provider: "Castrol", status: "Pendiente", value: "$ 12.450.000" },
+  { id: "PR-2026-000244", client: "Moto Repuestos del Norte", date: "28/05/2026 08:47 a. m.", provider: "Castrol", status: "Espera proveedor", value: "$ 8.230.000" },
+  { id: "PR-2026-000243", client: "Comercializadora Andina", date: "28/05/2026 07:38 a. m.", provider: "Castrol", status: "Enviada a PeopleSoft", value: "$ 5.980.000" },
+  { id: "PR-2026-000242", client: "Lubricantes del Sur Ltda.", date: "27/05/2026 04:22 p. m.", provider: "Castrol", status: "Modificada", value: "$ 3.120.000" },
+  { id: "PR-2026-000241", client: "Autopartes del Caribe", date: "27/05/2026 02:11 p. m.", provider: "Castrol", status: "Error integración", value: "$ 9.760.000" },
 ];
 
 const activity = [
-  { icon: CheckCircle2, tone: "success" as const, text: "PR-2024-000243 fue aprobada", sub: "por Juan Pérez", time: "Hace 35 min" },
-  { icon: Clock, tone: "warning" as const, text: "Castrol respondió solicitud", sub: "PR-2024-000244", time: "Hace 1 hora" },
-  { icon: FileText, tone: "primary" as const, text: "Nueva solicitud PR-2024-000245", sub: "creada por Luis Gómez", time: "Hace 2 horas" },
-  { icon: XCircle, tone: "destructive" as const, text: "PR-2024-000238 fue rechazada", sub: "por María López", time: "Hace 3 horas" },
+  { icon: CheckCircle2, tone: "success" as const, text: "PR-2026-000243 fue aprobada", sub: "por Juan Pérez", time: "Hace 35 min" },
+  { icon: Clock, tone: "warning" as const, text: "Castrol respondió solicitud", sub: "PR-2026-000244", time: "Hace 1 hora" },
+  { icon: FileText, tone: "primary" as const, text: "Nueva solicitud PR-2026-000245", sub: "creada por Luis Gómez", time: "Hace 2 horas" },
+  { icon: XCircle, tone: "destructive" as const, text: "PR-2026-000238 fue rechazada", sub: "por María López", time: "Hace 3 horas" },
 ];
 
 type DonutSeg = { label: string; count: number; valueM: number; color: string };
@@ -124,9 +124,9 @@ const donutData: DonutSeg[] = [
 ];
 
 const overdue = [
-  { id: "PR-2024-000241", supplier: "Autopartes del Caribe", deadline: "Vence 5pm", tone: "destructive" as const },
-  { id: "PR-2024-000238", supplier: "Lubricantes Sur", deadline: "Vence 6pm", tone: "destructive" as const },
-  { id: "PR-2024-000235", supplier: "Moto Repuestos", deadline: "Vence mañana", tone: "warning" as const },
+  { id: "PR-2026-000241", supplier: "Autopartes del Caribe", deadline: "Vence 5pm", tone: "destructive" as const },
+  { id: "PR-2026-000238", supplier: "Lubricantes Sur", deadline: "Vence 6pm", tone: "destructive" as const },
+  { id: "PR-2026-000235", supplier: "Moto Repuestos", deadline: "Vence mañana", tone: "warning" as const },
 ];
 
 const supplierWait = [
@@ -239,7 +239,7 @@ function DashboardOverview() {
         </div>
         <button className="inline-flex items-center gap-2 rounded-lg border border-border bg-card px-3.5 py-2 text-sm font-medium hover:bg-accent">
           <Calendar className="h-4 w-4 text-muted-foreground" />
-          Hoy, 28 de mayo de 2024
+          Hoy, 28 de mayo de 2026
           <ChevronDown className="h-4 w-4 text-muted-foreground" />
         </button>
       </div>

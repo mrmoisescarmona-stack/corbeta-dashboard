@@ -21,10 +21,10 @@ const myPreorders: {
   phase: Phase;
   result: "En curso" | "Aprobada" | "Rechazada" | "Mixta";
 }[] = [
-  { id: "PR-2024-000245", client: "Distribuidora del Valle", lines: 4, approved: 2, modified: 1, rejected: 0, pending: 1, value: "$ 12.450.000", phase: 3, result: "En curso" },
-  { id: "PR-2024-000244", client: "Moto Repuestos Norte", lines: 3, approved: 0, modified: 0, rejected: 0, pending: 3, value: "$ 8.230.000", phase: 2, result: "En curso" },
-  { id: "PR-2024-000243", client: "Comercializadora Andina", lines: 5, approved: 5, modified: 0, rejected: 0, pending: 0, value: "$ 5.980.000", phase: 5, result: "Aprobada" },
-  { id: "PR-2024-000242", client: "Lubricantes del Sur", lines: 2, approved: 0, modified: 0, rejected: 2, pending: 0, value: "$ 3.120.000", phase: 4, result: "Rechazada" },
+  { id: "PR-2026-000245", client: "Distribuidora del Valle", lines: 4, approved: 2, modified: 1, rejected: 0, pending: 1, value: "$ 12.450.000", phase: 3, result: "En curso" },
+  { id: "PR-2026-000244", client: "Moto Repuestos Norte", lines: 3, approved: 0, modified: 0, rejected: 0, pending: 3, value: "$ 8.230.000", phase: 2, result: "En curso" },
+  { id: "PR-2026-000243", client: "Comercializadora Andina", lines: 5, approved: 5, modified: 0, rejected: 0, pending: 0, value: "$ 5.980.000", phase: 5, result: "Aprobada" },
+  { id: "PR-2026-000242", client: "Lubricantes del Sur", lines: 2, approved: 0, modified: 0, rejected: 2, pending: 0, value: "$ 3.120.000", phase: 4, result: "Rechazada" },
 ];
 
 function SalesRepPage() {

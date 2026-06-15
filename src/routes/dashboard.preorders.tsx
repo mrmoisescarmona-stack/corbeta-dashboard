@@ -84,7 +84,7 @@ const rows: Row[] = Array.from({ length: 10 }).map((_, i) => {
       ? linesTotal
       : Math.min(linesTotal, Math.max(0, i % linesTotal));
   return {
-    id: `PR-2024-0002${30 + i}`,
+    id: `PR-2026-0002${30 + i}`,
     client: [
       "Distribuidora del Valle",
       "Moto Repuestos Norte",
@@ -93,7 +93,7 @@ const rows: Row[] = Array.from({ length: 10 }).map((_, i) => {
       "Autopartes del Caribe",
     ][i % 5],
     zone: ["Norte", "Centro", "Sur", "Occidente"][i % 4],
-    date: `${20 + (i % 8)}/05/2024`,
+    date: `${20 + (i % 8)}/05/2026`,
     provider: "Castrol",
     status,
     valueM: +(1 + i * 0.8).toFixed(1),

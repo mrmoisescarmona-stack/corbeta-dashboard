@@ -66,8 +66,8 @@ function RequestDetailPage() {
   const navigate = useNavigate();
   const [lines, setLines] = useState<Line[]>(initialLines);
   const [trace, setTrace] = useState<TraceEntry[]>([
-    { at: "28/05/2024 09:12", who: "CorbeMóvil", action: "Preorden recibida" },
-    { at: "28/05/2024 09:12", who: "Sistema", action: "Asignada a Moises Carmona" },
+    { at: "28/05/2026 09:12", who: "CorbeMóvil", action: "Preorden recibida" },
+    { at: "28/05/2026 09:12", who: "Sistema", action: "Asignada a Moises Carmona" },
   ]);
   const [modal, setModal] = useState<{ kind: "modify" | "reject" | "cancel"; idx: number } | null>(null);
   const [files, setFiles] = useState<File[]>([]);
@@ -168,10 +168,10 @@ function RequestDetailPage() {
           <MetaItem icon={Phone} label="Vendedor" value="Luis Quintero" sub="+57 318 555 1024" />
         </div>
         <div className="mt-5 grid grid-cols-2 md:grid-cols-4 gap-5 text-xs text-muted-foreground">
-          <div><span className="text-foreground/70 font-medium">Digitada:</span> 28/05/2024 09:08</div>
-          <div><span className="text-foreground/70 font-medium">Recibida:</span> 28/05/2024 09:12</div>
+          <div><span className="text-foreground/70 font-medium">Digitada:</span> 28/05/2026 09:08</div>
+          <div><span className="text-foreground/70 font-medium">Recibida:</span> 28/05/2026 09:12</div>
           <div><span className="text-foreground/70 font-medium">Origen:</span> CorbeMóvil (100)</div>
-          <div><span className="text-foreground/70 font-medium">Catálogo:</span> Lubricantes 2024</div>
+          <div><span className="text-foreground/70 font-medium">Catálogo:</span> Lubricantes 2026</div>
         </div>
       </section>
 

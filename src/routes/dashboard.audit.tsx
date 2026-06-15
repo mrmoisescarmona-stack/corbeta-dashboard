@@ -11,10 +11,10 @@ export const Route = createFileRoute("/dashboard/audit")({
 
 const events = Array.from({ length: 10 }).map((_, i) => {
   const types = [
-    { icon: CheckCircle2, tone: "bg-success/20 text-foreground", text: "Aprobó solicitud", target: "PR-2024-000243" },
-    { icon: XCircle, tone: "bg-destructive/10 text-destructive", text: "Rechazó solicitud", target: "PR-2024-000238" },
-    { icon: FileText, tone: "bg-primary/10 text-primary", text: "Creó solicitud", target: "PR-2024-000245" },
-    { icon: Clock, tone: "bg-warning/10 text-warning", text: "Reasignó solicitud", target: "PR-2024-000241" },
+    { icon: CheckCircle2, tone: "bg-success/20 text-foreground", text: "Aprobó solicitud", target: "PR-2026-000243" },
+    { icon: XCircle, tone: "bg-destructive/10 text-destructive", text: "Rechazó solicitud", target: "PR-2026-000238" },
+    { icon: FileText, tone: "bg-primary/10 text-primary", text: "Creó solicitud", target: "PR-2026-000245" },
+    { icon: Clock, tone: "bg-warning/10 text-warning", text: "Reasignó solicitud", target: "PR-2026-000241" },
   ];
   const t = types[i % 4];
   return { ...t, user: ["Juan Pérez", "María López", "Luis Gómez", "Ana Carolina"][i % 4], time: `Hace ${i + 1}h`, ip: `10.0.${i}.${i + 12}` };
@@ -68,7 +68,7 @@ function AuditPage() {
                 </div>
                 <div className="text-right">
                   <div className="text-xs text-muted-foreground whitespace-nowrap">{e.time}</div>
-                  <div className="text-[11px] text-muted-foreground mt-0.5">28/05/2024</div>
+                  <div className="text-[11px] text-muted-foreground mt-0.5">28/05/2026</div>
                 </div>
               </li>
             );

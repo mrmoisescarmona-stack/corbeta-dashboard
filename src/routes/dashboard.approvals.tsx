@@ -17,9 +17,9 @@ const stats = [
 ];
 
 const rows = Array.from({ length: 8 }).map((_, i) => ({
-  id: `PR-2024-0002${40 + i}`,
+  id: `PR-2026-0002${40 + i}`,
   client: ["Distribuidora del Valle", "Moto Repuestos Norte", "Comercializadora Andina", "Lubricantes del Sur", "Autopartes del Caribe"][i % 5],
-  date: "28/05/2024",
+  date: "28/05/2026",
   provider: "Castrol",
   status: ["Pendiente", "Espera proveedor", "Pendiente", "Aprobada"][i % 4],
   sla: ["2h", "vence hoy", "4h", "ok"][i % 4],

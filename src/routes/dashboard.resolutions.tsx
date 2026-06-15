@@ -7,9 +7,9 @@ export const Route = createFileRoute("/dashboard/resolutions")({
 });
 
 const resolutions = [
-  { id: "PR-2024-000243", client: "Comercializadora Andina", approved: 5, modified: 0, rejected: 0, notified: true, vendor: "Luis Quintero", at: "28/05/2024 11:02" },
-  { id: "PR-2024-000241", client: "Autopartes del Caribe", approved: 3, modified: 1, rejected: 1, notified: true, vendor: "Andrés Ruiz", at: "28/05/2024 10:48" },
-  { id: "PR-2024-000240", client: "Lubricantes del Norte", approved: 2, modified: 0, rejected: 2, notified: false, vendor: "Sofía Mora", at: "28/05/2024 09:35" },
+  { id: "PR-2026-000243", client: "Comercializadora Andina", approved: 5, modified: 0, rejected: 0, notified: true, vendor: "Luis Quintero", at: "28/05/2026 11:02" },
+  { id: "PR-2026-000241", client: "Autopartes del Caribe", approved: 3, modified: 1, rejected: 1, notified: true, vendor: "Andrés Ruiz", at: "28/05/2026 10:48" },
+  { id: "PR-2026-000240", client: "Lubricantes del Norte", approved: 2, modified: 0, rejected: 2, notified: false, vendor: "Sofía Mora", at: "28/05/2026 09:35" },
 ];
 
 function ResolutionsPage() {

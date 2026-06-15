@@ -14,10 +14,10 @@ const tabs = ["Todas", "No leídas", "Aprobaciones", "Sistema"];
 
 const items = Array.from({ length: 8 }).map((_, i) => {
   const types = [
-    { icon: CheckCircle2, tone: "bg-success/20 text-foreground", title: "PR-2024-000243 fue aprobada", sub: "por Juan Pérez" },
-    { icon: Clock, tone: "bg-warning/10 text-warning", title: "Castrol respondió PR-2024-000244", sub: "Requiere tu revisión" },
-    { icon: FileText, tone: "bg-primary/10 text-primary", title: "Nueva solicitud PR-2024-000245", sub: "creada por Luis Gómez" },
-    { icon: XCircle, tone: "bg-destructive/10 text-destructive", title: "PR-2024-000238 fue rechazada", sub: "por María López" },
+    { icon: CheckCircle2, tone: "bg-success/20 text-foreground", title: "PR-2026-000243 fue aprobada", sub: "por Juan Pérez" },
+    { icon: Clock, tone: "bg-warning/10 text-warning", title: "Castrol respondió PR-2026-000244", sub: "Requiere tu revisión" },
+    { icon: FileText, tone: "bg-primary/10 text-primary", title: "Nueva solicitud PR-2026-000245", sub: "creada por Luis Gómez" },
+    { icon: XCircle, tone: "bg-destructive/10 text-destructive", title: "PR-2026-000238 fue rechazada", sub: "por María López" },
   ];
   const t = types[i % 4];
   return { ...t, time: `Hace ${i + 1}h`, unread: i < 3 };
