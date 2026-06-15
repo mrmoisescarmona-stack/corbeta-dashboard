@@ -75,7 +75,6 @@ function RequestDetailPage() {
     { at: "28/05/2026 09:12", who: "Sistema", action: "Asignada a Moises Carmona" },
   ]);
   const [modal, setModal] = useState<{ kind: "modify" | "reject" | "cancel"; idx: number } | null>(null);
-  const [files, setFiles] = useState<File[]>([]);
   const [fileError, setFileError] = useState<string | null>(null);
   const [dragOver, setDragOver] = useState(false);
   const fileInput = useRef<HTMLInputElement>(null);
@@ -86,6 +85,9 @@ function RequestDetailPage() {
     { name: "Correo_Proveedor.eml", size: "842 KB", by: "Ana Carolina", date: "28/05/2024 09:16 a. m.", status: "Validado" },
     { name: "Soporte_Comercial.msg", size: "2.1 MB", by: "Ana Carolina", date: "28/05/2024 09:18 a. m.", status: "Validado" },
   ]);
+
+  const visibleLines = lines; // HU_004: solo líneas de mi gestión (mock: todas)
+  const summary = useMemo(() => {
     const total = visibleLines.reduce((acc, l) => acc + l.qty * l.listPrice, 0);
     const pending = visibleLines.filter((l) => l.status === "Pendiente").length;
     return { total, pending, count: visibleLines.length };
