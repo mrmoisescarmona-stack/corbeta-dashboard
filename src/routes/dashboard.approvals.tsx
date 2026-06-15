@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/dialog";
 
 export const Route = createFileRoute("/dashboard/approvals")({
-  head: () => ({ meta: [{ title: "Parametrización del Workflow · Corbeta" }] }),
+  head: () => ({ meta: [{ title: "Parametrización del Flujo · Corbeta" }] }),
   component: ApprovalsPage,
   pendingComponent: ApprovalsSkeleton,
 });
