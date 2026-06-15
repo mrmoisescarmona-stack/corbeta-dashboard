@@ -141,11 +141,8 @@ function DashboardLayout() {
             <button className="md:hidden -ml-1 p-2 text-muted-foreground hover:text-foreground">
               <Menu className="h-5 w-5" />
             </button>
-            <h1 className="text-sm md:text-base font-semibold text-foreground truncate">
-              Gestor de Aprobaciones de Descuentos Puntuales
-            </h1>
-            <div className="ml-auto flex items-center gap-3">
-              <div className="hidden lg:flex relative w-80">
+            <div className="flex-1 flex">
+              <div className="relative w-full max-w-2xl">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <input
                   placeholder="Buscar preorden, cliente o proveedor…"
@@ -155,6 +152,9 @@ function DashboardLayout() {
                   ⌘K
                 </kbd>
               </div>
+            </div>
+            <div className="flex items-center gap-3">
+
               <button className="relative rounded-lg p-2 text-muted-foreground hover:bg-accent hover:text-foreground">
                 <Bell className="h-5 w-5" />
                 <span className="absolute top-1 right-1 flex h-4 w-4 items-center justify-center rounded-full bg-warning text-[10px] font-semibold text-warning-foreground">
