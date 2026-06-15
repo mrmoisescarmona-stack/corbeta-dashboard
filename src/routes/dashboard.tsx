@@ -46,7 +46,7 @@ const navGroups: NavGroup[] = [
   {
     title: "Admin",
     items: [
-      { icon: Flag, label: "Seguimiento de Solicitudes", to: "/dashboard/resolutions" },
+      { icon: Flag, label: "Seguimiento", to: "/dashboard/resolutions" },
       { icon: Database, label: "Envío PeopleSoft", to: "/dashboard/peoplesoft" },
       { icon: Building2, label: "Proveedores", to: "/dashboard/providers" },
       { icon: Bell, label: "Notificaciones", to: "/dashboard/notifications" },

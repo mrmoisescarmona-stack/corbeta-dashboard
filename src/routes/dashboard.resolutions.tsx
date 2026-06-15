@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Flag, CheckCircle2, XCircle, Pencil, Send, Eye } from "lucide-react";
 
 export const Route = createFileRoute("/dashboard/resolutions")({
-  head: () => ({ meta: [{ title: "Seguimiento de Solicitudes · Corbeta" }] }),
+  head: () => ({ meta: [{ title: "Seguimiento · Corbeta" }] }),
   component: ResolutionsPage,
 });
 
@@ -34,7 +34,7 @@ function ResolutionsPage() {
   return (
     <div className="space-y-8 animate-fade-in">
       <div>
-        <h2 className="text-2xl md:text-3xl font-semibold tracking-tight">Seguimiento de Solicitudes</h2>
+        <h2 className="text-2xl md:text-3xl font-semibold tracking-tight">Seguimiento</h2>
         <p className="mt-1 text-sm text-muted-foreground">Panel de solicitudes pendientes asignadas a su gestión.</p>
       </div>
 
