@@ -232,33 +232,7 @@ function ApproverDetailDialog({ approver, onClose }: { approver: Approver | null
               </h4>
               <div className="space-y-3">
                 {approver.scopes.map((s) => (
-                  <div key={s.code} className="rounded-xl border border-border bg-card">
-                    <div className="flex flex-wrap items-start justify-between gap-3 p-4 border-b border-border">
-                      <div>
-                        <div className="text-sm font-semibold">
-                          {s.code} — {s.description}
-                        </div>
-                        <div className="text-xs text-muted-foreground mt-0.5">
-                          Alcance asociado al rol de aprobador
-                        </div>
-                      </div>
-                      <PillBadge label={s.status} tone={s.status === "Activo" ? "success" : "warning"} />
-                    </div>
-                    <div className="grid gap-4 md:grid-cols-3 p-4 text-sm">
-                      <div>
-                        <div className="text-xs text-muted-foreground">Código</div>
-                        <div className="font-medium tabular-nums">{s.code}</div>
-                      </div>
-                      <div>
-                        <div className="text-xs text-muted-foreground">Límite de descuento</div>
-                        <div className="font-medium tabular-nums">{s.limit}</div>
-                      </div>
-                      <div>
-                        <div className="text-xs text-muted-foreground">Estado</div>
-                        <div className="font-medium">{s.status}</div>
-                      </div>
-                    </div>
-                  </div>
+                  <ScopeActionCard key={s.code} scope={s} />
                 ))}
               </div>
             </div>
