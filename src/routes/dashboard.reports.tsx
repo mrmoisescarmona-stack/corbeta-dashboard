@@ -224,8 +224,8 @@ function ReportsPage() {
 
       <div className="flex flex-wrap items-start justify-between gap-4 pt-2">
         <div>
-          <h2 className="text-2xl md:text-3xl font-semibold tracking-tight">Reportes</h2>
-          <p className="mt-1 text-sm text-muted-foreground">Indicadores operativos y desempeño del equipo.</p>
+          <h2 className="text-2xl md:text-3xl font-semibold tracking-tight">Indicadores Operativos</h2>
+          <p className="mt-1 text-sm text-muted-foreground">Resultados operativos y desempeño del equipo.</p>
         </div>
         <button className="inline-flex items-center gap-2 rounded-lg border border-border bg-card px-3.5 py-2 text-sm font-medium hover:bg-accent">
           <BarChart3 className="h-4 w-4 text-muted-foreground" /> Exportar reporte
@@ -339,7 +339,7 @@ function TraceabilitySection() {
       <div>
         <h2 className="text-2xl md:text-3xl font-semibold tracking-tight">Reportes y Trazabilidad</h2>
         <p className="mt-1 text-sm text-muted-foreground">
-          Consulta histórica y descarga de reportes de descuentos puntuales.
+          Seguimiento de resultados operativos y desempeño del equipo.
         </p>
       </div>
 
