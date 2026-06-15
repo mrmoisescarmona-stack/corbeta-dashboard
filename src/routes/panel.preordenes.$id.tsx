@@ -1,5 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useMemo, useRef, useState } from "react";
+import { toast } from "sonner";
 import {
   ArrowLeft,
   CheckCircle2,
@@ -62,7 +63,7 @@ const initialLines: Line[] = [
 const fmtCOP = (n: number) =>
   new Intl.NumberFormat("es-CO", { style: "currency", currency: "COP", maximumFractionDigits: 0 }).format(n);
 
-const allowedExt = [".eml", ".msg"];
+const allowedExt = [".eml", ".msg", ".oft", ".emlx"];
 const maxBytes = 10 * 1024 * 1024;
 
 function RequestDetailPage() {
@@ -148,6 +149,11 @@ function RequestDetailPage() {
       })),
     ]);
     pushTrace(`Cargó ${arr.length} soporte(s)`, arr.map((f) => f.name).join(", "));
+    toast.success(
+      arr.length === 1
+        ? `Archivo adjuntado: ${arr[0].name}`
+        : `${arr.length} archivos adjuntados correctamente`
+    );
   }
 
   return (
@@ -296,12 +302,12 @@ function RequestDetailPage() {
             Seleccionar archivo
           </span>
           <div className="mt-3 text-[11px] text-muted-foreground">
-            Formatos permitidos: .msg, .eml &nbsp;|&nbsp; Tamaño máximo por archivo: 10 MB
+            Formatos permitidos: .eml, .msg, .oft, .emlx &nbsp;|&nbsp; Tamaño máximo por archivo: 10 MB
           </div>
           <input
             ref={fileInput}
             type="file"
-            accept=".eml,.msg"
+            accept=".eml,.msg,.oft,.emlx"
             multiple
             className="hidden"
             onChange={(e) => e.target.files && handleFiles(e.target.files)}
