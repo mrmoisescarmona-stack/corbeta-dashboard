@@ -127,11 +127,14 @@ const donutData: DonutSeg[] = [
   { label: "Canceladas", count: 2, valueM: 6, color: "oklch(0.78 0.005 250)" },
 ];
 
-const overdue = [
-  { id: "PR-2026-000241", supplier: "Autopartes del Caribe", deadline: "Vence 5pm", tone: "destructive" as const },
-  { id: "PR-2026-000238", supplier: "Lubricantes Sur", deadline: "Vence 6pm", tone: "destructive" as const },
-  { id: "PR-2026-000235", supplier: "Moto Repuestos", deadline: "Vence mañana", tone: "warning" as const },
+const overdueBase = [
+  { id: "PR-2026-000241", supplier: "Autopartes del Caribe", deadline: "Vence 5pm", tone: "destructive" as const, sku: "8806094567891", item: "Refrigerador Samsung RT38 380L", desc: "DTO-001", providerName: "Samsung Colombia S.A.", qty: 5, listPrice: "$ 2.450.000", corbetaPct: "3.5%", supplierPct: "5.0%", totalPct: "8.5%", supplierResp: "Aprobado" },
+  { id: "PR-2026-000238", supplier: "Lubricantes Sur", deadline: "Vence 6pm", tone: "destructive" as const, sku: "8806094567238", item: "Aceite Castrol GTX 20W-50", desc: "DTO-014", providerName: "Castrol Colombia S.A.", qty: 120, listPrice: "$ 85.000", corbetaPct: "4.0%", supplierPct: "6.0%", totalPct: "10.0%", supplierResp: "Aprobado" },
+  { id: "PR-2026-000235", supplier: "Moto Repuestos", deadline: "Vence mañana", tone: "warning" as const, sku: "8806094567235", item: "Pastillas freno moto AKT 125", desc: "DTO-022", providerName: "AKT Motos S.A.", qty: 50, listPrice: "$ 38.500", corbetaPct: "2.5%", supplierPct: "4.5%", totalPct: "7.0%", supplierResp: "Aprobado" },
 ];
+
+type OverdueItem = (typeof overdueBase)[number];
+type Decision = "approve" | "reject" | "modify" | "cancel";
 
 const supplierWait = [
   { name: "Castrol", hours: 31, status: "Vencida" as const },
