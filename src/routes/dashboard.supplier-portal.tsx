@@ -7,16 +7,16 @@ export const Route = createFileRoute("/dashboard/supplier-portal")({
 });
 
 const pending = [
-  { id: "PR-2024-000245", client: "Distribuidora del Valle", line: "Castrol GTX 20W50", qty: 24, pct: 4, sla: "Vence en 6h" },
-  { id: "PR-2024-000244", client: "Moto Repuestos Norte", line: "Filtro Mann W 712/75", qty: 60, pct: 12, sla: "Vence mañana" },
-  { id: "PR-2024-000241", client: "Autopartes del Caribe", line: "Refrigerante Prestone", qty: 36, pct: 6, sla: "Vence en 2d" },
+  { id: "PR-2026-000245", client: "Distribuidora del Valle", line: "Castrol GTX 20W50", qty: 24, pct: 4, sla: "Vence en 6h" },
+  { id: "PR-2026-000244", client: "Moto Repuestos Norte", line: "Filtro Mann W 712/75", qty: 60, pct: 12, sla: "Vence mañana" },
+  { id: "PR-2026-000241", client: "Autopartes del Caribe", line: "Refrigerante Prestone", qty: 36, pct: 6, sla: "Vence en 2d" },
 ];
 
 const tracking = [
-  { provider: "Castrol", id: "PR-2024-000244", hours: 31, reminderAt: "Hace 6h", status: "Vencida" as const },
-  { provider: "Shell", id: "PR-2024-000240", hours: 18, reminderAt: "Hace 2h", status: "En riesgo" as const },
-  { provider: "Mobil", id: "PR-2024-000236", hours: 4, reminderAt: "—", status: "A tiempo" as const },
-  { provider: "Total", id: "PR-2024-000233", hours: 28, reminderAt: "Hace 4h", status: "Vencida" as const },
+  { provider: "Castrol", id: "PR-2026-000244", hours: 31, reminderAt: "Hace 6h", status: "Vencida" as const },
+  { provider: "Shell", id: "PR-2026-000240", hours: 18, reminderAt: "Hace 2h", status: "En riesgo" as const },
+  { provider: "Mobil", id: "PR-2026-000236", hours: 4, reminderAt: "—", status: "A tiempo" as const },
+  { provider: "Total", id: "PR-2026-000233", hours: 28, reminderAt: "Hace 4h", status: "Vencida" as const },
 ];
 
 function SupplierPortalPage() {

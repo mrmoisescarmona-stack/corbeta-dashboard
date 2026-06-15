@@ -9,11 +9,11 @@ export const Route = createFileRoute("/dashboard/peoplesoft")({
 type DispatchStatus = "Enviada" | "Reintentando" | "Error";
 
 const dispatches: { id: string; status: DispatchStatus; at: string; attempts: number; error?: string }[] = [
-  { id: "PR-2024-000243", status: "Enviada", at: "28/05/2024 11:05", attempts: 1 },
-  { id: "PR-2024-000241", status: "Enviada", at: "28/05/2024 10:51", attempts: 1 },
-  { id: "PR-2024-000239", status: "Error", at: "28/05/2024 09:42", attempts: 3, error: "Producto no existe en catálogo PS (EAN 7702011009999)" },
-  { id: "PR-2024-000238", status: "Reintentando", at: "28/05/2024 09:21", attempts: 2, error: "Timeout en endpoint /createOrder" },
-  { id: "PR-2024-000236", status: "Error", at: "28/05/2024 08:55", attempts: 4, error: "NIT cliente sin registro en PeopleSoft" },
+  { id: "PR-2026-000243", status: "Enviada", at: "28/05/2026 11:05", attempts: 1 },
+  { id: "PR-2026-000241", status: "Enviada", at: "28/05/2026 10:51", attempts: 1 },
+  { id: "PR-2026-000239", status: "Error", at: "28/05/2026 09:42", attempts: 3, error: "Producto no existe en catálogo PS (EAN 7702011009999)" },
+  { id: "PR-2026-000238", status: "Reintentando", at: "28/05/2026 09:21", attempts: 2, error: "Timeout en endpoint /createOrder" },
+  { id: "PR-2026-000236", status: "Error", at: "28/05/2026 08:55", attempts: 4, error: "NIT cliente sin registro en PeopleSoft" },
 ];
 
 const kpis = [
