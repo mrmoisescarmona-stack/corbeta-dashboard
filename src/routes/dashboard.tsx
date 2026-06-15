@@ -2,9 +2,8 @@ import { createFileRoute, Link, Outlet, redirect, useNavigate, useRouterState } 
 import {
   LayoutDashboard,
   CheckSquare,
-  FileText,
+  Inbox,
   BarChart3,
-  Users,
   Settings,
   ShieldCheck,
   Bell,
@@ -12,6 +11,11 @@ import {
   Menu,
   ChevronDown,
   LogOut,
+  Mail,
+  User,
+  Flag,
+  Database,
+  Building2,
 } from "lucide-react";
 import logoAsset from "@/assets/logo_corbeta.png.asset.json";
 import { supabase } from "@/integrations/supabase/client";
@@ -26,15 +30,57 @@ export const Route = createFileRoute("/dashboard")({
   component: DashboardLayout,
 });
 
-const navItems = [
-  { icon: LayoutDashboard, label: "Dashboard", to: "/dashboard" as const, exact: true },
-  { icon: CheckSquare, label: "Mis aprobaciones", to: "/dashboard/approvals" as const },
-  { icon: FileText, label: "Solicitudes", to: "/dashboard/requests" as const },
-  { icon: BarChart3, label: "Reportes", to: "/dashboard/reports" as const },
-  { icon: Users, label: "Proveedores", to: "/dashboard/providers" as const },
-  { icon: Settings, label: "Configuración", to: "/dashboard/settings" as const },
-  { icon: ShieldCheck, label: "Auditoría", to: "/dashboard/audit" as const },
-  { icon: Bell, label: "Notificaciones", to: "/dashboard/notifications" as const },
+type NavItem = { icon: any; label: string; to: string; exact?: boolean };
+type NavGroup = { title: string; items: NavItem[] };
+
+const navGroups: NavGroup[] = [
+  {
+    title: "General",
+    items: [
+      { icon: LayoutDashboard, label: "Panel general", to: "/dashboard", exact: true },
+    ],
+  },
+  {
+    title: "Fase 1 · Recepción",
+    items: [
+      { icon: Inbox, label: "Preordenes recibidas", to: "/dashboard/preorders" },
+    ],
+  },
+  {
+    title: "Fase 2 · Proveedor",
+    items: [
+      { icon: Mail, label: "Portal del proveedor", to: "/dashboard/supplier-portal" },
+      { icon: Bell, label: "Trazabilidad notificaciones", to: "/dashboard/notifications" },
+    ],
+  },
+  {
+    title: "Fase 3 · Aprobadores",
+    items: [
+      { icon: CheckSquare, label: "Mis aprobaciones", to: "/dashboard/approvals" },
+      { icon: User, label: "Vista vendedor", to: "/dashboard/sales-rep" },
+    ],
+  },
+  {
+    title: "Fase 4 · Cierre",
+    items: [
+      { icon: Flag, label: "Resultados finales", to: "/dashboard/resolutions" },
+    ],
+  },
+  {
+    title: "Fase 5 · Integraciones",
+    items: [
+      { icon: Database, label: "Envío PeopleSoft", to: "/dashboard/peoplesoft" },
+      { icon: Building2, label: "Proveedores", to: "/dashboard/providers" },
+    ],
+  },
+  {
+    title: "Admin",
+    items: [
+      { icon: BarChart3, label: "Reportes", to: "/dashboard/reports" },
+      { icon: ShieldCheck, label: "Auditoría", to: "/dashboard/audit" },
+      { icon: Settings, label: "Workflows", to: "/dashboard/settings" },
+    ],
+  },
 ];
 
 function DashboardLayout() {
