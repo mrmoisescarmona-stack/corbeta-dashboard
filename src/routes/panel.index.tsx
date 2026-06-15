@@ -297,27 +297,46 @@ function DashboardOverview() {
       {/* Overdue banner */}
       <section className="rounded-xl border border-warning/40 bg-warning/5 p-5">
         <div className="flex items-center gap-2 text-sm font-semibold text-warning">
-          <AlertTriangle className="h-4 w-4" /> 3 solicitudes vencen hoy
+          <AlertTriangle className="h-4 w-4" /> {overdue.length} solicitudes vencen hoy
         </div>
         <ul className="mt-3 divide-y divide-warning/20">
           {overdue.map((o) => (
-            <li key={o.id} className="flex items-center justify-between py-2 text-sm">
-              <Link to="/panel/preordenes/$id" params={{ id: o.id }} className="hover:underline">
+            <li key={o.id} className="flex items-center justify-between gap-3 py-2 text-sm">
+              <Link to="/panel/preordenes/$id" params={{ id: o.id }} className="hover:underline min-w-0 flex-1 truncate">
                 <span className="font-medium">{o.id}</span>
                 <span className="text-muted-foreground"> · {o.supplier}</span>
               </Link>
-              <span
-                className={`inline-flex items-center rounded-full px-2.5 py-1 text-[11px] font-medium ${
-                  o.tone === "destructive"
-                    ? "bg-destructive/10 text-destructive"
-                    : "bg-warning/10 text-warning"
-                }`}
-              >
-                {o.deadline}
-              </span>
+              <div className="flex items-center gap-2 shrink-0">
+                <span
+                  className={`inline-flex items-center rounded-full px-2.5 py-1 text-[11px] font-medium ${
+                    o.tone === "destructive"
+                      ? "bg-destructive/10 text-destructive"
+                      : "bg-warning/10 text-warning"
+                  }`}
+                >
+                  {o.deadline}
+                </span>
+                <button
+                  onClick={() => setGestion(o)}
+                  className="inline-flex items-center gap-1 rounded-md border border-border bg-card px-2 py-1 text-[11px] font-medium hover:bg-accent"
+                  aria-label={`Gestionar ${o.id}`}
+                >
+                  <Pencil className="h-3 w-3" /> Gestionar
+                </button>
+              </div>
             </li>
           ))}
+          {overdue.length === 0 && (
+            <li className="py-3 text-center text-xs text-muted-foreground">
+              No hay solicitudes pendientes por vencer.
+            </li>
+          )}
         </ul>
+      </section>
+
+      {gestion && (
+        <GestionModal item={gestion} onClose={() => setGestion(null)} onConfirm={handleConfirm} />
+      )}
       </section>
 
       <section className="grid grid-cols-1 xl:grid-cols-3 gap-6">
