@@ -66,6 +66,7 @@ const approvers: Approver[] = [
     direction: "Tecnología",
     division: "Computación",
     active: true,
+    status: "Pendiente",
     email: "pedro.martinez@corbeta.com",
     phone: "3119876543",
     manager: "Ana Ruiz",
@@ -73,7 +74,7 @@ const approvers: Approver[] = [
     unit: "Antioquia Centro",
     startDate: "2023-09-01",
     scopes: [
-      { code: "SC-010", description: "Aprobación descuentos línea Cómputo", limit: "10%", status: "Activo" },
+      { code: "SC-010", description: "Aprobación descuentos línea Cómputo", limit: "10%", status: "Pendiente" },
     ],
   },
   {
