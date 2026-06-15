@@ -178,6 +178,166 @@ function InfoCard({ title, rows }: { title: string; rows: { label: string; value
   );
 }
 
+type ScopeDecision = "approve" | "reject" | "modify" | "cancel";
+type ScopeStatusLocal = "Activo" | "Pendiente" | "Espera proveedor" | "Rechazada" | "Cancelada" | "Modificada";
+
+function ScopeActionCard({
+  scope,
+}: {
+  scope: { code: string; description: string; limit: string; status: "Activo" | "Pendiente" };
+}) {
+  const [status, setStatus] = useState<ScopeStatusLocal>(scope.status);
+  const [open, setOpen] = useState(false);
+  const [decision, setDecision] = useState<ScopeDecision | null>(null);
+  const [justif, setJustif] = useState("");
+  const [tipoDesc, setTipoDesc] = useState("Visible");
+  const [tipoExcl, setTipoExcl] = useState("No mutuamente excluyente");
+
+  const isPending = status === "Pendiente";
+  const canConfirm = decision !== null && justif.trim().length > 0;
+
+  const tone: "success" | "warning" | "destructive" | "muted" =
+    status === "Activo"
+      ? "success"
+      : status === "Pendiente"
+        ? "warning"
+        : status === "Rechazada" || status === "Cancelada"
+          ? "destructive"
+          : "muted";
+
+  const actions: { key: ScopeDecision; label: string; icon: any; next: ScopeStatusLocal }[] = [
+    { key: "approve", label: "Aprobar", icon: Check, next: "Activo" },
+    { key: "reject", label: "Rechazar", icon: X, next: "Rechazada" },
+    { key: "modify", label: "Modificar y aprobar", icon: Pencil, next: "Modificada" },
+    { key: "cancel", label: "Cancelar línea", icon: Ban, next: "Cancelada" },
+  ];
+
+  const confirm = () => {
+    const next = actions.find((a) => a.key === decision)?.next ?? "Activo";
+    setStatus(next);
+    setOpen(false);
+    setDecision(null);
+    setJustif("");
+  };
+
+  return (
+    <div className="rounded-xl border border-border bg-card">
+      <div className="flex flex-wrap items-start justify-between gap-3 p-4 border-b border-border">
+        <div>
+          <div className="text-sm font-semibold">
+            {scope.code} — {scope.description}
+          </div>
+          <div className="text-xs text-muted-foreground mt-0.5">
+            Alcance asociado al rol de aprobador
+          </div>
+        </div>
+        <div className="flex items-center gap-2">
+          <PillBadge label={status} tone={tone} />
+          {isPending && (
+            <button
+              onClick={() => setOpen((v) => !v)}
+              className="inline-flex items-center gap-1.5 rounded-md border border-border bg-background px-2.5 py-1 text-xs font-medium hover:bg-accent"
+            >
+              <Pencil className="h-3.5 w-3.5" /> Gestionar
+            </button>
+          )}
+        </div>
+      </div>
+      <div className="grid gap-4 md:grid-cols-3 p-4 text-sm">
+        <div>
+          <div className="text-xs text-muted-foreground">Código</div>
+          <div className="font-medium tabular-nums">{scope.code}</div>
+        </div>
+        <div>
+          <div className="text-xs text-muted-foreground">Límite de descuento</div>
+          <div className="font-medium tabular-nums">{scope.limit}</div>
+        </div>
+        <div>
+          <div className="text-xs text-muted-foreground">Estado</div>
+          <div className="font-medium">{status}</div>
+        </div>
+      </div>
+
+      {open && isPending && (
+        <div className="border-t border-border p-4 space-y-4 bg-muted/30">
+          <div>
+            <div className="text-sm font-medium text-foreground">Acción del aprobador (HU_004)</div>
+            <div className="mt-2 grid grid-cols-2 gap-2">
+              {actions.map((a) => {
+                const Icon = a.icon;
+                const active = decision === a.key;
+                return (
+                  <button
+                    key={a.key}
+                    onClick={() => setDecision(a.key)}
+                    className={`inline-flex items-center justify-center gap-2 rounded-lg border px-3 py-2 text-sm font-medium transition-colors ${
+                      active
+                        ? "border-primary bg-primary/5 text-primary"
+                        : "border-border bg-background text-foreground hover:bg-accent"
+                    }`}
+                  >
+                    <Icon className="h-4 w-4" /> {a.label}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          <div>
+            <label className="text-sm font-medium text-foreground">
+              Justificación <span className="text-destructive">*</span>
+            </label>
+            <textarea
+              value={justif}
+              onChange={(e) => setJustif(e.target.value)}
+              rows={3}
+              placeholder="Ingrese la justificación de su decisión…"
+              className="mt-1.5 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring/30"
+            />
+          </div>
+
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="text-xs font-medium text-foreground">
+                Tipo de descuento <span className="text-destructive">*</span>
+              </label>
+              <select
+                value={tipoDesc}
+                onChange={(e) => setTipoDesc(e.target.value)}
+                className="mt-1 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring/30"
+              >
+                <option>Visible</option>
+                <option>No visible</option>
+              </select>
+            </div>
+            <div>
+              <label className="text-xs font-medium text-foreground">
+                Tipo de exclusión <span className="text-destructive">*</span>
+              </label>
+              <select
+                value={tipoExcl}
+                onChange={(e) => setTipoExcl(e.target.value)}
+                className="mt-1 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring/30"
+              >
+                <option>No mutuamente excluyente</option>
+                <option>Mutuamente excluyente</option>
+              </select>
+            </div>
+          </div>
+
+          <button
+            disabled={!canConfirm}
+            onClick={confirm}
+            className="w-full rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            Confirmar gestión
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
+
 function ApproverDetailDialog({ approver, onClose }: { approver: Approver | null; onClose: () => void }) {
   return (
     <Dialog open={!!approver} onOpenChange={(o) => !o && onClose()}>
