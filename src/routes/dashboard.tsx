@@ -54,12 +54,6 @@ const navGroups: NavGroup[] = [
     ],
   },
   {
-    title: "Cierre",
-    items: [
-      { icon: Flag, label: "Resultados finales", to: "/dashboard/resolutions" },
-    ],
-  },
-  {
     title: "Admin",
     items: [
       { icon: Mail, label: "Portal del proveedor", to: "/dashboard/supplier-portal" },
@@ -67,6 +61,7 @@ const navGroups: NavGroup[] = [
       { icon: Database, label: "Envío PeopleSoft", to: "/dashboard/peoplesoft" },
       { icon: Building2, label: "Proveedores", to: "/dashboard/providers" },
       { icon: BarChart3, label: "Reportes", to: "/dashboard/reports" },
+      { icon: Flag, label: "Resultados finales", to: "/dashboard/resolutions" },
       { icon: ShieldCheck, label: "Auditoría", to: "/dashboard/audit" },
       { icon: Settings, label: "Configuración", to: "/dashboard/settings" },
     ],
