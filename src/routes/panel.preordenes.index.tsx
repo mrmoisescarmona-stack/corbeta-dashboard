@@ -20,7 +20,7 @@ import {
 import { RequestsSkeleton } from "@/components/dashboard/skeleton";
 import { useFakeLoading } from "@/hooks/use-fake-loading";
 
-export const Route = createFileRoute("/panel/preordenes")({
+export const Route = createFileRoute("/panel/preordenes/")({
   head: () => ({ meta: [{ title: "Solicitudes · Corbeta" }] }),
   component: RequestsPage,
   pendingComponent: RequestsSkeleton,
