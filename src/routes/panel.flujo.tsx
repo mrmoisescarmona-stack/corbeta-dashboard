@@ -405,7 +405,7 @@ function ScopeActionCard({
               </span>
             </div>
             <p className="text-xs text-muted-foreground">
-              Los soportes son obligatorios para continuar con el flujo de aprobación.
+              Los soportes son obligatorios para continuar con el workflow de aprobación.
             </p>
             <FileDropzone
               onFiles={(fl) => {
