@@ -78,7 +78,7 @@ const navGroups: NavGroup[] = [
     items: [
       { icon: BarChart3, label: "Reportes", to: "/dashboard/reports" },
       { icon: ShieldCheck, label: "Auditoría", to: "/dashboard/audit" },
-      { icon: Settings, label: "Workflows", to: "/dashboard/settings" },
+      { icon: Settings, label: "Configuración", to: "/dashboard/settings" },
     ],
   },
 ];
