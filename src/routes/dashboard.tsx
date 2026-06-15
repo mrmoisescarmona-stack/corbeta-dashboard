@@ -38,6 +38,7 @@ const navGroups: NavGroup[] = [
     title: "General",
     items: [
       { icon: LayoutDashboard, label: "Panel general", to: "/dashboard", exact: true },
+      { icon: CheckSquare, label: "Workflow", to: "/dashboard/approvals" },
     ],
   },
   {
@@ -56,7 +57,6 @@ const navGroups: NavGroup[] = [
   {
     title: "Aprobadores",
     items: [
-      { icon: CheckSquare, label: "Workflow", to: "/dashboard/approvals" },
       { icon: User, label: "Vista vendedor", to: "/dashboard/sales-rep" },
     ],
   },
