@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { BarChart3, ChevronDown, TrendingUp, Search, Download, CalendarIcon } from "lucide-react";
+import { BarChart3, ChevronDown, TrendingUp, TrendingDown, Search, Download, CalendarIcon } from "lucide-react";
 import { useState } from "react";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
@@ -8,6 +8,17 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { cn } from "@/lib/utils";
 import { ReportsSkeleton } from "@/components/dashboard/skeleton";
 import { useFakeLoading } from "@/hooks/use-fake-loading";
+import {
+  Area,
+  AreaChart,
+  CartesianGrid,
+  Line,
+  LineChart,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from "recharts";
 
 export const Route = createFileRoute("/dashboard/reports")({
   head: () => ({ meta: [{ title: "Reportes · Corbeta" }] }),
