@@ -593,6 +593,7 @@ function ApproverDetailDialog({ approver, onClose }: { approver: Approver | null
 function ApprovalsPage() {
   const [tab, setTab] = useState<TabKey>("aprobadores");
   const [selected, setSelected] = useState<Approver | null>(null);
+  const [newApproverOpen, setNewApproverOpen] = useState(false);
   if (useFakeLoading()) return <ApprovalsSkeleton />;
 
   return (
