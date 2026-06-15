@@ -167,12 +167,14 @@ function RequestDetailPage() {
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
           <button
-            onClick={() => navigate({ to: "/panel/preordenes" })}
+            onClick={() => navigate({ to: readOnly ? "/panel/reportes" : "/panel/preordenes" })}
             className="mb-2 inline-flex items-center gap-1.5 text-xs font-medium text-muted-foreground hover:text-foreground"
           >
-            <ArrowLeft className="h-3.5 w-3.5" /> Volver a Preórdenes
+            <ArrowLeft className="h-3.5 w-3.5" /> {readOnly ? "Volver a Reportes" : "Volver a Preórdenes"}
           </button>
-          <span className="inline-flex items-center rounded-full bg-primary/10 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-primary">Detalle</span>
+          <span className={`inline-flex items-center rounded-full px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider ${readOnly ? "bg-muted text-muted-foreground" : "bg-primary/10 text-primary"}`}>
+            {readOnly ? "Solo lectura" : "Detalle"}
+          </span>
           <h2 className="mt-2 text-2xl md:text-3xl font-semibold tracking-tight">Preorden {id}</h2>
           <p className="mt-1 text-sm text-muted-foreground">
             Evalúa cada línea con descuento puntual. Si <span className="font-medium">% asumido por proveedor &gt; 0</span> se notifica al proveedor en paralelo.
