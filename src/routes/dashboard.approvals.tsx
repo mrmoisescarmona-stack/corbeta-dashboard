@@ -93,23 +93,21 @@ function ApprovalsPage() {
         </p>
       </div>
 
-      <div className="rounded-xl border border-border bg-card p-1.5">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-1">
-          {TABS.map((t) => {
-            const active = tab === t.key;
-            return (
-              <button
-                key={t.key}
-                onClick={() => setTab(t.key)}
-                className={`rounded-lg px-4 py-2.5 text-sm font-medium transition-colors ${
-                  active ? "bg-background shadow-sm text-foreground" : "text-muted-foreground hover:text-foreground"
-                }`}
-              >
-                {t.label}
-              </button>
-            );
-          })}
-        </div>
+      <div className="flex flex-wrap items-center gap-2">
+        {TABS.map((t) => {
+          const active = tab === t.key;
+          return (
+            <button
+              key={t.key}
+              onClick={() => setTab(t.key)}
+              className={`rounded-full px-3.5 py-1.5 text-xs font-medium transition-colors ${
+                active ? "bg-primary text-primary-foreground" : "border border-border bg-background hover:bg-accent"
+              }`}
+            >
+              {t.label}
+            </button>
+          );
+        })}
       </div>
 
       {tab === "aprobadores" && (
