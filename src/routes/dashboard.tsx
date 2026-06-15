@@ -39,6 +39,7 @@ const navGroups: NavGroup[] = [
     items: [
       { icon: LayoutDashboard, label: "Panel general", to: "/dashboard", exact: true },
       { icon: Inbox, label: "Workflow", to: "/dashboard/approvals" },
+      { icon: BarChart3, label: "Reportes", to: "/dashboard/reports" },
     ],
   },
   {
@@ -49,7 +50,6 @@ const navGroups: NavGroup[] = [
       { icon: Database, label: "Envío PeopleSoft", to: "/dashboard/peoplesoft" },
       { icon: Building2, label: "Proveedores", to: "/dashboard/providers" },
       { icon: Bell, label: "Trazabilidad notificaciones", to: "/dashboard/notifications" },
-      { icon: BarChart3, label: "Reportes", to: "/dashboard/reports" },
       { icon: ShieldCheck, label: "Auditoría", to: "/dashboard/audit" },
       { icon: Settings, label: "Configuración", to: "/dashboard/settings" },
     ],
