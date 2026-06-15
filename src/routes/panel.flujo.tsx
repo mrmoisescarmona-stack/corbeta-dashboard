@@ -710,3 +710,65 @@ function ApprovalsPage() {
     </div>
   );
 }
+
+const ALLOWED_EXT = [".eml", ".msg", ".oft", ".emlx"];
+const MAX_BYTES = 10 * 1024 * 1024;
+
+function FileDropzone({ onFiles }: { onFiles: (files: File[]) => void }) {
+  const [dragOver, setDragOver] = useState(false);
+
+  const handle = (list: FileList | File[]) => {
+    const arr = Array.from(list);
+    const valid: File[] = [];
+    for (const f of arr) {
+      const lower = f.name.toLowerCase();
+      if (!ALLOWED_EXT.some((e) => lower.endsWith(e))) {
+        toast.error(`Formato no permitido: ${f.name}`);
+        continue;
+      }
+      if (f.size > MAX_BYTES) {
+        toast.error(`${f.name} supera 10 MB`);
+        continue;
+      }
+      valid.push(f);
+    }
+    if (valid.length) onFiles(valid);
+  };
+
+  return (
+    <label
+      onDragOver={(e) => {
+        e.preventDefault();
+        setDragOver(true);
+      }}
+      onDragLeave={() => setDragOver(false)}
+      onDrop={(e) => {
+        e.preventDefault();
+        setDragOver(false);
+        if (e.dataTransfer.files?.length) handle(e.dataTransfer.files);
+      }}
+      className={`mt-3 flex flex-col items-center justify-center gap-2 rounded-lg border-2 border-dashed px-4 py-6 text-center cursor-pointer transition-colors ${
+        dragOver
+          ? "border-primary bg-primary/10"
+          : "border-primary/30 bg-primary/[0.03] hover:bg-primary/[0.06]"
+      }`}
+    >
+      <UploadCloud className="h-7 w-7 text-primary" />
+      <div className="text-sm text-foreground">Arrastre archivos aquí</div>
+      <div className="text-xs text-muted-foreground">o</div>
+      <span className="inline-flex items-center rounded-lg bg-primary px-4 py-2 text-xs font-semibold text-primary-foreground">
+        Seleccionar archivo
+      </span>
+      <div className="text-[11px] text-muted-foreground mt-1">
+        Formatos permitidos: .eml, .msg, .oft, .emlx &nbsp;|&nbsp; Tamaño máximo por archivo: 10 MB
+      </div>
+      <input
+        type="file"
+        accept=".eml,.msg,.oft,.emlx"
+        multiple
+        className="hidden"
+        onChange={(e) => e.target.files && handle(e.target.files)}
+      />
+    </label>
+  );
+}
