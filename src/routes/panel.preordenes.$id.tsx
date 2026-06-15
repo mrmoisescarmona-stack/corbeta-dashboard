@@ -28,9 +28,16 @@ export const Route = createFileRoute("/panel/preordenes/$id")({
   head: ({ params }) => ({
     meta: [{ title: `Solicitud ${params.id} · Corbeta` }],
   }),
-  validateSearch: (search: Record<string, unknown>) => ({
-    from: search.from === "reportes" ? ("reportes" as const) : undefined,
-  }),
+  validateSearch: (search: Record<string, unknown>) => {
+    const from = search.from;
+    return {
+      from:
+        from === "reportes" || from === "panel" || from === "preordenes"
+          ? (from as "reportes" | "panel" | "preordenes")
+          : undefined,
+      status: typeof search.status === "string" ? (search.status as string) : undefined,
+    };
+  },
   component: RequestDetailPage,
 });
 
