@@ -1,7 +1,6 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { useEffect, useMemo, useState } from "react";
 import {
-  CheckSquare,
   FileText,
   BarChart3,
   Bell,
@@ -10,7 +9,6 @@ import {
   Clock,
   CheckCircle2,
   XCircle,
-  Ban,
   ClipboardList,
   Eye,
   MoreHorizontal,
@@ -21,6 +19,8 @@ import {
   TrendingDown,
   ArrowRight,
   Calendar,
+  AlertTriangle,
+  Timer,
 } from "lucide-react";
 import { DashboardOverviewSkeleton } from "@/components/dashboard/skeleton";
 
@@ -39,24 +39,72 @@ export const Route = createFileRoute("/dashboard/")({
   pendingComponent: DashboardOverviewSkeleton,
 });
 
-const stats = [
-  { label: "Pendientes de aprobar", value: 18, icon: ClipboardList, tone: "primary" as const, delta: "+3 hoy" },
-  { label: "En espera de proveedor", value: 7, icon: Clock, tone: "warning" as const, delta: "2 vencen hoy" },
-  { label: "Aprobadas hoy", value: 24, icon: CheckCircle2, tone: "success" as const, delta: "+12% vs ayer" },
-  { label: "Rechazadas hoy", value: 5, icon: XCircle, tone: "destructive" as const, delta: "-1 vs ayer" },
-  { label: "Canceladas hoy", value: 2, icon: Ban, tone: "muted" as const, delta: "Sin cambios" },
+type Tone = "primary" | "warning" | "success" | "destructive" | "muted";
+
+const stats: {
+  label: string;
+  value: string | number;
+  icon: any;
+  tone: Tone;
+  delta: string;
+  deltaTone?: "warn" | "muted" | "success";
+}[] = [
+  {
+    label: "Pendientes de aprobar",
+    value: 18,
+    icon: ClipboardList,
+    tone: "primary",
+    delta: "⚠ 3 vencen hoy · 52 líneas",
+    deltaTone: "warn",
+  },
+  {
+    label: "En espera de proveedor",
+    value: 7,
+    icon: Clock,
+    tone: "warning",
+    delta: "⚠ 2 sin respuesta >24h",
+    deltaTone: "warn",
+  },
+  {
+    label: "Aprobadas hoy · $138M",
+    value: 24,
+    icon: CheckCircle2,
+    tone: "success",
+    delta: "Valor gestionado hoy",
+    deltaTone: "success",
+  },
+  {
+    label: "Tiempo prom. resolución",
+    value: "2.3 d",
+    icon: Timer,
+    tone: "muted",
+    delta: "-0.4 d vs sem. anterior",
+    deltaTone: "success",
+  },
 ];
 
-type Status = "Pendiente" | "Espera proveedor" | "Aprobada" | "Rechazada";
+type Status =
+  | "Pendiente"
+  | "Espera proveedor"
+  | "Aprobada"
+  | "Rechazada"
+  | "Modificada"
+  | "Enviada a PeopleSoft"
+  | "Error integración";
 
 const requests: {
-  id: string; client: string; date: string; provider: string; status: Status; value: string;
+  id: string;
+  client: string;
+  date: string;
+  provider: string;
+  status: Status;
+  value: string;
 }[] = [
   { id: "PR-2024-000245", client: "Distribuidora del Valle S.A.S.", date: "28/05/2024 09:15 a. m.", provider: "Castrol", status: "Pendiente", value: "$ 12.450.000" },
   { id: "PR-2024-000244", client: "Moto Repuestos del Norte", date: "28/05/2024 08:47 a. m.", provider: "Castrol", status: "Espera proveedor", value: "$ 8.230.000" },
-  { id: "PR-2024-000243", client: "Comercializadora Andina", date: "28/05/2024 07:38 a. m.", provider: "Castrol", status: "Aprobada", value: "$ 5.980.000" },
-  { id: "PR-2024-000242", client: "Lubricantes del Sur Ltda.", date: "27/05/2024 04:22 p. m.", provider: "Castrol", status: "Rechazada", value: "$ 3.120.000" },
-  { id: "PR-2024-000241", client: "Autopartes del Caribe", date: "27/05/2024 02:11 p. m.", provider: "Castrol", status: "Pendiente", value: "$ 9.760.000" },
+  { id: "PR-2024-000243", client: "Comercializadora Andina", date: "28/05/2024 07:38 a. m.", provider: "Castrol", status: "Enviada a PeopleSoft", value: "$ 5.980.000" },
+  { id: "PR-2024-000242", client: "Lubricantes del Sur Ltda.", date: "27/05/2024 04:22 p. m.", provider: "Castrol", status: "Modificada", value: "$ 3.120.000" },
+  { id: "PR-2024-000241", client: "Autopartes del Caribe", date: "27/05/2024 02:11 p. m.", provider: "Castrol", status: "Error integración", value: "$ 9.760.000" },
 ];
 
 const activity = [
@@ -66,12 +114,25 @@ const activity = [
   { icon: XCircle, tone: "destructive" as const, text: "PR-2024-000238 fue rechazada", sub: "por María López", time: "Hace 3 horas" },
 ];
 
-const donutSegments = [
-  { label: "Pendientes", value: 18, pct: 36, color: "var(--primary)" },
-  { label: "Espera proveedor", value: 7, pct: 14, color: "var(--warning)" },
-  { label: "Aprobadas", value: 24, pct: 48, color: "var(--success)" },
-  { label: "Rechazadas", value: 5, pct: 10, color: "var(--destructive)" },
-  { label: "Canceladas", value: 2, pct: 4, color: "oklch(0.78 0.005 250)" },
+type DonutSeg = { label: string; count: number; valueM: number; color: string };
+const donutData: DonutSeg[] = [
+  { label: "Pendientes", count: 18, valueM: 214, color: "var(--primary)" },
+  { label: "Espera proveedor", count: 7, valueM: 52, color: "var(--warning)" },
+  { label: "Aprobadas", count: 24, valueM: 138, color: "var(--success)" },
+  { label: "Rechazadas", count: 5, valueM: 18, color: "var(--destructive)" },
+  { label: "Canceladas", count: 2, valueM: 6, color: "oklch(0.78 0.005 250)" },
+];
+
+const overdue = [
+  { id: "PR-2024-000241", supplier: "Autopartes del Caribe", deadline: "Vence 5pm", tone: "destructive" as const },
+  { id: "PR-2024-000238", supplier: "Lubricantes Sur", deadline: "Vence 6pm", tone: "destructive" as const },
+  { id: "PR-2024-000235", supplier: "Moto Repuestos", deadline: "Vence mañana", tone: "warning" as const },
+];
+
+const supplierWait = [
+  { name: "Castrol", hours: 31, status: "Vencida" as const },
+  { name: "Shell", hours: 18, status: "En riesgo" as const },
+  { name: "Mobil", hours: 4, status: "A tiempo" as const },
 ];
 
 const zones = [
@@ -87,6 +148,9 @@ function statusBadge(status: Status) {
     "Espera proveedor": "bg-warning/10 text-warning ring-1 ring-inset ring-warning/20",
     Aprobada: "bg-success/15 text-foreground ring-1 ring-inset ring-success/30",
     Rechazada: "bg-destructive/10 text-destructive ring-1 ring-inset ring-destructive/20",
+    Modificada: "bg-[oklch(0.94_0.04_300)] text-[oklch(0.4_0.18_300)] ring-1 ring-inset ring-[oklch(0.4_0.18_300)]/20",
+    "Enviada a PeopleSoft": "bg-[oklch(0.95_0.04_240)] text-[oklch(0.42_0.15_240)] ring-1 ring-inset ring-[oklch(0.42_0.15_240)]/20",
+    "Error integración": "bg-[oklch(0.96_0.04_330)] text-[oklch(0.45_0.18_330)] ring-1 ring-inset ring-[oklch(0.45_0.18_330)]/20",
   };
   return map[status];
 }
@@ -97,11 +161,14 @@ function statusBar(status: Status) {
     "Espera proveedor": "bg-warning",
     Aprobada: "bg-success",
     Rechazada: "bg-destructive",
+    Modificada: "bg-[oklch(0.55_0.18_300)]",
+    "Enviada a PeopleSoft": "bg-[oklch(0.55_0.15_240)]",
+    "Error integración": "bg-[oklch(0.55_0.18_330)]",
   };
   return map[status];
 }
 
-function toneClass(tone: "primary" | "warning" | "success" | "destructive" | "muted") {
+function toneClass(tone: Tone) {
   const map = {
     primary: "bg-primary/10 text-primary",
     warning: "bg-warning/10 text-warning",
@@ -112,17 +179,18 @@ function toneClass(tone: "primary" | "warning" | "success" | "destructive" | "mu
   return map[tone];
 }
 
-function Donut() {
-  const total = donutSegments.reduce((s, d) => s + d.value, 0);
+function Donut({ mode }: { mode: "count" | "value" }) {
   const radius = 70;
   const circ = 2 * Math.PI * radius;
+  const total = donutData.reduce((s, d) => s + (mode === "count" ? d.count : d.valueM), 0);
   let offset = 0;
   return (
-    <div className="relative h-44 w-44">
+    <div className="relative h-44 w-44 shrink-0">
       <svg viewBox="0 0 180 180" className="h-full w-full -rotate-90">
         <circle cx="90" cy="90" r={radius} fill="none" stroke="var(--muted)" strokeWidth="18" />
-        {donutSegments.map((seg) => {
-          const len = (seg.pct / 100) * circ;
+        {donutData.map((seg) => {
+          const v = mode === "count" ? seg.count : seg.valueM;
+          const len = (v / total) * circ;
           const el = (
             <circle
               key={seg.label}
@@ -138,7 +206,9 @@ function Donut() {
         })}
       </svg>
       <div className="absolute inset-0 flex flex-col items-center justify-center">
-        <div className="text-3xl font-semibold tracking-tight">{total}</div>
+        <div className="text-3xl font-semibold tracking-tight tabular-nums">
+          {mode === "count" ? total : `$${total}M`}
+        </div>
         <div className="text-xs text-muted-foreground">Total</div>
       </div>
     </div>
@@ -147,6 +217,8 @@ function Donut() {
 
 function DashboardOverview() {
   const [loading, setLoading] = useState(true);
+  const [donutMode, setDonutMode] = useState<"count" | "value">("count");
+
   useEffect(() => {
     const t = setTimeout(() => setLoading(false), 600);
     return () => clearTimeout(t);
@@ -172,27 +244,57 @@ function DashboardOverview() {
         </button>
       </div>
 
-      <section className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-4">
+      {/* KPI cards */}
+      <section className="grid grid-cols-2 md:grid-cols-2 xl:grid-cols-4 gap-4">
         {stats.map((s) => {
           const Icon = s.icon;
+          const deltaCls =
+            s.deltaTone === "warn"
+              ? "text-destructive"
+              : s.deltaTone === "success"
+                ? "text-[oklch(0.45_0.13_160)]"
+                : "text-muted-foreground";
           return (
             <div key={s.label} className="group rounded-xl border border-border bg-card p-5 transition-shadow hover:shadow-sm">
               <div className="flex items-start justify-between">
                 <div className={`flex h-10 w-10 items-center justify-center rounded-lg ${toneClass(s.tone)}`}>
                   <Icon className="h-5 w-5" />
                 </div>
-                <span className="text-[11px] font-medium text-muted-foreground">{s.delta}</span>
               </div>
               <div className="mt-4">
                 <div className="text-3xl font-semibold tracking-tight tabular-nums">{s.value}</div>
                 <div className="mt-0.5 text-xs text-muted-foreground leading-snug">{s.label}</div>
+                <div className={`mt-2 text-[11px] font-medium ${deltaCls}`}>{s.delta}</div>
               </div>
-              <button className="mt-4 inline-flex items-center gap-1 text-xs font-medium text-primary hover:underline">
-                Ver todas <ArrowRight className="h-3 w-3" />
-              </button>
             </div>
           );
         })}
+      </section>
+
+      {/* Overdue banner */}
+      <section className="rounded-xl border border-warning/40 bg-warning/5 p-5">
+        <div className="flex items-center gap-2 text-sm font-semibold text-warning">
+          <AlertTriangle className="h-4 w-4" /> 3 solicitudes vencen hoy
+        </div>
+        <ul className="mt-3 divide-y divide-warning/20">
+          {overdue.map((o) => (
+            <li key={o.id} className="flex items-center justify-between py-2 text-sm">
+              <Link to="/dashboard/preorders/$id" params={{ id: o.id }} className="hover:underline">
+                <span className="font-medium">{o.id}</span>
+                <span className="text-muted-foreground"> · {o.supplier}</span>
+              </Link>
+              <span
+                className={`inline-flex items-center rounded-full px-2.5 py-1 text-[11px] font-medium ${
+                  o.tone === "destructive"
+                    ? "bg-destructive/10 text-destructive"
+                    : "bg-warning/10 text-warning"
+                }`}
+              >
+                {o.deadline}
+              </span>
+            </li>
+          ))}
+        </ul>
       </section>
 
       <section className="grid grid-cols-1 xl:grid-cols-3 gap-6">
@@ -204,7 +306,7 @@ function DashboardOverview() {
               </div>
               <h3 className="text-base font-semibold">Solicitudes recientes</h3>
             </div>
-            <button className="text-xs font-medium text-primary hover:underline">Ver todas</button>
+            <Link to="/dashboard/preorders" className="text-xs font-medium text-primary hover:underline">Ver todas</Link>
           </div>
 
           <div className="flex flex-wrap items-center gap-2 p-5 border-b border-border">
@@ -262,9 +364,9 @@ function DashboardOverview() {
                     <td className="px-3 py-3.5 text-right font-medium tabular-nums">{r.value}</td>
                     <td className="px-5 py-3.5">
                       <div className="flex items-center justify-end gap-1">
-                        <button className="rounded-md p-1.5 text-muted-foreground hover:bg-accent hover:text-foreground">
+                        <Link to="/dashboard/preorders/$id" params={{ id: r.id }} className="rounded-md p-1.5 text-muted-foreground hover:bg-accent hover:text-foreground">
                           <Eye className="h-4 w-4" />
-                        </button>
+                        </Link>
                         <button className="rounded-md p-1.5 text-muted-foreground hover:bg-accent hover:text-foreground">
                           <MoreHorizontal className="h-4 w-4" />
                         </button>
@@ -275,54 +377,79 @@ function DashboardOverview() {
               </tbody>
             </table>
           </div>
-
-          <div className="flex flex-wrap items-center justify-between gap-3 p-5 border-t border-border">
-            <span className="text-xs text-muted-foreground">Mostrando 1 a 5 de 25 resultados</span>
-            <div className="flex items-center gap-1">
-              {["‹", "1", "2", "3", "…", "5", "›"].map((p, i) => (
-                <button key={i} className={`min-w-8 h-8 rounded-md border border-border px-2 text-xs font-medium ${p === "1" ? "bg-primary text-primary-foreground border-primary" : "bg-background hover:bg-accent"}`}>
-                  {p}
-                </button>
-              ))}
-            </div>
-          </div>
         </div>
 
         <div className="space-y-6">
-          <div className="rounded-xl border border-border bg-card">
-            <div className="flex items-center justify-between p-5 border-b border-border">
-              <h3 className="text-base font-semibold">Actividad reciente</h3>
-              <button className="text-xs font-medium text-primary hover:underline">Ver todo</button>
+          {/* Supplier wait */}
+          <div className="rounded-xl border border-border bg-card p-5">
+            <div className="flex items-center justify-between">
+              <h3 className="text-base font-semibold">Tiempo de espera proveedor</h3>
+              <Link to="/dashboard/supplier-portal" className="text-xs font-medium text-primary hover:underline">Ver</Link>
             </div>
-            <ul className="p-2">
-              {activity.map((a, i) => {
-                const Icon = a.icon;
+            <div className="mt-4 grid grid-cols-3 text-[10px] uppercase tracking-wider text-muted-foreground border-b border-border pb-2">
+              <span>Proveedor</span>
+              <span>Espera</span>
+              <span>Estado</span>
+            </div>
+            <ul>
+              {supplierWait.map((s) => {
+                const isOver = s.hours >= 24;
+                const isRisk = s.hours >= 12 && !isOver;
+                const txt = isOver ? "text-destructive" : isRisk ? "text-warning" : "text-[oklch(0.45_0.13_160)]";
                 return (
-                  <li key={i} className="flex gap-3 rounded-lg p-3 hover:bg-muted/50">
-                    <div className={`mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full ${toneClass(a.tone)}`}>
-                      <Icon className="h-4 w-4" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm leading-snug text-foreground">{a.text}</p>
-                      <p className="text-xs text-muted-foreground">{a.sub}</p>
-                    </div>
-                    <span className="text-[11px] text-muted-foreground whitespace-nowrap">{a.time}</span>
+                  <li key={s.name} className="grid grid-cols-3 items-center py-2.5 text-sm border-b border-border last:border-none">
+                    <span className="font-medium">{s.name}</span>
+                    <span className={`font-semibold tabular-nums ${txt}`}>
+                      {s.hours}h {isOver && <span className="ml-1">⚠</span>}
+                    </span>
+                    <span>
+                      <span
+                        className={`inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-medium ${
+                          isOver
+                            ? "bg-destructive/10 text-destructive"
+                            : isRisk
+                              ? "bg-warning/10 text-warning"
+                              : "bg-success/15 text-foreground"
+                        }`}
+                      >
+                        {s.status}
+                      </span>
+                    </span>
                   </li>
                 );
               })}
             </ul>
           </div>
 
+          {/* Donut with toggle */}
           <div className="rounded-xl border border-border bg-card p-5">
-            <h3 className="text-base font-semibold">Aprobaciones por estado</h3>
+            <div className="flex items-center justify-between">
+              <h3 className="text-base font-semibold">Aprobaciones por estado</h3>
+              <div className="inline-flex rounded-md border border-border p-0.5 text-[11px] font-medium">
+                <button
+                  onClick={() => setDonutMode("count")}
+                  className={`px-2 py-1 rounded ${donutMode === "count" ? "bg-primary text-primary-foreground" : "text-muted-foreground"}`}
+                >
+                  # Solicitudes
+                </button>
+                <button
+                  onClick={() => setDonutMode("value")}
+                  className={`px-2 py-1 rounded ${donutMode === "value" ? "bg-primary text-primary-foreground" : "text-muted-foreground"}`}
+                >
+                  $ Valor
+                </button>
+              </div>
+            </div>
             <div className="mt-4 flex items-center gap-6">
-              <Donut />
+              <Donut mode={donutMode} />
               <ul className="flex-1 space-y-2.5">
-                {donutSegments.map((d) => (
+                {donutData.map((d) => (
                   <li key={d.label} className="flex items-center gap-2 text-xs">
                     <span className="h-2.5 w-2.5 rounded-sm" style={{ backgroundColor: d.color }} />
-                    <span className="flex-1 text-foreground/90">{d.label} ({d.value})</span>
-                    <span className="font-medium tabular-nums text-muted-foreground">{d.pct}%</span>
+                    <span className="flex-1 text-foreground/90">{d.label}</span>
+                    <span className="font-medium tabular-nums text-muted-foreground">
+                      {donutMode === "count" ? d.count : `$${d.valueM}M`}
+                    </span>
                   </li>
                 ))}
               </ul>
@@ -379,25 +506,24 @@ function DashboardOverview() {
         </div>
 
         <div className="rounded-xl border border-border bg-card p-5">
-          <h3 className="text-base font-semibold">Acciones rápidas</h3>
-          <div className="mt-5 grid grid-cols-2 gap-3">
-            {[
-              { icon: Plus, label: "Nueva solicitud", tone: "primary" as const },
-              { icon: Upload, label: "Subir archivo", tone: "success" as const },
-              { icon: BarChart3, label: "Ver reportes", tone: "warning" as const },
-              { icon: Bell, label: "Notificaciones", tone: "destructive" as const },
-            ].map((a) => {
+          <h3 className="text-base font-semibold">Actividad reciente</h3>
+          <ul className="mt-3 space-y-1">
+            {activity.map((a, i) => {
               const Icon = a.icon;
               return (
-                <button key={a.label} className="group flex flex-col items-start gap-3 rounded-lg border border-border bg-background p-3.5 text-left transition-all hover:border-primary/30 hover:shadow-sm">
-                  <div className={`flex h-9 w-9 items-center justify-center rounded-lg ${toneClass(a.tone)}`}>
+                <li key={i} className="flex gap-3 rounded-lg p-2 hover:bg-muted/50">
+                  <div className={`mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full ${toneClass(a.tone)}`}>
                     <Icon className="h-4 w-4" />
                   </div>
-                  <span className="text-xs font-medium leading-tight">{a.label}</span>
-                </button>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm leading-snug text-foreground">{a.text}</p>
+                    <p className="text-xs text-muted-foreground">{a.sub}</p>
+                  </div>
+                  <span className="text-[11px] text-muted-foreground whitespace-nowrap">{a.time}</span>
+                </li>
               );
             })}
-          </div>
+          </ul>
         </div>
       </section>
     </div>
