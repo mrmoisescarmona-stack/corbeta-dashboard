@@ -16,6 +16,7 @@ import {
   Flag,
   Database,
   Building2,
+  Headphones,
 } from "lucide-react";
 import logoAsset from "@/assets/logo_corbeta.png.asset.json";
 import { supabase } from "@/integrations/supabase/client";
@@ -50,6 +51,7 @@ const navGroups: NavGroup[] = [
       { icon: Building2, label: "Proveedores", to: "/dashboard/providers" },
       { icon: Bell, label: "Notificaciones", to: "/dashboard/notifications" },
       { icon: ShieldCheck, label: "Auditoría", to: "/dashboard/audit" },
+      { icon: Headphones, label: "Soporte", to: "/dashboard/support" },
       { icon: Settings, label: "Configuración", to: "/dashboard/settings" },
     ],
   },
