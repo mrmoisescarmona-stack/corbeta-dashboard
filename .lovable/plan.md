@@ -1,27 +1,59 @@
-## Objetivo
+## Goal
+Map the dashboard structure to the official flow (DIAGRAMA GENERAL DEL SISTEMA — Gestión de Aprobaciones de Descuentos Puntuales), so every phase in the diagram has a clear home in the UI. Today's sidebar (`Mis aprobaciones`, `Solicitudes`, `Proveedores`, `Reportes`, `Auditoría`, `Notificaciones`, `Configuración`) only loosely covers Phases 1 and 3 and leaves Phases 2, 4, and 5 implicit.
 
-Bloquear el dashboard detrás del login. Nadie podrá ver `/dashboard/*` sin estar autenticado. Crear usuario de prueba `test@corbeta.com.co` / `123456789`.
+## Gap analysis vs. the sitemap
 
-## Cambios
+| Phase | Sitemap pages | Current route | Status |
+|---|---|---|---|
+| 1 — Recepción e Identificación | Preordenes Recibidas, Detalle de Preorden, Clasificación de Líneas | `dashboard.requests`, `dashboard.requests.$id` | Partial — no "inbox" framing, no line-classification view |
+| 2 — Notificación / Respuesta Proveedor | Portal del Proveedor, Trazabilidad de Notificaciones | `dashboard.providers` (generic), `dashboard.notifications` | Missing supplier portal + per-line tracking |
+| 3 — Evaluación Aprobadores Internos | Solicitudes Asignadas, Evaluación, Mis Preordenes (Vendedor) | `dashboard.approvals` | Partial — no Vendedor view |
+| 4 — Cierre y Notificación al Vendedor | Resultado Final, Notificación al Vendedor | — | Missing |
+| 5 — Envío a PeopleSoft e Integraciones | Envío PeopleSoft, Condición de Pago, Clasificación Productos, Info Proveedores | — | Missing |
+| Global | Panel General, Reportes, Gestión de Workflows | `dashboard.index`, `dashboard.reports`, `dashboard.settings`, `dashboard.audit` | OK |
 
-### 1. Redirigir raíz al login cuando no hay sesión
-- `src/routes/index.tsx`: hoy redirige a `/dashboard`. Cambiarlo para que verifique sesión con `supabase.auth.getSession()` en `beforeLoad` y redirija a `/login` si no hay sesión, o a `/dashboard` si la hay.
+## Proposed navigation (sidebar grouped by phase)
 
-### 2. Proteger toda la sección `/dashboard`
-- `src/routes/dashboard.tsx` (layout padre de todas las páginas del dashboard): añadir `beforeLoad` que verifique sesión con `supabase.auth.getUser()`. Si no hay usuario, `throw redirect({ to: "/login" })`. Esto cubre `/dashboard`, `/dashboard/approvals`, `/dashboard/requests`, `/dashboard/requests/$id`, `/dashboard/settings`, `/dashboard/audit`, etc. en un solo lugar.
-- Marcar la ruta `ssr: false` para que la verificación de sesión (que vive en `localStorage`) funcione en refresh sin loop.
+```text
+GENERAL
+  Panel General                 /dashboard
+FASE 1 · Recepción
+  Preordenes recibidas          /dashboard/preorders            (rename of /requests)
+    └ Detalle                   /dashboard/preorders/$id
+FASE 2 · Proveedor
+  Portal del proveedor          /dashboard/supplier-portal
+  Trazabilidad notificaciones   /dashboard/notifications        (existing, repurposed)
+FASE 3 · Aprobadores
+  Mis aprobaciones              /dashboard/approvals
+  Vista vendedor                /dashboard/sales-rep
+FASE 4 · Cierre
+  Resultados finales            /dashboard/resolutions
+FASE 5 · Integraciones
+  Envío PeopleSoft              /dashboard/peoplesoft
+  Catálogos (pago / productos / proveedores)  /dashboard/peoplesoft/lookups
+ADMIN
+  Reportes y trazabilidad       /dashboard/reports
+  Workflows                     /dashboard/settings
+  Auditoría                     /dashboard/audit
+```
 
-### 3. Logout funcional
-- Añadir botón "Cerrar sesión" en el header del layout `dashboard.tsx` que llame `supabase.auth.signOut()` y navegue a `/login`. Hoy no existe una salida; sin esto el gate no es útil.
+## Work plan
+1. Rename `dashboard.requests*` to `dashboard.preorders*` and update the detail page to surface the "¿% asumido por proveedor > 0?" branch + line-classification block from Phase 1.
+2. Add new routes:
+   - `dashboard.supplier-portal.tsx` (Phase 2 supplier-facing simulation)
+   - `dashboard.sales-rep.tsx` (Phase 3 Vendedor view)
+   - `dashboard.resolutions.tsx` (Phase 4 final result + notification log)
+   - `dashboard.peoplesoft.tsx` and `dashboard.peoplesoft.lookups.tsx` (Phase 5)
+3. Rework `dashboard.providers.tsx` → either fold into Phase 5 supplier lookup or remove (kept as part of "Info de Proveedores").
+4. Rebuild the sidebar in `dashboard.tsx` with the grouped sections above, including a small phase tag (badge) per item so users see how navigation maps to the diagram.
+5. Update `dashboard.index` KPIs/quick links to point at the new phase-aligned routes.
+6. Keep `dashboard.notifications` but reframe it as "Trazabilidad de notificaciones" (Phase 2 log).
 
-### 4. Login → dashboard
-- `src/routes/login.tsx` ya hace `signInWithPassword` y navega a `/`. Tras el cambio (1), `/` enviará al dashboard cuando haya sesión. Si ya hay sesión al entrar a `/login`, redirigir a `/dashboard` desde `beforeLoad`.
+## Out of scope
+- No new backend tables or real integrations with PeopleSoft / CorbeMóvil (UI-only mapping, mock data).
+- No auth/role logic changes — login + gateway stay as they are.
 
-### 5. Crear usuario de prueba
-- Crear el usuario `test@corbeta.com.co` con contraseña `123456789` en Lovable Cloud (Auth) con email auto-confirmado, para que pueda iniciar sesión inmediatamente sin verificar correo.
-
-## Notas
-
-- No se toca la lógica de negocio ni el UI del dashboard; solo se añade el gate y el botón de logout.
-- La contraseña `123456789` es débil; aceptable solo como credencial de prueba/demo.
-- No se agregan tablas ni roles; es únicamente auth de Lovable Cloud.
+## Technical notes
+- All new routes follow `createFileRoute("/dashboard/<segment>")` and reuse the `DashboardLayout` outlet.
+- Sidebar groups implemented as plain section headers inside the existing `<aside>` (no component lib changes).
+- Renaming `requests` → `preorders` updates: file names, route strings, sidebar entry, and any `Link to`/`navigate` calls (currently only used inside the requests pages and dashboard index).
