@@ -38,7 +38,7 @@ const navGroups: NavGroup[] = [
     title: "General",
     items: [
       { icon: LayoutDashboard, label: "Panel general", to: "/dashboard", exact: true },
-      { icon: CheckSquare, label: "Workflow", to: "/dashboard/approvals" },
+      { icon: Inbox, label: "Workflow", to: "/dashboard/approvals" },
     ],
   },
   {
