@@ -258,10 +258,10 @@ function RequestDetailPage() {
                     </td>
                     <td className="px-5 py-3.5">
                       <div className="flex justify-end gap-1.5">
-                        <ActionBtn label="Aprobar" icon={CheckCircle2} tone="success" disabled={done} onClick={() => approve(idx)} />
-                        <ActionBtn label="Modificar" icon={Pencil} disabled={done} onClick={() => setModal({ kind: "modify", idx })} />
-                        <ActionBtn label="Rechazar" icon={XCircle} tone="destructive" disabled={done} onClick={() => setModal({ kind: "reject", idx })} />
-                        <ActionBtn label="Cancelar" icon={Ban} disabled={done} onClick={() => setModal({ kind: "cancel", idx })} />
+                        <ActionBtn label="Aprobar" icon={CheckCircle2} tone="success" disabled={done || readOnly} onClick={() => approve(idx)} />
+                        <ActionBtn label="Modificar" icon={Pencil} disabled={done || readOnly} onClick={() => setModal({ kind: "modify", idx })} />
+                        <ActionBtn label="Rechazar" icon={XCircle} tone="destructive" disabled={done || readOnly} onClick={() => setModal({ kind: "reject", idx })} />
+                        <ActionBtn label="Cancelar" icon={Ban} disabled={done || readOnly} onClick={() => setModal({ kind: "cancel", idx })} />
                       </div>
                     </td>
                   </tr>
