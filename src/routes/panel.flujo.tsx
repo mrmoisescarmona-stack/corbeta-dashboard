@@ -627,7 +627,7 @@ function ApprovalsPage() {
           title="Aprobadores internos"
           subtitle="Configuración por dirección y división"
           action={
-            <PrimaryButton>
+            <PrimaryButton onClick={() => setNewApproverOpen(true)}>
               <Plus className="h-4 w-4" /> Agregar
             </PrimaryButton>
           }
