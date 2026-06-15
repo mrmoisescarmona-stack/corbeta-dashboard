@@ -6,7 +6,7 @@ import {
   XCircle,
   Pencil,
   Ban,
-  Upload,
+  UploadCloud,
   Paperclip,
   AlertCircle,
   Clock,
@@ -17,6 +17,11 @@ import {
   FileText,
   X,
   History,
+  Mail,
+  Eye,
+  Download,
+  Trash2,
+  Check,
 } from "lucide-react";
 
 export const Route = createFileRoute("/panel/preordenes/$id")({
