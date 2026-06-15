@@ -177,9 +177,7 @@ function RequestDetailPage() {
           <button
             onClick={() => {
               const dest = from === "reportes" ? "/panel/reportes" : from === "panel" ? "/panel" : "/panel/preordenes";
-              const label = from === "reportes" ? "Reportes" : from === "panel" ? "Panel" : "Preórdenes";
               navigate({ to: dest });
-              void label;
             }}
             className="mb-2 inline-flex items-center gap-1.5 text-xs font-medium text-muted-foreground hover:text-foreground"
           >
