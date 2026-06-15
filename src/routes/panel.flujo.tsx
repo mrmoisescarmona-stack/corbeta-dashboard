@@ -482,7 +482,7 @@ function ApprovalsPage() {
                     <td className="px-3 py-3.5 text-muted-foreground tabular-nums">{a.id}</td>
                     <td className="px-3 py-3.5">{a.direction}</td>
                     <td className="px-3 py-3.5">{a.division}</td>
-                    <td className="px-3 py-3.5"><StatusBadge active={a.active} /></td>
+                    <td className="px-3 py-3.5"><StatusBadge active={a.active} status={a.status} /></td>
                     <td className="px-5 py-3.5">
                       <div className="flex justify-end gap-1">
                         <button
