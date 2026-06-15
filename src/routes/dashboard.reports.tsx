@@ -168,27 +168,27 @@ function TraceabilitySection() {
         </div>
         <div className="p-5 grid gap-4 md:grid-cols-3">
           <Field label="Fecha inicio" required>
-            <input type="date" defaultValue="2026-06-01" className="input-base" />
+            <input type="date" defaultValue="2026-06-01" className="w-full rounded-lg border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring/30" />
           </Field>
           <Field label="Fecha fin" required>
-            <input type="date" defaultValue="2026-06-30" className="input-base" />
+            <input type="date" defaultValue="2026-06-30" className="w-full rounded-lg border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring/30" />
           </Field>
           <Field label="Aprobador">
-            <select className="input-base">
+            <select className="w-full rounded-lg border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring/30">
               <option>Seleccionar…</option>
               <option>María González</option>
               <option>Pedro Martínez</option>
             </select>
           </Field>
           <Field label="Proveedor">
-            <select className="input-base">
+            <select className="w-full rounded-lg border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring/30">
               <option>Seleccionar…</option>
               <option>Whirlpool Andina</option>
               <option>Samsung Colombia S.A.</option>
             </select>
           </Field>
           <Field label="Zona">
-            <input type="text" placeholder="Ej: Bogotá Norte" className="input-base" />
+            <input type="text" placeholder="Ej: Bogotá Norte" className="w-full rounded-lg border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring/30" />
           </Field>
         </div>
         <div className="px-5 pb-5 flex flex-wrap items-center gap-2">
