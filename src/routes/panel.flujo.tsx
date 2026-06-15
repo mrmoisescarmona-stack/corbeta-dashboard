@@ -541,7 +541,7 @@ function ApprovalsPage() {
       <div>
         <h2 className="text-2xl md:text-3xl font-semibold tracking-tight">Parametrización del Flujo</h2>
         <p className="mt-1 text-sm text-muted-foreground">
-          Configuración de reglas, aprobadores, sustitutos y proveedores (HU_002)
+          Configuración de reglas, aprobadores, sustitutos y proveedores
         </p>
       </div>
 
