@@ -60,7 +60,9 @@ function ReportsPage() {
   if (useFakeLoading()) return <ReportsSkeleton />;
   return (
     <div className="space-y-6 animate-fade-in">
-      <div className="flex flex-wrap items-start justify-between gap-4">
+      <TraceabilitySection />
+
+      <div className="flex flex-wrap items-start justify-between gap-4 pt-2">
         <div>
           <h2 className="text-2xl md:text-3xl font-semibold tracking-tight">Reportes</h2>
           <p className="mt-1 text-sm text-muted-foreground">Indicadores operativos y desempeño del equipo.</p>
@@ -69,6 +71,7 @@ function ReportsPage() {
           <BarChart3 className="h-4 w-4 text-muted-foreground" /> Exportar reporte
         </button>
       </div>
+
 
       <section className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {stats.map((s) => (
@@ -112,7 +115,6 @@ function ReportsPage() {
         </div>
       </section>
 
-      <TraceabilitySection />
     </div>
   );
 }
