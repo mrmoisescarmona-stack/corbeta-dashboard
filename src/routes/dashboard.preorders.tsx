@@ -3,7 +3,7 @@ import { FileText, Search, Filter, ChevronDown, Plus, Eye, MoreHorizontal } from
 import { RequestsSkeleton } from "@/components/dashboard/skeleton";
 import { useFakeLoading } from "@/hooks/use-fake-loading";
 
-export const Route = createFileRoute("/dashboard/requests")({
+export const Route = createFileRoute("/dashboard/preorders")({
   head: () => ({ meta: [{ title: "Solicitudes · Corbeta" }] }),
   component: RequestsPage,
   pendingComponent: RequestsSkeleton,
