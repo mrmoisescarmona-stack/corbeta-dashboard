@@ -302,12 +302,12 @@ function RequestDetailPage() {
             Seleccionar archivo
           </span>
           <div className="mt-3 text-[11px] text-muted-foreground">
-            Formatos permitidos: .msg, .eml &nbsp;|&nbsp; Tamaño máximo por archivo: 10 MB
+            Formatos permitidos: .eml, .msg, .oft, .emlx &nbsp;|&nbsp; Tamaño máximo por archivo: 10 MB
           </div>
           <input
             ref={fileInput}
             type="file"
-            accept=".eml,.msg"
+            accept=".eml,.msg,.oft,.emlx"
             multiple
             className="hidden"
             onChange={(e) => e.target.files && handleFiles(e.target.files)}
