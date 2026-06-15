@@ -45,11 +45,11 @@ const navGroups: NavGroup[] = [
     title: "Admin",
     items: [
       { icon: Mail, label: "Portal del proveedor", to: "/dashboard/supplier-portal" },
-      { icon: Bell, label: "Trazabilidad notificaciones", to: "/dashboard/notifications" },
+      { icon: Flag, label: "Resultados finales", to: "/dashboard/resolutions" },
       { icon: Database, label: "Envío PeopleSoft", to: "/dashboard/peoplesoft" },
       { icon: Building2, label: "Proveedores", to: "/dashboard/providers" },
+      { icon: Bell, label: "Trazabilidad notificaciones", to: "/dashboard/notifications" },
       { icon: BarChart3, label: "Reportes", to: "/dashboard/reports" },
-      { icon: Flag, label: "Resultados finales", to: "/dashboard/resolutions" },
       { icon: ShieldCheck, label: "Auditoría", to: "/dashboard/audit" },
       { icon: Settings, label: "Configuración", to: "/dashboard/settings" },
     ],
