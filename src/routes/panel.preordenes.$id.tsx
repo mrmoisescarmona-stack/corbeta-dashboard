@@ -434,6 +434,44 @@ function RequestDetailPage() {
         </ol>
       </div>
 
+      {/* Confirmar gestión */}
+      {(() => {
+        const allDone = lines.every((l) => l.status !== "Pendiente");
+        const closed = readOnly || allDone;
+        return (
+          <div className="space-y-2">
+            <button
+              type="button"
+              disabled={closed}
+              onClick={() => {
+                toast.success("Gestión confirmada", {
+                  description: `Preorden ${id} actualizada correctamente.`,
+                });
+                setTrace((t) => [
+                  ...t,
+                  {
+                    at: new Date().toLocaleString("es-CO"),
+                    who: "Moises Carmona",
+                    action: "Gestión confirmada",
+                  },
+                ]);
+                navigate({ to: from === "reportes" ? "/panel/reportes" : from === "panel" ? "/panel" : "/panel/preordenes" });
+              }}
+              className="w-full rounded-lg bg-primary px-4 py-3 text-sm font-semibold text-primary-foreground shadow-sm transition-opacity hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              Confirmar gestión
+            </button>
+            {closed && (
+              <p className="text-center text-[11px] text-muted-foreground">
+                {readOnly
+                  ? "Esta solicitud está en modo solo lectura."
+                  : "Todas las líneas ya fueron gestionadas."}
+              </p>
+            )}
+          </div>
+        );
+      })()}
+
       {modal && (
         <DecisionModal
           kind={modal.kind}
