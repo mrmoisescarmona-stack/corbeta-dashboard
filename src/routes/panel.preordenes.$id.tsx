@@ -28,6 +28,9 @@ export const Route = createFileRoute("/panel/preordenes/$id")({
   head: ({ params }) => ({
     meta: [{ title: `Solicitud ${params.id} · Corbeta` }],
   }),
+  validateSearch: (search: Record<string, unknown>) => ({
+    from: search.from === "reportes" ? ("reportes" as const) : undefined,
+  }),
   component: RequestDetailPage,
 });
 
@@ -68,6 +71,8 @@ const maxBytes = 10 * 1024 * 1024;
 
 function RequestDetailPage() {
   const { id } = Route.useParams();
+  const { from } = Route.useSearch();
+  const readOnly = from === "reportes";
   const navigate = useNavigate();
   const [lines, setLines] = useState<Line[]>(initialLines);
   const [trace, setTrace] = useState<TraceEntry[]>([
@@ -162,12 +167,14 @@ function RequestDetailPage() {
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
           <button
-            onClick={() => navigate({ to: "/panel/preordenes" })}
+            onClick={() => navigate({ to: readOnly ? "/panel/reportes" : "/panel/preordenes" })}
             className="mb-2 inline-flex items-center gap-1.5 text-xs font-medium text-muted-foreground hover:text-foreground"
           >
-            <ArrowLeft className="h-3.5 w-3.5" /> Volver a Preórdenes
+            <ArrowLeft className="h-3.5 w-3.5" /> {readOnly ? "Volver a Reportes" : "Volver a Preórdenes"}
           </button>
-          <span className="inline-flex items-center rounded-full bg-primary/10 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-primary">Detalle</span>
+          <span className={`inline-flex items-center rounded-full px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider ${readOnly ? "bg-muted text-muted-foreground" : "bg-primary/10 text-primary"}`}>
+            {readOnly ? "Solo lectura" : "Detalle"}
+          </span>
           <h2 className="mt-2 text-2xl md:text-3xl font-semibold tracking-tight">Preorden {id}</h2>
           <p className="mt-1 text-sm text-muted-foreground">
             Evalúa cada línea con descuento puntual. Si <span className="font-medium">% asumido por proveedor &gt; 0</span> se notifica al proveedor en paralelo.
@@ -251,10 +258,10 @@ function RequestDetailPage() {
                     </td>
                     <td className="px-5 py-3.5">
                       <div className="flex justify-end gap-1.5">
-                        <ActionBtn label="Aprobar" icon={CheckCircle2} tone="success" disabled={done} onClick={() => approve(idx)} />
-                        <ActionBtn label="Modificar" icon={Pencil} disabled={done} onClick={() => setModal({ kind: "modify", idx })} />
-                        <ActionBtn label="Rechazar" icon={XCircle} tone="destructive" disabled={done} onClick={() => setModal({ kind: "reject", idx })} />
-                        <ActionBtn label="Cancelar" icon={Ban} disabled={done} onClick={() => setModal({ kind: "cancel", idx })} />
+                        <ActionBtn label="Aprobar" icon={CheckCircle2} tone="success" disabled={done || readOnly} onClick={() => approve(idx)} />
+                        <ActionBtn label="Modificar" icon={Pencil} disabled={done || readOnly} onClick={() => setModal({ kind: "modify", idx })} />
+                        <ActionBtn label="Rechazar" icon={XCircle} tone="destructive" disabled={done || readOnly} onClick={() => setModal({ kind: "reject", idx })} />
+                        <ActionBtn label="Cancelar" icon={Ban} disabled={done || readOnly} onClick={() => setModal({ kind: "cancel", idx })} />
                       </div>
                     </td>
                   </tr>
@@ -277,6 +284,7 @@ function RequestDetailPage() {
           Los soportes son obligatorios para continuar con el flujo de aprobación.
         </p>
 
+        {!readOnly && (
         <div
           onDragOver={(e) => {
             e.preventDefault();
@@ -313,6 +321,7 @@ function RequestDetailPage() {
             onChange={(e) => e.target.files && handleFiles(e.target.files)}
           />
         </div>
+        )}
 
         {fileError && (
           <div className="mt-3 flex items-center gap-2 rounded-lg border border-destructive/40 bg-destructive/5 px-3 py-2 text-xs text-destructive">
@@ -369,6 +378,7 @@ function RequestDetailPage() {
                           <button className="rounded-md border border-border bg-background p-1.5 hover:bg-accent" title="Descargar">
                             <Download className="h-3.5 w-3.5 text-primary" />
                           </button>
+                          {!readOnly && (
                           <button
                             onClick={() => setAttachments((prev) => prev.filter((_, idx) => idx !== i))}
                             className="rounded-md border border-border bg-background p-1.5 hover:bg-destructive/10"
@@ -376,6 +386,7 @@ function RequestDetailPage() {
                           >
                             <Trash2 className="h-3.5 w-3.5 text-destructive" />
                           </button>
+                          )}
                         </div>
                       </td>
                     </tr>
