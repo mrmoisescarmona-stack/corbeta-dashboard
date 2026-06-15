@@ -48,13 +48,6 @@ const navGroups: NavGroup[] = [
     ],
   },
   {
-    title: "Proveedor",
-    items: [
-      { icon: Mail, label: "Portal del proveedor", to: "/dashboard/supplier-portal" },
-      { icon: Bell, label: "Trazabilidad notificaciones", to: "/dashboard/notifications" },
-    ],
-  },
-  {
     title: "Aprobadores",
     items: [
       { icon: User, label: "Vista vendedor", to: "/dashboard/sales-rep" },
@@ -69,6 +62,8 @@ const navGroups: NavGroup[] = [
   {
     title: "Admin",
     items: [
+      { icon: Mail, label: "Portal del proveedor", to: "/dashboard/supplier-portal" },
+      { icon: Bell, label: "Trazabilidad notificaciones", to: "/dashboard/notifications" },
       { icon: Database, label: "Envío PeopleSoft", to: "/dashboard/peoplesoft" },
       { icon: Building2, label: "Proveedores", to: "/dashboard/providers" },
       { icon: BarChart3, label: "Reportes", to: "/dashboard/reports" },
