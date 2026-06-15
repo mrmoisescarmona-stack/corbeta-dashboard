@@ -1,5 +1,11 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { BarChart3, ChevronDown, TrendingUp, Search, Download } from "lucide-react";
+import { BarChart3, ChevronDown, TrendingUp, Search, Download, CalendarIcon } from "lucide-react";
+import { useState } from "react";
+import { format } from "date-fns";
+import { es } from "date-fns/locale";
+import { Calendar } from "@/components/ui/calendar";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { cn } from "@/lib/utils";
 import { ReportsSkeleton } from "@/components/dashboard/skeleton";
 import { useFakeLoading } from "@/hooks/use-fake-loading";
 
@@ -170,10 +176,10 @@ function TraceabilitySection() {
         </div>
         <div className="p-5 grid gap-4 md:grid-cols-3">
           <Field label="Fecha inicio" required>
-            <input type="date" defaultValue="2026-06-01" className="w-full rounded-lg border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring/30" />
+            <DateField defaultDate={new Date(2026, 5, 1)} />
           </Field>
           <Field label="Fecha fin" required>
-            <input type="date" defaultValue="2026-06-30" className="w-full rounded-lg border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring/30" />
+            <DateField defaultDate={new Date(2026, 5, 30)} />
           </Field>
           <Field label="Aprobador">
             <select className="w-full rounded-lg border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring/30">
