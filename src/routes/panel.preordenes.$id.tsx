@@ -378,6 +378,7 @@ function RequestDetailPage() {
                           <button className="rounded-md border border-border bg-background p-1.5 hover:bg-accent" title="Descargar">
                             <Download className="h-3.5 w-3.5 text-primary" />
                           </button>
+                          {!readOnly && (
                           <button
                             onClick={() => setAttachments((prev) => prev.filter((_, idx) => idx !== i))}
                             className="rounded-md border border-border bg-background p-1.5 hover:bg-destructive/10"
@@ -385,6 +386,7 @@ function RequestDetailPage() {
                           >
                             <Trash2 className="h-3.5 w-3.5 text-destructive" />
                           </button>
+                          )}
                         </div>
                       </td>
                     </tr>
