@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import { Plus, Pencil, Trash2, ArrowLeftRight, Check, X, Ban } from "lucide-react";
+import { Plus, Pencil, Trash2, ArrowLeftRight, Check, X, Ban, UploadCloud, Mail, Eye, Download } from "lucide-react";
 import { ApprovalsSkeleton } from "@/components/dashboard/skeleton";
 import { useFakeLoading } from "@/hooks/use-fake-loading";
 import {
