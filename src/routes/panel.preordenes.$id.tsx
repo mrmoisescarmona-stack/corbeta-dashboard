@@ -183,9 +183,6 @@ function RequestDetailPage() {
           >
             <ArrowLeft className="h-3.5 w-3.5" /> Volver a {from === "reportes" ? "Reportes" : from === "panel" ? "Panel" : "Preórdenes"}
           </button>
-          <span className={`inline-flex items-center rounded-full px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider ${readOnly ? "bg-muted text-muted-foreground" : "bg-primary/10 text-primary"}`}>
-            {readOnly ? "Solo lectura" : "Detalle"}
-          </span>
           <h2 className="mt-2 text-2xl md:text-3xl font-semibold tracking-tight">Preorden {id}</h2>
           <p className="mt-1 text-sm text-muted-foreground">
             Evalúa cada línea con descuento puntual. Si <span className="font-medium">% asumido por proveedor &gt; 0</span> se notifica al proveedor en paralelo.
