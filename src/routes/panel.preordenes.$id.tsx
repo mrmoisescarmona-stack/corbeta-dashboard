@@ -71,6 +71,8 @@ const maxBytes = 10 * 1024 * 1024;
 
 function RequestDetailPage() {
   const { id } = Route.useParams();
+  const { from } = Route.useSearch();
+  const readOnly = from === "reportes";
   const navigate = useNavigate();
   const [lines, setLines] = useState<Line[]>(initialLines);
   const [trace, setTrace] = useState<TraceEntry[]>([
