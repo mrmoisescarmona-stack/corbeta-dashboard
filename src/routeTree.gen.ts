@@ -13,14 +13,19 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as DashboardIndexRouteImport } from './routes/dashboard.index'
+import { Route as DashboardSupplierPortalRouteImport } from './routes/dashboard.supplier-portal'
 import { Route as DashboardSettingsRouteImport } from './routes/dashboard.settings'
+import { Route as DashboardSalesRepRouteImport } from './routes/dashboard.sales-rep'
+import { Route as DashboardResolutionsRouteImport } from './routes/dashboard.resolutions'
 import { Route as DashboardReportsRouteImport } from './routes/dashboard.reports'
 import { Route as DashboardProvidersRouteImport } from './routes/dashboard.providers'
 import { Route as DashboardPreordersRouteImport } from './routes/dashboard.preorders'
+import { Route as DashboardPeoplesoftRouteImport } from './routes/dashboard.peoplesoft'
 import { Route as DashboardNotificationsRouteImport } from './routes/dashboard.notifications'
 import { Route as DashboardAuditRouteImport } from './routes/dashboard.audit'
 import { Route as DashboardApprovalsRouteImport } from './routes/dashboard.approvals'
 import { Route as DashboardPreordersIdRouteImport } from './routes/dashboard.preorders.$id'
+import { Route as DashboardPeoplesoftLookupsRouteImport } from './routes/dashboard.peoplesoft.lookups'
 
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
@@ -42,9 +47,24 @@ const DashboardIndexRoute = DashboardIndexRouteImport.update({
   path: '/',
   getParentRoute: () => DashboardRoute,
 } as any)
+const DashboardSupplierPortalRoute = DashboardSupplierPortalRouteImport.update({
+  id: '/supplier-portal',
+  path: '/supplier-portal',
+  getParentRoute: () => DashboardRoute,
+} as any)
 const DashboardSettingsRoute = DashboardSettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardSalesRepRoute = DashboardSalesRepRouteImport.update({
+  id: '/sales-rep',
+  path: '/sales-rep',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardResolutionsRoute = DashboardResolutionsRouteImport.update({
+  id: '/resolutions',
+  path: '/resolutions',
   getParentRoute: () => DashboardRoute,
 } as any)
 const DashboardReportsRoute = DashboardReportsRouteImport.update({
@@ -60,6 +80,11 @@ const DashboardProvidersRoute = DashboardProvidersRouteImport.update({
 const DashboardPreordersRoute = DashboardPreordersRouteImport.update({
   id: '/preorders',
   path: '/preorders',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardPeoplesoftRoute = DashboardPeoplesoftRouteImport.update({
+  id: '/peoplesoft',
+  path: '/peoplesoft',
   getParentRoute: () => DashboardRoute,
 } as any)
 const DashboardNotificationsRoute = DashboardNotificationsRouteImport.update({
@@ -82,6 +107,12 @@ const DashboardPreordersIdRoute = DashboardPreordersIdRouteImport.update({
   path: '/$id',
   getParentRoute: () => DashboardPreordersRoute,
 } as any)
+const DashboardPeoplesoftLookupsRoute =
+  DashboardPeoplesoftLookupsRouteImport.update({
+    id: '/lookups',
+    path: '/lookups',
+    getParentRoute: () => DashboardPeoplesoftRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -90,11 +121,16 @@ export interface FileRoutesByFullPath {
   '/dashboard/approvals': typeof DashboardApprovalsRoute
   '/dashboard/audit': typeof DashboardAuditRoute
   '/dashboard/notifications': typeof DashboardNotificationsRoute
+  '/dashboard/peoplesoft': typeof DashboardPeoplesoftRouteWithChildren
   '/dashboard/preorders': typeof DashboardPreordersRouteWithChildren
   '/dashboard/providers': typeof DashboardProvidersRoute
   '/dashboard/reports': typeof DashboardReportsRoute
+  '/dashboard/resolutions': typeof DashboardResolutionsRoute
+  '/dashboard/sales-rep': typeof DashboardSalesRepRoute
   '/dashboard/settings': typeof DashboardSettingsRoute
+  '/dashboard/supplier-portal': typeof DashboardSupplierPortalRoute
   '/dashboard/': typeof DashboardIndexRoute
+  '/dashboard/peoplesoft/lookups': typeof DashboardPeoplesoftLookupsRoute
   '/dashboard/preorders/$id': typeof DashboardPreordersIdRoute
 }
 export interface FileRoutesByTo {
@@ -103,11 +139,16 @@ export interface FileRoutesByTo {
   '/dashboard/approvals': typeof DashboardApprovalsRoute
   '/dashboard/audit': typeof DashboardAuditRoute
   '/dashboard/notifications': typeof DashboardNotificationsRoute
+  '/dashboard/peoplesoft': typeof DashboardPeoplesoftRouteWithChildren
   '/dashboard/preorders': typeof DashboardPreordersRouteWithChildren
   '/dashboard/providers': typeof DashboardProvidersRoute
   '/dashboard/reports': typeof DashboardReportsRoute
+  '/dashboard/resolutions': typeof DashboardResolutionsRoute
+  '/dashboard/sales-rep': typeof DashboardSalesRepRoute
   '/dashboard/settings': typeof DashboardSettingsRoute
+  '/dashboard/supplier-portal': typeof DashboardSupplierPortalRoute
   '/dashboard': typeof DashboardIndexRoute
+  '/dashboard/peoplesoft/lookups': typeof DashboardPeoplesoftLookupsRoute
   '/dashboard/preorders/$id': typeof DashboardPreordersIdRoute
 }
 export interface FileRoutesById {
@@ -118,11 +159,16 @@ export interface FileRoutesById {
   '/dashboard/approvals': typeof DashboardApprovalsRoute
   '/dashboard/audit': typeof DashboardAuditRoute
   '/dashboard/notifications': typeof DashboardNotificationsRoute
+  '/dashboard/peoplesoft': typeof DashboardPeoplesoftRouteWithChildren
   '/dashboard/preorders': typeof DashboardPreordersRouteWithChildren
   '/dashboard/providers': typeof DashboardProvidersRoute
   '/dashboard/reports': typeof DashboardReportsRoute
+  '/dashboard/resolutions': typeof DashboardResolutionsRoute
+  '/dashboard/sales-rep': typeof DashboardSalesRepRoute
   '/dashboard/settings': typeof DashboardSettingsRoute
+  '/dashboard/supplier-portal': typeof DashboardSupplierPortalRoute
   '/dashboard/': typeof DashboardIndexRoute
+  '/dashboard/peoplesoft/lookups': typeof DashboardPeoplesoftLookupsRoute
   '/dashboard/preorders/$id': typeof DashboardPreordersIdRoute
 }
 export interface FileRouteTypes {
@@ -134,11 +180,16 @@ export interface FileRouteTypes {
     | '/dashboard/approvals'
     | '/dashboard/audit'
     | '/dashboard/notifications'
+    | '/dashboard/peoplesoft'
     | '/dashboard/preorders'
     | '/dashboard/providers'
     | '/dashboard/reports'
+    | '/dashboard/resolutions'
+    | '/dashboard/sales-rep'
     | '/dashboard/settings'
+    | '/dashboard/supplier-portal'
     | '/dashboard/'
+    | '/dashboard/peoplesoft/lookups'
     | '/dashboard/preorders/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -147,11 +198,16 @@ export interface FileRouteTypes {
     | '/dashboard/approvals'
     | '/dashboard/audit'
     | '/dashboard/notifications'
+    | '/dashboard/peoplesoft'
     | '/dashboard/preorders'
     | '/dashboard/providers'
     | '/dashboard/reports'
+    | '/dashboard/resolutions'
+    | '/dashboard/sales-rep'
     | '/dashboard/settings'
+    | '/dashboard/supplier-portal'
     | '/dashboard'
+    | '/dashboard/peoplesoft/lookups'
     | '/dashboard/preorders/$id'
   id:
     | '__root__'
@@ -161,11 +217,16 @@ export interface FileRouteTypes {
     | '/dashboard/approvals'
     | '/dashboard/audit'
     | '/dashboard/notifications'
+    | '/dashboard/peoplesoft'
     | '/dashboard/preorders'
     | '/dashboard/providers'
     | '/dashboard/reports'
+    | '/dashboard/resolutions'
+    | '/dashboard/sales-rep'
     | '/dashboard/settings'
+    | '/dashboard/supplier-portal'
     | '/dashboard/'
+    | '/dashboard/peoplesoft/lookups'
     | '/dashboard/preorders/$id'
   fileRoutesById: FileRoutesById
 }
@@ -205,11 +266,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardIndexRouteImport
       parentRoute: typeof DashboardRoute
     }
+    '/dashboard/supplier-portal': {
+      id: '/dashboard/supplier-portal'
+      path: '/supplier-portal'
+      fullPath: '/dashboard/supplier-portal'
+      preLoaderRoute: typeof DashboardSupplierPortalRouteImport
+      parentRoute: typeof DashboardRoute
+    }
     '/dashboard/settings': {
       id: '/dashboard/settings'
       path: '/settings'
       fullPath: '/dashboard/settings'
       preLoaderRoute: typeof DashboardSettingsRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/sales-rep': {
+      id: '/dashboard/sales-rep'
+      path: '/sales-rep'
+      fullPath: '/dashboard/sales-rep'
+      preLoaderRoute: typeof DashboardSalesRepRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/resolutions': {
+      id: '/dashboard/resolutions'
+      path: '/resolutions'
+      fullPath: '/dashboard/resolutions'
+      preLoaderRoute: typeof DashboardResolutionsRouteImport
       parentRoute: typeof DashboardRoute
     }
     '/dashboard/reports': {
@@ -231,6 +313,13 @@ declare module '@tanstack/react-router' {
       path: '/preorders'
       fullPath: '/dashboard/preorders'
       preLoaderRoute: typeof DashboardPreordersRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/peoplesoft': {
+      id: '/dashboard/peoplesoft'
+      path: '/peoplesoft'
+      fullPath: '/dashboard/peoplesoft'
+      preLoaderRoute: typeof DashboardPeoplesoftRouteImport
       parentRoute: typeof DashboardRoute
     }
     '/dashboard/notifications': {
@@ -261,8 +350,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardPreordersIdRouteImport
       parentRoute: typeof DashboardPreordersRoute
     }
+    '/dashboard/peoplesoft/lookups': {
+      id: '/dashboard/peoplesoft/lookups'
+      path: '/lookups'
+      fullPath: '/dashboard/peoplesoft/lookups'
+      preLoaderRoute: typeof DashboardPeoplesoftLookupsRouteImport
+      parentRoute: typeof DashboardPeoplesoftRoute
+    }
   }
 }
+
+interface DashboardPeoplesoftRouteChildren {
+  DashboardPeoplesoftLookupsRoute: typeof DashboardPeoplesoftLookupsRoute
+}
+
+const DashboardPeoplesoftRouteChildren: DashboardPeoplesoftRouteChildren = {
+  DashboardPeoplesoftLookupsRoute: DashboardPeoplesoftLookupsRoute,
+}
+
+const DashboardPeoplesoftRouteWithChildren =
+  DashboardPeoplesoftRoute._addFileChildren(DashboardPeoplesoftRouteChildren)
 
 interface DashboardPreordersRouteChildren {
   DashboardPreordersIdRoute: typeof DashboardPreordersIdRoute
@@ -279,10 +386,14 @@ interface DashboardRouteChildren {
   DashboardApprovalsRoute: typeof DashboardApprovalsRoute
   DashboardAuditRoute: typeof DashboardAuditRoute
   DashboardNotificationsRoute: typeof DashboardNotificationsRoute
+  DashboardPeoplesoftRoute: typeof DashboardPeoplesoftRouteWithChildren
   DashboardPreordersRoute: typeof DashboardPreordersRouteWithChildren
   DashboardProvidersRoute: typeof DashboardProvidersRoute
   DashboardReportsRoute: typeof DashboardReportsRoute
+  DashboardResolutionsRoute: typeof DashboardResolutionsRoute
+  DashboardSalesRepRoute: typeof DashboardSalesRepRoute
   DashboardSettingsRoute: typeof DashboardSettingsRoute
+  DashboardSupplierPortalRoute: typeof DashboardSupplierPortalRoute
   DashboardIndexRoute: typeof DashboardIndexRoute
 }
 
@@ -290,10 +401,14 @@ const DashboardRouteChildren: DashboardRouteChildren = {
   DashboardApprovalsRoute: DashboardApprovalsRoute,
   DashboardAuditRoute: DashboardAuditRoute,
   DashboardNotificationsRoute: DashboardNotificationsRoute,
+  DashboardPeoplesoftRoute: DashboardPeoplesoftRouteWithChildren,
   DashboardPreordersRoute: DashboardPreordersRouteWithChildren,
   DashboardProvidersRoute: DashboardProvidersRoute,
   DashboardReportsRoute: DashboardReportsRoute,
+  DashboardResolutionsRoute: DashboardResolutionsRoute,
+  DashboardSalesRepRoute: DashboardSalesRepRoute,
   DashboardSettingsRoute: DashboardSettingsRoute,
+  DashboardSupplierPortalRoute: DashboardSupplierPortalRoute,
   DashboardIndexRoute: DashboardIndexRoute,
 }
 
