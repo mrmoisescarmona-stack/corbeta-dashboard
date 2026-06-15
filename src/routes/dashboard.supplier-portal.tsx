@@ -23,7 +23,7 @@ function SupplierPortalPage() {
   return (
     <div className="space-y-6 animate-fade-in">
       <div>
-        <span className="inline-flex items-center rounded-full bg-success/15 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-foreground ring-1 ring-success/30">Fase 2 · Proveedor</span>
+        <span className="inline-flex items-center rounded-full bg-success/15 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-foreground ring-1 ring-success/30">Proveedor</span>
         <h2 className="mt-2 text-2xl md:text-3xl font-semibold tracking-tight">Portal del proveedor</h2>
         <p className="mt-1 text-sm text-muted-foreground">
           Seguimiento de respuestas de proveedores y vista simulada del portal donde responden (Aprobar / Rechazar / Modificar %).

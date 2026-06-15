@@ -30,7 +30,7 @@ function PeopleSoftPage() {
     <div className="space-y-6 animate-fade-in">
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div>
-          <span className="inline-flex items-center rounded-full bg-[oklch(0.9_0.06_290)] px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-[oklch(0.4_0.15_290)]">Fase 5 · Integraciones</span>
+          <span className="inline-flex items-center rounded-full bg-[oklch(0.9_0.06_290)] px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-[oklch(0.4_0.15_290)]">Integraciones</span>
           <h2 className="mt-2 text-2xl md:text-3xl font-semibold tracking-tight">Envío a PeopleSoft</h2>
           <p className="mt-1 text-sm text-muted-foreground">
             Estado del despacho de preordenes gestionadas y catálogos consultados desde PeopleSoft.
