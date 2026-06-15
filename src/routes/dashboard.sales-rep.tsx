@@ -33,7 +33,7 @@ function SalesRepPage() {
       <div className="flex items-start gap-4">
         <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 text-primary"><User className="h-5 w-5" /></div>
         <div>
-          <span className="inline-flex items-center rounded-full bg-warning/10 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-warning">Fase 3 · Vendedor</span>
+          <span className="inline-flex items-center rounded-full bg-warning/10 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-warning">Vendedor</span>
           <h2 className="mt-2 text-2xl md:text-3xl font-semibold tracking-tight">Mis preordenes</h2>
           <p className="mt-1 text-sm text-muted-foreground">
             Vista de solo lectura: avance por fase y resultado final de cada preorden enviada desde CorbeMóvil.

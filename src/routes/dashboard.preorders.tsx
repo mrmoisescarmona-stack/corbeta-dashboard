@@ -160,7 +160,7 @@ function RequestsPage() {
     <div className="space-y-6 animate-fade-in">
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
-          <span className="inline-flex items-center rounded-full bg-primary/10 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-primary">Fase 1 · Recepción</span>
+          <span className="inline-flex items-center rounded-full bg-primary/10 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-primary">Recepción</span>
           <h2 className="mt-2 text-2xl md:text-3xl font-semibold tracking-tight">Preordenes recibidas</h2>
           <p className="mt-1 text-sm text-muted-foreground">Inbox de preordenes con seguimiento a nivel de línea, vencimiento y aprobador asignado.</p>
         </div>

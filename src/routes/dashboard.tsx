@@ -41,33 +41,33 @@ const navGroups: NavGroup[] = [
     ],
   },
   {
-    title: "Fase 1 · Recepción",
+    title: "Recepción",
     items: [
       { icon: Inbox, label: "Preordenes recibidas", to: "/dashboard/preorders" },
     ],
   },
   {
-    title: "Fase 2 · Proveedor",
+    title: "Proveedor",
     items: [
       { icon: Mail, label: "Portal del proveedor", to: "/dashboard/supplier-portal" },
       { icon: Bell, label: "Trazabilidad notificaciones", to: "/dashboard/notifications" },
     ],
   },
   {
-    title: "Fase 3 · Aprobadores",
+    title: "Aprobadores",
     items: [
       { icon: CheckSquare, label: "Mis aprobaciones", to: "/dashboard/approvals" },
       { icon: User, label: "Vista vendedor", to: "/dashboard/sales-rep" },
     ],
   },
   {
-    title: "Fase 4 · Cierre",
+    title: "Cierre",
     items: [
       { icon: Flag, label: "Resultados finales", to: "/dashboard/resolutions" },
     ],
   },
   {
-    title: "Fase 5 · Integraciones",
+    title: "Integraciones",
     items: [
       { icon: Database, label: "Envío PeopleSoft", to: "/dashboard/peoplesoft" },
       { icon: Building2, label: "Proveedores", to: "/dashboard/providers" },
