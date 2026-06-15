@@ -3,7 +3,7 @@ import { FileText, Search, Filter, ChevronDown, Plus, Eye, MoreHorizontal } from
 import { RequestsSkeleton } from "@/components/dashboard/skeleton";
 import { useFakeLoading } from "@/hooks/use-fake-loading";
 
-export const Route = createFileRoute("/dashboard/requests")({
+export const Route = createFileRoute("/dashboard/preorders")({
   head: () => ({ meta: [{ title: "Solicitudes · Corbeta" }] }),
   component: RequestsPage,
   pendingComponent: RequestsSkeleton,
@@ -32,11 +32,12 @@ function RequestsPage() {
     <div className="space-y-6 animate-fade-in">
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
-          <h2 className="text-2xl md:text-3xl font-semibold tracking-tight">Solicitudes</h2>
-          <p className="mt-1 text-sm text-muted-foreground">Listado completo de solicitudes de descuento puntual.</p>
+          <span className="inline-flex items-center rounded-full bg-primary/10 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-primary">Fase 1 · Recepción</span>
+          <h2 className="mt-2 text-2xl md:text-3xl font-semibold tracking-tight">Preordenes recibidas</h2>
+          <p className="mt-1 text-sm text-muted-foreground">Inbox de preordenes provenientes de CorbeMóvil con su clasificación de líneas.</p>
         </div>
         <button className="inline-flex items-center gap-2 rounded-lg bg-primary px-3.5 py-2 text-sm font-medium text-primary-foreground hover:opacity-90">
-          <Plus className="h-4 w-4" /> Nueva solicitud
+          <Plus className="h-4 w-4" /> Nueva preorden
         </button>
       </div>
 
@@ -102,7 +103,7 @@ function RequestsPage() {
                   <td className="px-3 py-3.5 text-right font-medium tabular-nums">{r.value}</td>
                   <td className="px-5 py-3.5">
                     <div className="flex justify-end gap-1">
-                      <Link to="/dashboard/requests/$id" params={{ id: r.id }} className="rounded-md p-1.5 hover:bg-accent" aria-label="Ver detalle"><Eye className="h-4 w-4" /></Link>
+                      <Link to="/dashboard/preorders/$id" params={{ id: r.id }} className="rounded-md p-1.5 hover:bg-accent" aria-label="Ver detalle"><Eye className="h-4 w-4" /></Link>
                       <button className="rounded-md p-1.5 hover:bg-accent"><MoreHorizontal className="h-4 w-4" /></button>
                     </div>
                   </td>
