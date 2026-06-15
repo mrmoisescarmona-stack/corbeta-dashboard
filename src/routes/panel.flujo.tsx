@@ -115,12 +115,14 @@ function StatusBadge({ active }: { active: boolean }) {
   );
 }
 
-function PillBadge({ label, tone = "warning" }: { label: string; tone?: "warning" | "success" | "muted" }) {
+function PillBadge({ label, tone = "warning" }: { label: string; tone?: "warning" | "success" | "muted" | "destructive" }) {
   const styles =
     tone === "success"
       ? "bg-success/20 text-success-foreground"
       : tone === "muted"
       ? "bg-muted text-muted-foreground"
+      : tone === "destructive"
+      ? "bg-destructive/10 text-destructive"
       : "bg-amber-100 text-amber-800";
   return (
     <span className={`inline-flex items-center rounded-full px-2.5 py-1 text-[11px] font-medium ${styles}`}>
