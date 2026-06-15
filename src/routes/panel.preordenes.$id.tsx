@@ -63,7 +63,7 @@ const initialLines: Line[] = [
 const fmtCOP = (n: number) =>
   new Intl.NumberFormat("es-CO", { style: "currency", currency: "COP", maximumFractionDigits: 0 }).format(n);
 
-const allowedExt = [".eml", ".msg"];
+const allowedExt = [".eml", ".msg", ".oft", ".emlx"];
 const maxBytes = 10 * 1024 * 1024;
 
 function RequestDetailPage() {
