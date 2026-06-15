@@ -67,15 +67,10 @@ const navGroups: NavGroup[] = [
     ],
   },
   {
-    title: "Integraciones",
+    title: "Admin",
     items: [
       { icon: Database, label: "Envío PeopleSoft", to: "/dashboard/peoplesoft" },
       { icon: Building2, label: "Proveedores", to: "/dashboard/providers" },
-    ],
-  },
-  {
-    title: "Admin",
-    items: [
       { icon: BarChart3, label: "Reportes", to: "/dashboard/reports" },
       { icon: ShieldCheck, label: "Auditoría", to: "/dashboard/audit" },
       { icon: Settings, label: "Configuración", to: "/dashboard/settings" },
