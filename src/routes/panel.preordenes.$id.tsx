@@ -284,6 +284,7 @@ function RequestDetailPage() {
           Los soportes son obligatorios para continuar con el flujo de aprobación.
         </p>
 
+        {!readOnly && (
         <div
           onDragOver={(e) => {
             e.preventDefault();
@@ -320,6 +321,7 @@ function RequestDetailPage() {
             onChange={(e) => e.target.files && handleFiles(e.target.files)}
           />
         </div>
+        )}
 
         {fileError && (
           <div className="mt-3 flex items-center gap-2 rounded-lg border border-destructive/40 bg-destructive/5 px-3 py-2 text-xs text-destructive">
