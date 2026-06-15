@@ -7,7 +7,6 @@ import {
   Pencil,
   Ban,
   UploadCloud,
-  Paperclip,
   AlertCircle,
   Clock,
   User,
