@@ -141,7 +141,7 @@ function RequestDetailPage() {
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
           <button
-            onClick={() => navigate({ to: "/dashboard/preorders" })}
+            onClick={() => navigate({ to: "/panel/preordenes" })}
             className="mb-2 inline-flex items-center gap-1.5 text-xs font-medium text-muted-foreground hover:text-foreground"
           >
             <ArrowLeft className="h-3.5 w-3.5" /> Volver a Preórdenes

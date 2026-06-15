@@ -24,7 +24,7 @@ const kpis = [
 
 function PeopleSoftPage() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
-  const showRoot = pathname === "/dashboard/peoplesoft";
+  const showRoot = pathname === "/panel/peoplesoft";
 
   return (
     <div className="space-y-6 animate-fade-in">
@@ -37,10 +37,10 @@ function PeopleSoftPage() {
           </p>
         </div>
         <nav className="inline-flex rounded-lg border border-border bg-card p-1 text-xs font-medium">
-          <Link to="/dashboard/peoplesoft" className={`px-3 py-1.5 rounded-md ${showRoot ? "bg-primary text-primary-foreground" : "hover:bg-accent"}`}>
+          <Link to="/panel/peoplesoft" className={`px-3 py-1.5 rounded-md ${showRoot ? "bg-primary text-primary-foreground" : "hover:bg-accent"}`}>
             Despachos
           </Link>
-          <Link to="/dashboard/peoplesoft/lookups" className={`px-3 py-1.5 rounded-md ${!showRoot ? "bg-primary text-primary-foreground" : "hover:bg-accent"}`}>
+          <Link to="/panel/peoplesoft/catalogos" className={`px-3 py-1.5 rounded-md ${!showRoot ? "bg-primary text-primary-foreground" : "hover:bg-accent"}`}>
             Catálogos
           </Link>
         </nav>

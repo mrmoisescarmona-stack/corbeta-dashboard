@@ -53,7 +53,7 @@ function SalesRepPage() {
               </div>
               <div className="flex items-center gap-2">
                 <ResultBadge result={p.result} />
-                <Link to="/dashboard/preorders/$id" params={{ id: p.id }} className="inline-flex items-center gap-1.5 rounded-md border border-border bg-background px-2.5 py-1.5 text-xs font-medium hover:bg-accent">
+                <Link to="/panel/preordenes/$id" params={{ id: p.id }} className="inline-flex items-center gap-1.5 rounded-md border border-border bg-background px-2.5 py-1.5 text-xs font-medium hover:bg-accent">
                   <Eye className="h-3.5 w-3.5" /> Ver
                 </Link>
               </div>
