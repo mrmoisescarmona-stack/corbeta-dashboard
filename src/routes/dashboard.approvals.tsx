@@ -115,7 +115,7 @@ function ApprovalsPage() {
       {tab === "aprobadores" && (
         <SectionCard
           title="Aprobadores internos"
-          subtitle="Configuración por dirección y división (HU_002)"
+          subtitle="Configuración por dirección y división"
           action={
             <PrimaryButton>
               <Plus className="h-4 w-4" /> Agregar
