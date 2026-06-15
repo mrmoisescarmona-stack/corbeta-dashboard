@@ -169,7 +169,7 @@ function DashboardLayout() {
                 <div className="hidden sm:block leading-tight">
                   <div className="text-xs font-semibold">Moises Carmona</div>
                   <div className="text-[11px] text-muted-foreground">
-                    Aprobador Interno
+                    Supervisor
                   </div>
                 </div>
                 <ChevronDown className="h-4 w-4 text-muted-foreground" />
