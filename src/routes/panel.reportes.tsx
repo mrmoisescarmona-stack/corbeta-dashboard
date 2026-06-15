@@ -20,7 +20,7 @@ import {
   YAxis,
 } from "recharts";
 
-export const Route = createFileRoute("/dashboard/reports")({
+export const Route = createFileRoute("/panel/reportes")({
   head: () => ({ meta: [{ title: "Reportes · Corbeta" }] }),
   component: ReportsPage,
   pendingComponent: ReportsSkeleton,
@@ -410,7 +410,7 @@ function TraceabilitySection() {
               {traceResults.map((r) => (
                 <tr key={r.id} className="hover:bg-muted/40">
                   <td className="px-5 py-4 whitespace-nowrap">
-                    <Link to="/dashboard/preorders/$id" params={{ id: r.id }} className="font-medium text-primary hover:underline">
+                    <Link to="/panel/preordenes/$id" params={{ id: r.id }} className="font-medium text-primary hover:underline">
                       {r.id}
                     </Link>
                   </td>

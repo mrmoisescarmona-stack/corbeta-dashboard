@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Flag, CheckCircle2, XCircle, Pencil, Send, Eye } from "lucide-react";
 
-export const Route = createFileRoute("/dashboard/resolutions")({
+export const Route = createFileRoute("/panel/seguimiento")({
   head: () => ({ meta: [{ title: "Seguimiento · Corbeta" }] }),
   component: ResolutionsPage,
 });
@@ -68,7 +68,7 @@ function ResolutionsPage() {
               {pending.map((p) => (
                 <tr key={p.id} className="hover:bg-muted/40">
                   <td className="px-5 py-4">
-                    <Link to="/dashboard/preorders/$id" params={{ id: p.id }} className="font-medium text-primary hover:underline">
+                    <Link to="/panel/preordenes/$id" params={{ id: p.id }} className="font-medium text-primary hover:underline">
                       {p.id}
                     </Link>
                   </td>
@@ -85,7 +85,7 @@ function ResolutionsPage() {
                     </span>
                   </td>
                   <td className="px-5 py-4">
-                    <Link to="/dashboard/preorders/$id" params={{ id: p.id }} className="inline-flex items-center gap-1.5 rounded-md border border-border bg-background px-2.5 py-1.5 text-xs font-medium hover:bg-accent">
+                    <Link to="/panel/preordenes/$id" params={{ id: p.id }} className="inline-flex items-center gap-1.5 rounded-md border border-border bg-background px-2.5 py-1.5 text-xs font-medium hover:bg-accent">
                       <Eye className="h-3.5 w-3.5" /> Gestionar
                     </Link>
                   </td>
@@ -131,7 +131,7 @@ function ResolutionsPage() {
                   <Send className="h-3.5 w-3.5" /> Notificar vendedor
                 </button>
               )}
-              <Link to="/dashboard/preorders/$id" params={{ id: r.id }} className="inline-flex items-center gap-1.5 rounded-md border border-border bg-background px-2.5 py-1.5 text-xs font-medium hover:bg-accent">
+              <Link to="/panel/preordenes/$id" params={{ id: r.id }} className="inline-flex items-center gap-1.5 rounded-md border border-border bg-background px-2.5 py-1.5 text-xs font-medium hover:bg-accent">
                 <Eye className="h-3.5 w-3.5" /> Ver
               </Link>
             </li>

@@ -22,7 +22,7 @@ import logoAsset from "@/assets/logo_corbeta.png.asset.json";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
-export const Route = createFileRoute("/dashboard")({
+export const Route = createFileRoute("/panel")({
   ssr: false,
   beforeLoad: async () => {
     const { data } = await supabase.auth.getSession();
@@ -38,21 +38,21 @@ const navGroups: NavGroup[] = [
   {
     title: "General",
     items: [
-      { icon: LayoutDashboard, label: "Panel general", to: "/dashboard", exact: true },
-      { icon: Inbox, label: "Flujo de aprobación", to: "/dashboard/approvals" },
-      { icon: BarChart3, label: "Reportes", to: "/dashboard/reports" },
+      { icon: LayoutDashboard, label: "Panel general", to: "/panel", exact: true },
+      { icon: Inbox, label: "Flujo de aprobación", to: "/panel/flujo" },
+      { icon: BarChart3, label: "Reportes", to: "/panel/reportes" },
     ],
   },
   {
     title: "Admin",
     items: [
-      { icon: Flag, label: "Seguimiento", to: "/dashboard/resolutions" },
-      { icon: Database, label: "Envío PeopleSoft", to: "/dashboard/peoplesoft" },
-      { icon: Building2, label: "Proveedores", to: "/dashboard/providers" },
-      { icon: Bell, label: "Notificaciones", to: "/dashboard/notifications" },
-      { icon: ShieldCheck, label: "Auditoría", to: "/dashboard/audit" },
-      { icon: Headphones, label: "Soporte", to: "/dashboard/support" },
-      { icon: Settings, label: "Configuración", to: "/dashboard/settings" },
+      { icon: Flag, label: "Seguimiento", to: "/panel/seguimiento" },
+      { icon: Database, label: "Envío PeopleSoft", to: "/panel/peoplesoft" },
+      { icon: Building2, label: "Proveedores", to: "/panel/proveedores" },
+      { icon: Bell, label: "Notificaciones", to: "/panel/notificaciones" },
+      { icon: ShieldCheck, label: "Auditoría", to: "/panel/auditoria" },
+      { icon: Headphones, label: "Soporte", to: "/panel/soporte" },
+      { icon: Settings, label: "Configuración", to: "/panel/configuracion" },
     ],
   },
 ];

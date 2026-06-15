@@ -20,7 +20,7 @@ import {
 import { RequestsSkeleton } from "@/components/dashboard/skeleton";
 import { useFakeLoading } from "@/hooks/use-fake-loading";
 
-export const Route = createFileRoute("/dashboard/preorders")({
+export const Route = createFileRoute("/panel/preordenes")({
   head: () => ({ meta: [{ title: "Solicitudes · Corbeta" }] }),
   component: RequestsPage,
   pendingComponent: RequestsSkeleton,
@@ -366,7 +366,7 @@ function RequestsPage() {
                             <CheckCircle2 className="h-3.5 w-3.5" /> Aprobar
                           </button>
                         )}
-                        <Link to="/dashboard/preorders/$id" params={{ id: r.id }} className="rounded-md p-1.5 hover:bg-accent" aria-label="Ver detalle">
+                        <Link to="/panel/preordenes/$id" params={{ id: r.id }} className="rounded-md p-1.5 hover:bg-accent" aria-label="Ver detalle">
                           <Eye className="h-4 w-4" />
                         </Link>
                         <div className="relative">

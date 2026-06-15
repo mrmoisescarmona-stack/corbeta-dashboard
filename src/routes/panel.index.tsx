@@ -24,7 +24,7 @@ import {
 } from "lucide-react";
 import { DashboardOverviewSkeleton } from "@/components/dashboard/skeleton";
 
-export const Route = createFileRoute("/dashboard/")({
+export const Route = createFileRoute("/panel/")({
   head: () => ({
     meta: [
       { title: "Panel · Corbeta" },
@@ -279,7 +279,7 @@ function DashboardOverview() {
         <ul className="mt-3 divide-y divide-warning/20">
           {overdue.map((o) => (
             <li key={o.id} className="flex items-center justify-between py-2 text-sm">
-              <Link to="/dashboard/preorders/$id" params={{ id: o.id }} className="hover:underline">
+              <Link to="/panel/preordenes/$id" params={{ id: o.id }} className="hover:underline">
                 <span className="font-medium">{o.id}</span>
                 <span className="text-muted-foreground"> · {o.supplier}</span>
               </Link>
@@ -306,7 +306,7 @@ function DashboardOverview() {
               </div>
               <h3 className="text-base font-semibold">Solicitudes recientes</h3>
             </div>
-            <Link to="/dashboard/preorders" className="text-xs font-medium text-primary hover:underline">Ver todas</Link>
+            <Link to="/panel/preordenes" className="text-xs font-medium text-primary hover:underline">Ver todas</Link>
           </div>
 
           <div className="flex flex-wrap items-center gap-2 p-5 border-b border-border">
@@ -364,7 +364,7 @@ function DashboardOverview() {
                     <td className="px-3 py-3.5 text-right font-medium tabular-nums">{r.value}</td>
                     <td className="px-5 py-3.5">
                       <div className="flex items-center justify-end gap-1">
-                        <Link to="/dashboard/preorders/$id" params={{ id: r.id }} className="rounded-md p-1.5 text-muted-foreground hover:bg-accent hover:text-foreground">
+                        <Link to="/panel/preordenes/$id" params={{ id: r.id }} className="rounded-md p-1.5 text-muted-foreground hover:bg-accent hover:text-foreground">
                           <Eye className="h-4 w-4" />
                         </Link>
                         <button className="rounded-md p-1.5 text-muted-foreground hover:bg-accent hover:text-foreground">
@@ -384,7 +384,7 @@ function DashboardOverview() {
           <div className="rounded-xl border border-border bg-card p-5">
             <div className="flex items-center justify-between">
               <h3 className="text-base font-semibold">Tiempo de espera proveedor</h3>
-              <Link to="/dashboard/supplier-portal" className="text-xs font-medium text-primary hover:underline">Ver</Link>
+              <Link to="/panel/portal-proveedor" className="text-xs font-medium text-primary hover:underline">Ver</Link>
             </div>
             <div className="mt-4 grid grid-cols-3 text-[10px] uppercase tracking-wider text-muted-foreground border-b border-border pb-2">
               <span>Proveedor</span>

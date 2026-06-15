@@ -3,7 +3,7 @@ import { Search, ChevronDown, Filter, Building2 } from "lucide-react";
 import { ProvidersSkeleton } from "@/components/dashboard/skeleton";
 import { useFakeLoading } from "@/hooks/use-fake-loading";
 
-export const Route = createFileRoute("/dashboard/providers")({
+export const Route = createFileRoute("/panel/proveedores")({
   head: () => ({ meta: [{ title: "Proveedores · Corbeta" }] }),
   component: ProvidersPage,
   pendingComponent: ProvidersSkeleton,

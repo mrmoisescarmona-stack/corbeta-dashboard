@@ -4,7 +4,7 @@ import { useState } from "react";
 import { NotificationsSkeleton } from "@/components/dashboard/skeleton";
 import { useFakeLoading } from "@/hooks/use-fake-loading";
 
-export const Route = createFileRoute("/dashboard/notifications")({
+export const Route = createFileRoute("/panel/notificaciones")({
   head: () => ({ meta: [{ title: "Notificaciones · Corbeta" }] }),
   component: NotificationsPage,
   pendingComponent: NotificationsSkeleton,

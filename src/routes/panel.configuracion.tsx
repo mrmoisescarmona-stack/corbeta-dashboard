@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { SettingsSkeleton } from "@/components/dashboard/skeleton";
 import { useFakeLoading } from "@/hooks/use-fake-loading";
 
-export const Route = createFileRoute("/dashboard/settings")({
+export const Route = createFileRoute("/panel/configuracion")({
   head: () => ({ meta: [{ title: "Configuración · Corbeta" }] }),
   component: SettingsPage,
   pendingComponent: SettingsSkeleton,
