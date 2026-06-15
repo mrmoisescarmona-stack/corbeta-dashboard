@@ -337,7 +337,7 @@ function DashboardOverview() {
       {gestion && (
         <GestionModal item={gestion} onClose={() => setGestion(null)} onConfirm={handleConfirm} />
       )}
-      </section>
+
 
       <section className="grid grid-cols-1 xl:grid-cols-3 gap-6">
         <div className="xl:col-span-2 rounded-xl border border-border bg-card">
