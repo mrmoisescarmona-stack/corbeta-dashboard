@@ -410,7 +410,7 @@ function TraceabilitySection() {
               {traceResults.map((r) => (
                 <tr key={r.id} className="hover:bg-muted/40">
                   <td className="px-5 py-4 whitespace-nowrap">
-                    <Link to="/panel/preordenes/$id" params={{ id: r.id }} className="font-medium text-primary hover:underline">
+                    <Link to="/panel/preordenes/$id" params={{ id: r.id }} search={{ from: "reportes" }} className="font-medium text-primary hover:underline">
                       {r.id}
                     </Link>
                   </td>
