@@ -32,6 +32,7 @@ type Approver = {
   direction: string;
   division: string;
   active: boolean;
+  status?: "Activo" | "Inactivo" | "Pendiente";
   email: string;
   phone: string;
   manager: string;
