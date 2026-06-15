@@ -32,6 +32,7 @@ type Approver = {
   direction: string;
   division: string;
   active: boolean;
+  status?: "Activo" | "Inactivo" | "Pendiente";
   email: string;
   phone: string;
   manager: string;
@@ -65,6 +66,7 @@ const approvers: Approver[] = [
     direction: "Tecnología",
     division: "Computación",
     active: true,
+    status: "Pendiente",
     email: "pedro.martinez@corbeta.com",
     phone: "3119876543",
     manager: "Ana Ruiz",
@@ -72,7 +74,7 @@ const approvers: Approver[] = [
     unit: "Antioquia Centro",
     startDate: "2023-09-01",
     scopes: [
-      { code: "SC-010", description: "Aprobación descuentos línea Cómputo", limit: "10%", status: "Activo" },
+      { code: "SC-010", description: "Aprobación descuentos línea Cómputo", limit: "10%", status: "Pendiente" },
     ],
   },
   {
@@ -103,14 +105,17 @@ const providers = [
   { id: "900789012", name: "Whirlpool Andina", category: "Línea Blanca", email: "comercial@whirlpool.com.co", active: true },
 ];
 
-function StatusBadge({ active }: { active: boolean }) {
+function StatusBadge({ active, status }: { active: boolean; status?: "Activo" | "Inactivo" | "Pendiente" }) {
+  const resolved = status ?? (active ? "Activo" : "Inactivo");
+  const styles =
+    resolved === "Activo"
+      ? "bg-success/20 text-success-foreground"
+      : resolved === "Pendiente"
+        ? "bg-amber-100 text-amber-800"
+        : "bg-muted text-muted-foreground";
   return (
-    <span
-      className={`inline-flex items-center rounded-full px-2.5 py-1 text-[11px] font-medium ${
-        active ? "bg-success/20 text-success-foreground" : "bg-muted text-muted-foreground"
-      }`}
-    >
-      {active ? "Activo" : "Inactivo"}
+    <span className={`inline-flex items-center rounded-full px-2.5 py-1 text-[11px] font-medium ${styles}`}>
+      {resolved}
     </span>
   );
 }
@@ -477,7 +482,7 @@ function ApprovalsPage() {
                     <td className="px-3 py-3.5 text-muted-foreground tabular-nums">{a.id}</td>
                     <td className="px-3 py-3.5">{a.direction}</td>
                     <td className="px-3 py-3.5">{a.division}</td>
-                    <td className="px-3 py-3.5"><StatusBadge active={a.active} /></td>
+                    <td className="px-3 py-3.5"><StatusBadge active={a.active} status={a.status} /></td>
                     <td className="px-5 py-3.5">
                       <div className="flex justify-end gap-1">
                         <button
