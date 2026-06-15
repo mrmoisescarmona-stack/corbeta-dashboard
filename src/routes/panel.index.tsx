@@ -225,6 +225,22 @@ function Donut({ mode }: { mode: "count" | "value" }) {
 function DashboardOverview() {
   const [loading, setLoading] = useState(true);
   const [donutMode, setDonutMode] = useState<"count" | "value">("count");
+  const [processed, setProcessed] = useState<Set<string>>(new Set());
+  const [gestion, setGestion] = useState<OverdueItem | null>(null);
+
+  const overdue = useMemo(
+    () => overdueBase.filter((o) => !processed.has(o.id)),
+    [processed]
+  );
+
+  const handleConfirm = (id: string) => {
+    setProcessed((prev) => {
+      const next = new Set(prev);
+      next.add(id);
+      return next;
+    });
+    setGestion(null);
+  };
 
   useEffect(() => {
     const t = setTimeout(() => setLoading(false), 600);
