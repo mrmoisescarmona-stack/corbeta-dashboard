@@ -289,7 +289,7 @@ function ApprovalsPage() {
   return (
     <div className="space-y-6 animate-fade-in">
       <div>
-        <h2 className="text-2xl md:text-3xl font-semibold tracking-tight">Parametrización del Workflow</h2>
+        <h2 className="text-2xl md:text-3xl font-semibold tracking-tight">Parametrización del Flujo</h2>
         <p className="mt-1 text-sm text-muted-foreground">
           Configuración de reglas, aprobadores, sustitutos y proveedores (HU_002)
         </p>
