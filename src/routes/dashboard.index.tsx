@@ -27,7 +27,7 @@ import { DashboardOverviewSkeleton } from "@/components/dashboard/skeleton";
 export const Route = createFileRoute("/dashboard/")({
   head: () => ({
     meta: [
-      { title: "Dashboard · Corbeta" },
+      { title: "Panel · Corbeta" },
       {
         name: "description",
         content:

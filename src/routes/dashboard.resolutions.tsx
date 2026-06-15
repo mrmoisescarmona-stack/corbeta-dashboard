@@ -100,14 +100,14 @@ function ResolutionsPage() {
         <span className="inline-flex items-center rounded-full bg-destructive/10 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-destructive">Cierre</span>
         <h2 className="mt-2 text-xl md:text-2xl font-semibold tracking-tight">Resultados finales</h2>
         <p className="mt-1 text-sm text-muted-foreground">
-          Preordenes con decisión cerrada en todas sus líneas. Desde aquí se dispara la notificación al vendedor.
+          Preórdenes con decisión cerrada en todas sus líneas. Desde aquí se dispara la notificación al vendedor.
         </p>
       </div>
 
       <div className="rounded-xl border border-border bg-card">
         <div className="flex items-center gap-2.5 p-5 border-b border-border">
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 text-primary"><Flag className="h-4 w-4" /></div>
-          <h3 className="text-base font-semibold">Preordenes resueltas</h3>
+          <h3 className="text-base font-semibold">Preórdenes resueltas</h3>
         </div>
         <ul className="divide-y divide-border">
           {resolutions.map((r) => (

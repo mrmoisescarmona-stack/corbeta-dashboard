@@ -144,7 +144,7 @@ function RequestDetailPage() {
             onClick={() => navigate({ to: "/dashboard/preorders" })}
             className="mb-2 inline-flex items-center gap-1.5 text-xs font-medium text-muted-foreground hover:text-foreground"
           >
-            <ArrowLeft className="h-3.5 w-3.5" /> Volver a Preordenes
+            <ArrowLeft className="h-3.5 w-3.5" /> Volver a Preórdenes
           </button>
           <span className="inline-flex items-center rounded-full bg-primary/10 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-primary">Detalle</span>
           <h2 className="mt-2 text-2xl md:text-3xl font-semibold tracking-tight">Preorden {id}</h2>
