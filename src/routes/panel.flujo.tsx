@@ -783,6 +783,7 @@ function ApprovalsPage() {
       )}
 
       <ApproverDetailDialog approver={selected} onClose={() => setSelected(null)} />
+      <NewApproverDialog open={newApproverOpen} onClose={() => setNewApproverOpen(false)} />
     </div>
   );
 }
