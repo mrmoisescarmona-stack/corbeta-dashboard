@@ -24,7 +24,7 @@ import {
 } from "lucide-react";
 import { DashboardOverviewSkeleton } from "@/components/dashboard/skeleton";
 
-export const Route = createFileRoute("/dashboard/")({
+export const Route = createFileRoute("/panel/")({
   head: () => ({
     meta: [
       { title: "Panel · Corbeta" },

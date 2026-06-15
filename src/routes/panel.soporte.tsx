@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { AlertTriangle, CheckCircle2, Database, RotateCcw, Headphones } from "lucide-react";
 import { useState } from "react";
 
-export const Route = createFileRoute("/dashboard/support")({
+export const Route = createFileRoute("/panel/soporte")({
   head: () => ({ meta: [{ title: "Soporte · Corbeta" }] }),
   component: SupportPage,
 });

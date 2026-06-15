@@ -9,33 +9,33 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as PanelRouteImport } from './routes/panel'
 import { Route as LoginRouteImport } from './routes/login'
-import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as DashboardIndexRouteImport } from './routes/dashboard.index'
-import { Route as DashboardSupportRouteImport } from './routes/dashboard.support'
-import { Route as DashboardSupplierPortalRouteImport } from './routes/dashboard.supplier-portal'
-import { Route as DashboardSettingsRouteImport } from './routes/dashboard.settings'
-import { Route as DashboardSalesRepRouteImport } from './routes/dashboard.sales-rep'
-import { Route as DashboardResolutionsRouteImport } from './routes/dashboard.resolutions'
-import { Route as DashboardReportsRouteImport } from './routes/dashboard.reports'
-import { Route as DashboardProvidersRouteImport } from './routes/dashboard.providers'
-import { Route as DashboardPreordersRouteImport } from './routes/dashboard.preorders'
-import { Route as DashboardPeoplesoftRouteImport } from './routes/dashboard.peoplesoft'
-import { Route as DashboardNotificationsRouteImport } from './routes/dashboard.notifications'
-import { Route as DashboardAuditRouteImport } from './routes/dashboard.audit'
-import { Route as DashboardApprovalsRouteImport } from './routes/dashboard.approvals'
-import { Route as DashboardPreordersIdRouteImport } from './routes/dashboard.preorders.$id'
-import { Route as DashboardPeoplesoftLookupsRouteImport } from './routes/dashboard.peoplesoft.lookups'
+import { Route as PanelIndexRouteImport } from './routes/panel.index'
+import { Route as PanelVendedorRouteImport } from './routes/panel.vendedor'
+import { Route as PanelSoporteRouteImport } from './routes/panel.soporte'
+import { Route as PanelSeguimientoRouteImport } from './routes/panel.seguimiento'
+import { Route as PanelReportesRouteImport } from './routes/panel.reportes'
+import { Route as PanelProveedoresRouteImport } from './routes/panel.proveedores'
+import { Route as PanelPreordenesRouteImport } from './routes/panel.preordenes'
+import { Route as PanelPortalProveedorRouteImport } from './routes/panel.portal-proveedor'
+import { Route as PanelPeoplesoftRouteImport } from './routes/panel.peoplesoft'
+import { Route as PanelNotificacionesRouteImport } from './routes/panel.notificaciones'
+import { Route as PanelFlujoRouteImport } from './routes/panel.flujo'
+import { Route as PanelConfiguracionRouteImport } from './routes/panel.configuracion'
+import { Route as PanelAuditoriaRouteImport } from './routes/panel.auditoria'
+import { Route as PanelPreordenesIdRouteImport } from './routes/panel.preordenes.$id'
+import { Route as PanelPeoplesoftCatalogosRouteImport } from './routes/panel.peoplesoft.catalogos'
 
+const PanelRoute = PanelRouteImport.update({
+  id: '/panel',
+  path: '/panel',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const DashboardRoute = DashboardRouteImport.update({
-  id: '/dashboard',
-  path: '/dashboard',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -43,225 +43,225 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const DashboardIndexRoute = DashboardIndexRouteImport.update({
+const PanelIndexRoute = PanelIndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => DashboardRoute,
+  getParentRoute: () => PanelRoute,
 } as any)
-const DashboardSupportRoute = DashboardSupportRouteImport.update({
-  id: '/support',
-  path: '/support',
-  getParentRoute: () => DashboardRoute,
+const PanelVendedorRoute = PanelVendedorRouteImport.update({
+  id: '/vendedor',
+  path: '/vendedor',
+  getParentRoute: () => PanelRoute,
 } as any)
-const DashboardSupplierPortalRoute = DashboardSupplierPortalRouteImport.update({
-  id: '/supplier-portal',
-  path: '/supplier-portal',
-  getParentRoute: () => DashboardRoute,
+const PanelSoporteRoute = PanelSoporteRouteImport.update({
+  id: '/soporte',
+  path: '/soporte',
+  getParentRoute: () => PanelRoute,
 } as any)
-const DashboardSettingsRoute = DashboardSettingsRouteImport.update({
-  id: '/settings',
-  path: '/settings',
-  getParentRoute: () => DashboardRoute,
+const PanelSeguimientoRoute = PanelSeguimientoRouteImport.update({
+  id: '/seguimiento',
+  path: '/seguimiento',
+  getParentRoute: () => PanelRoute,
 } as any)
-const DashboardSalesRepRoute = DashboardSalesRepRouteImport.update({
-  id: '/sales-rep',
-  path: '/sales-rep',
-  getParentRoute: () => DashboardRoute,
+const PanelReportesRoute = PanelReportesRouteImport.update({
+  id: '/reportes',
+  path: '/reportes',
+  getParentRoute: () => PanelRoute,
 } as any)
-const DashboardResolutionsRoute = DashboardResolutionsRouteImport.update({
-  id: '/resolutions',
-  path: '/resolutions',
-  getParentRoute: () => DashboardRoute,
+const PanelProveedoresRoute = PanelProveedoresRouteImport.update({
+  id: '/proveedores',
+  path: '/proveedores',
+  getParentRoute: () => PanelRoute,
 } as any)
-const DashboardReportsRoute = DashboardReportsRouteImport.update({
-  id: '/reports',
-  path: '/reports',
-  getParentRoute: () => DashboardRoute,
+const PanelPreordenesRoute = PanelPreordenesRouteImport.update({
+  id: '/preordenes',
+  path: '/preordenes',
+  getParentRoute: () => PanelRoute,
 } as any)
-const DashboardProvidersRoute = DashboardProvidersRouteImport.update({
-  id: '/providers',
-  path: '/providers',
-  getParentRoute: () => DashboardRoute,
+const PanelPortalProveedorRoute = PanelPortalProveedorRouteImport.update({
+  id: '/portal-proveedor',
+  path: '/portal-proveedor',
+  getParentRoute: () => PanelRoute,
 } as any)
-const DashboardPreordersRoute = DashboardPreordersRouteImport.update({
-  id: '/preorders',
-  path: '/preorders',
-  getParentRoute: () => DashboardRoute,
-} as any)
-const DashboardPeoplesoftRoute = DashboardPeoplesoftRouteImport.update({
+const PanelPeoplesoftRoute = PanelPeoplesoftRouteImport.update({
   id: '/peoplesoft',
   path: '/peoplesoft',
-  getParentRoute: () => DashboardRoute,
+  getParentRoute: () => PanelRoute,
 } as any)
-const DashboardNotificationsRoute = DashboardNotificationsRouteImport.update({
-  id: '/notifications',
-  path: '/notifications',
-  getParentRoute: () => DashboardRoute,
+const PanelNotificacionesRoute = PanelNotificacionesRouteImport.update({
+  id: '/notificaciones',
+  path: '/notificaciones',
+  getParentRoute: () => PanelRoute,
 } as any)
-const DashboardAuditRoute = DashboardAuditRouteImport.update({
-  id: '/audit',
-  path: '/audit',
-  getParentRoute: () => DashboardRoute,
+const PanelFlujoRoute = PanelFlujoRouteImport.update({
+  id: '/flujo',
+  path: '/flujo',
+  getParentRoute: () => PanelRoute,
 } as any)
-const DashboardApprovalsRoute = DashboardApprovalsRouteImport.update({
-  id: '/approvals',
-  path: '/approvals',
-  getParentRoute: () => DashboardRoute,
+const PanelConfiguracionRoute = PanelConfiguracionRouteImport.update({
+  id: '/configuracion',
+  path: '/configuracion',
+  getParentRoute: () => PanelRoute,
 } as any)
-const DashboardPreordersIdRoute = DashboardPreordersIdRouteImport.update({
+const PanelAuditoriaRoute = PanelAuditoriaRouteImport.update({
+  id: '/auditoria',
+  path: '/auditoria',
+  getParentRoute: () => PanelRoute,
+} as any)
+const PanelPreordenesIdRoute = PanelPreordenesIdRouteImport.update({
   id: '/$id',
   path: '/$id',
-  getParentRoute: () => DashboardPreordersRoute,
+  getParentRoute: () => PanelPreordenesRoute,
 } as any)
-const DashboardPeoplesoftLookupsRoute =
-  DashboardPeoplesoftLookupsRouteImport.update({
-    id: '/lookups',
-    path: '/lookups',
-    getParentRoute: () => DashboardPeoplesoftRoute,
+const PanelPeoplesoftCatalogosRoute =
+  PanelPeoplesoftCatalogosRouteImport.update({
+    id: '/catalogos',
+    path: '/catalogos',
+    getParentRoute: () => PanelPeoplesoftRoute,
   } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/dashboard': typeof DashboardRouteWithChildren
   '/login': typeof LoginRoute
-  '/dashboard/approvals': typeof DashboardApprovalsRoute
-  '/dashboard/audit': typeof DashboardAuditRoute
-  '/dashboard/notifications': typeof DashboardNotificationsRoute
-  '/dashboard/peoplesoft': typeof DashboardPeoplesoftRouteWithChildren
-  '/dashboard/preorders': typeof DashboardPreordersRouteWithChildren
-  '/dashboard/providers': typeof DashboardProvidersRoute
-  '/dashboard/reports': typeof DashboardReportsRoute
-  '/dashboard/resolutions': typeof DashboardResolutionsRoute
-  '/dashboard/sales-rep': typeof DashboardSalesRepRoute
-  '/dashboard/settings': typeof DashboardSettingsRoute
-  '/dashboard/supplier-portal': typeof DashboardSupplierPortalRoute
-  '/dashboard/support': typeof DashboardSupportRoute
-  '/dashboard/': typeof DashboardIndexRoute
-  '/dashboard/peoplesoft/lookups': typeof DashboardPeoplesoftLookupsRoute
-  '/dashboard/preorders/$id': typeof DashboardPreordersIdRoute
+  '/panel': typeof PanelRouteWithChildren
+  '/panel/auditoria': typeof PanelAuditoriaRoute
+  '/panel/configuracion': typeof PanelConfiguracionRoute
+  '/panel/flujo': typeof PanelFlujoRoute
+  '/panel/notificaciones': typeof PanelNotificacionesRoute
+  '/panel/peoplesoft': typeof PanelPeoplesoftRouteWithChildren
+  '/panel/portal-proveedor': typeof PanelPortalProveedorRoute
+  '/panel/preordenes': typeof PanelPreordenesRouteWithChildren
+  '/panel/proveedores': typeof PanelProveedoresRoute
+  '/panel/reportes': typeof PanelReportesRoute
+  '/panel/seguimiento': typeof PanelSeguimientoRoute
+  '/panel/soporte': typeof PanelSoporteRoute
+  '/panel/vendedor': typeof PanelVendedorRoute
+  '/panel/': typeof PanelIndexRoute
+  '/panel/peoplesoft/catalogos': typeof PanelPeoplesoftCatalogosRoute
+  '/panel/preordenes/$id': typeof PanelPreordenesIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
-  '/dashboard/approvals': typeof DashboardApprovalsRoute
-  '/dashboard/audit': typeof DashboardAuditRoute
-  '/dashboard/notifications': typeof DashboardNotificationsRoute
-  '/dashboard/peoplesoft': typeof DashboardPeoplesoftRouteWithChildren
-  '/dashboard/preorders': typeof DashboardPreordersRouteWithChildren
-  '/dashboard/providers': typeof DashboardProvidersRoute
-  '/dashboard/reports': typeof DashboardReportsRoute
-  '/dashboard/resolutions': typeof DashboardResolutionsRoute
-  '/dashboard/sales-rep': typeof DashboardSalesRepRoute
-  '/dashboard/settings': typeof DashboardSettingsRoute
-  '/dashboard/supplier-portal': typeof DashboardSupplierPortalRoute
-  '/dashboard/support': typeof DashboardSupportRoute
-  '/dashboard': typeof DashboardIndexRoute
-  '/dashboard/peoplesoft/lookups': typeof DashboardPeoplesoftLookupsRoute
-  '/dashboard/preorders/$id': typeof DashboardPreordersIdRoute
+  '/panel/auditoria': typeof PanelAuditoriaRoute
+  '/panel/configuracion': typeof PanelConfiguracionRoute
+  '/panel/flujo': typeof PanelFlujoRoute
+  '/panel/notificaciones': typeof PanelNotificacionesRoute
+  '/panel/peoplesoft': typeof PanelPeoplesoftRouteWithChildren
+  '/panel/portal-proveedor': typeof PanelPortalProveedorRoute
+  '/panel/preordenes': typeof PanelPreordenesRouteWithChildren
+  '/panel/proveedores': typeof PanelProveedoresRoute
+  '/panel/reportes': typeof PanelReportesRoute
+  '/panel/seguimiento': typeof PanelSeguimientoRoute
+  '/panel/soporte': typeof PanelSoporteRoute
+  '/panel/vendedor': typeof PanelVendedorRoute
+  '/panel': typeof PanelIndexRoute
+  '/panel/peoplesoft/catalogos': typeof PanelPeoplesoftCatalogosRoute
+  '/panel/preordenes/$id': typeof PanelPreordenesIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/dashboard': typeof DashboardRouteWithChildren
   '/login': typeof LoginRoute
-  '/dashboard/approvals': typeof DashboardApprovalsRoute
-  '/dashboard/audit': typeof DashboardAuditRoute
-  '/dashboard/notifications': typeof DashboardNotificationsRoute
-  '/dashboard/peoplesoft': typeof DashboardPeoplesoftRouteWithChildren
-  '/dashboard/preorders': typeof DashboardPreordersRouteWithChildren
-  '/dashboard/providers': typeof DashboardProvidersRoute
-  '/dashboard/reports': typeof DashboardReportsRoute
-  '/dashboard/resolutions': typeof DashboardResolutionsRoute
-  '/dashboard/sales-rep': typeof DashboardSalesRepRoute
-  '/dashboard/settings': typeof DashboardSettingsRoute
-  '/dashboard/supplier-portal': typeof DashboardSupplierPortalRoute
-  '/dashboard/support': typeof DashboardSupportRoute
-  '/dashboard/': typeof DashboardIndexRoute
-  '/dashboard/peoplesoft/lookups': typeof DashboardPeoplesoftLookupsRoute
-  '/dashboard/preorders/$id': typeof DashboardPreordersIdRoute
+  '/panel': typeof PanelRouteWithChildren
+  '/panel/auditoria': typeof PanelAuditoriaRoute
+  '/panel/configuracion': typeof PanelConfiguracionRoute
+  '/panel/flujo': typeof PanelFlujoRoute
+  '/panel/notificaciones': typeof PanelNotificacionesRoute
+  '/panel/peoplesoft': typeof PanelPeoplesoftRouteWithChildren
+  '/panel/portal-proveedor': typeof PanelPortalProveedorRoute
+  '/panel/preordenes': typeof PanelPreordenesRouteWithChildren
+  '/panel/proveedores': typeof PanelProveedoresRoute
+  '/panel/reportes': typeof PanelReportesRoute
+  '/panel/seguimiento': typeof PanelSeguimientoRoute
+  '/panel/soporte': typeof PanelSoporteRoute
+  '/panel/vendedor': typeof PanelVendedorRoute
+  '/panel/': typeof PanelIndexRoute
+  '/panel/peoplesoft/catalogos': typeof PanelPeoplesoftCatalogosRoute
+  '/panel/preordenes/$id': typeof PanelPreordenesIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/dashboard'
     | '/login'
-    | '/dashboard/approvals'
-    | '/dashboard/audit'
-    | '/dashboard/notifications'
-    | '/dashboard/peoplesoft'
-    | '/dashboard/preorders'
-    | '/dashboard/providers'
-    | '/dashboard/reports'
-    | '/dashboard/resolutions'
-    | '/dashboard/sales-rep'
-    | '/dashboard/settings'
-    | '/dashboard/supplier-portal'
-    | '/dashboard/support'
-    | '/dashboard/'
-    | '/dashboard/peoplesoft/lookups'
-    | '/dashboard/preorders/$id'
+    | '/panel'
+    | '/panel/auditoria'
+    | '/panel/configuracion'
+    | '/panel/flujo'
+    | '/panel/notificaciones'
+    | '/panel/peoplesoft'
+    | '/panel/portal-proveedor'
+    | '/panel/preordenes'
+    | '/panel/proveedores'
+    | '/panel/reportes'
+    | '/panel/seguimiento'
+    | '/panel/soporte'
+    | '/panel/vendedor'
+    | '/panel/'
+    | '/panel/peoplesoft/catalogos'
+    | '/panel/preordenes/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/login'
-    | '/dashboard/approvals'
-    | '/dashboard/audit'
-    | '/dashboard/notifications'
-    | '/dashboard/peoplesoft'
-    | '/dashboard/preorders'
-    | '/dashboard/providers'
-    | '/dashboard/reports'
-    | '/dashboard/resolutions'
-    | '/dashboard/sales-rep'
-    | '/dashboard/settings'
-    | '/dashboard/supplier-portal'
-    | '/dashboard/support'
-    | '/dashboard'
-    | '/dashboard/peoplesoft/lookups'
-    | '/dashboard/preorders/$id'
+    | '/panel/auditoria'
+    | '/panel/configuracion'
+    | '/panel/flujo'
+    | '/panel/notificaciones'
+    | '/panel/peoplesoft'
+    | '/panel/portal-proveedor'
+    | '/panel/preordenes'
+    | '/panel/proveedores'
+    | '/panel/reportes'
+    | '/panel/seguimiento'
+    | '/panel/soporte'
+    | '/panel/vendedor'
+    | '/panel'
+    | '/panel/peoplesoft/catalogos'
+    | '/panel/preordenes/$id'
   id:
     | '__root__'
     | '/'
-    | '/dashboard'
     | '/login'
-    | '/dashboard/approvals'
-    | '/dashboard/audit'
-    | '/dashboard/notifications'
-    | '/dashboard/peoplesoft'
-    | '/dashboard/preorders'
-    | '/dashboard/providers'
-    | '/dashboard/reports'
-    | '/dashboard/resolutions'
-    | '/dashboard/sales-rep'
-    | '/dashboard/settings'
-    | '/dashboard/supplier-portal'
-    | '/dashboard/support'
-    | '/dashboard/'
-    | '/dashboard/peoplesoft/lookups'
-    | '/dashboard/preorders/$id'
+    | '/panel'
+    | '/panel/auditoria'
+    | '/panel/configuracion'
+    | '/panel/flujo'
+    | '/panel/notificaciones'
+    | '/panel/peoplesoft'
+    | '/panel/portal-proveedor'
+    | '/panel/preordenes'
+    | '/panel/proveedores'
+    | '/panel/reportes'
+    | '/panel/seguimiento'
+    | '/panel/soporte'
+    | '/panel/vendedor'
+    | '/panel/'
+    | '/panel/peoplesoft/catalogos'
+    | '/panel/preordenes/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  DashboardRoute: typeof DashboardRouteWithChildren
   LoginRoute: typeof LoginRoute
+  PanelRoute: typeof PanelRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/panel': {
+      id: '/panel'
+      path: '/panel'
+      fullPath: '/panel'
+      preLoaderRoute: typeof PanelRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/login': {
       id: '/login'
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof LoginRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/dashboard': {
-      id: '/dashboard'
-      path: '/dashboard'
-      fullPath: '/dashboard'
-      preLoaderRoute: typeof DashboardRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -271,176 +271,176 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/dashboard/': {
-      id: '/dashboard/'
+    '/panel/': {
+      id: '/panel/'
       path: '/'
-      fullPath: '/dashboard/'
-      preLoaderRoute: typeof DashboardIndexRouteImport
-      parentRoute: typeof DashboardRoute
+      fullPath: '/panel/'
+      preLoaderRoute: typeof PanelIndexRouteImport
+      parentRoute: typeof PanelRoute
     }
-    '/dashboard/support': {
-      id: '/dashboard/support'
-      path: '/support'
-      fullPath: '/dashboard/support'
-      preLoaderRoute: typeof DashboardSupportRouteImport
-      parentRoute: typeof DashboardRoute
+    '/panel/vendedor': {
+      id: '/panel/vendedor'
+      path: '/vendedor'
+      fullPath: '/panel/vendedor'
+      preLoaderRoute: typeof PanelVendedorRouteImport
+      parentRoute: typeof PanelRoute
     }
-    '/dashboard/supplier-portal': {
-      id: '/dashboard/supplier-portal'
-      path: '/supplier-portal'
-      fullPath: '/dashboard/supplier-portal'
-      preLoaderRoute: typeof DashboardSupplierPortalRouteImport
-      parentRoute: typeof DashboardRoute
+    '/panel/soporte': {
+      id: '/panel/soporte'
+      path: '/soporte'
+      fullPath: '/panel/soporte'
+      preLoaderRoute: typeof PanelSoporteRouteImport
+      parentRoute: typeof PanelRoute
     }
-    '/dashboard/settings': {
-      id: '/dashboard/settings'
-      path: '/settings'
-      fullPath: '/dashboard/settings'
-      preLoaderRoute: typeof DashboardSettingsRouteImport
-      parentRoute: typeof DashboardRoute
+    '/panel/seguimiento': {
+      id: '/panel/seguimiento'
+      path: '/seguimiento'
+      fullPath: '/panel/seguimiento'
+      preLoaderRoute: typeof PanelSeguimientoRouteImport
+      parentRoute: typeof PanelRoute
     }
-    '/dashboard/sales-rep': {
-      id: '/dashboard/sales-rep'
-      path: '/sales-rep'
-      fullPath: '/dashboard/sales-rep'
-      preLoaderRoute: typeof DashboardSalesRepRouteImport
-      parentRoute: typeof DashboardRoute
+    '/panel/reportes': {
+      id: '/panel/reportes'
+      path: '/reportes'
+      fullPath: '/panel/reportes'
+      preLoaderRoute: typeof PanelReportesRouteImport
+      parentRoute: typeof PanelRoute
     }
-    '/dashboard/resolutions': {
-      id: '/dashboard/resolutions'
-      path: '/resolutions'
-      fullPath: '/dashboard/resolutions'
-      preLoaderRoute: typeof DashboardResolutionsRouteImport
-      parentRoute: typeof DashboardRoute
+    '/panel/proveedores': {
+      id: '/panel/proveedores'
+      path: '/proveedores'
+      fullPath: '/panel/proveedores'
+      preLoaderRoute: typeof PanelProveedoresRouteImport
+      parentRoute: typeof PanelRoute
     }
-    '/dashboard/reports': {
-      id: '/dashboard/reports'
-      path: '/reports'
-      fullPath: '/dashboard/reports'
-      preLoaderRoute: typeof DashboardReportsRouteImport
-      parentRoute: typeof DashboardRoute
+    '/panel/preordenes': {
+      id: '/panel/preordenes'
+      path: '/preordenes'
+      fullPath: '/panel/preordenes'
+      preLoaderRoute: typeof PanelPreordenesRouteImport
+      parentRoute: typeof PanelRoute
     }
-    '/dashboard/providers': {
-      id: '/dashboard/providers'
-      path: '/providers'
-      fullPath: '/dashboard/providers'
-      preLoaderRoute: typeof DashboardProvidersRouteImport
-      parentRoute: typeof DashboardRoute
+    '/panel/portal-proveedor': {
+      id: '/panel/portal-proveedor'
+      path: '/portal-proveedor'
+      fullPath: '/panel/portal-proveedor'
+      preLoaderRoute: typeof PanelPortalProveedorRouteImport
+      parentRoute: typeof PanelRoute
     }
-    '/dashboard/preorders': {
-      id: '/dashboard/preorders'
-      path: '/preorders'
-      fullPath: '/dashboard/preorders'
-      preLoaderRoute: typeof DashboardPreordersRouteImport
-      parentRoute: typeof DashboardRoute
-    }
-    '/dashboard/peoplesoft': {
-      id: '/dashboard/peoplesoft'
+    '/panel/peoplesoft': {
+      id: '/panel/peoplesoft'
       path: '/peoplesoft'
-      fullPath: '/dashboard/peoplesoft'
-      preLoaderRoute: typeof DashboardPeoplesoftRouteImport
-      parentRoute: typeof DashboardRoute
+      fullPath: '/panel/peoplesoft'
+      preLoaderRoute: typeof PanelPeoplesoftRouteImport
+      parentRoute: typeof PanelRoute
     }
-    '/dashboard/notifications': {
-      id: '/dashboard/notifications'
-      path: '/notifications'
-      fullPath: '/dashboard/notifications'
-      preLoaderRoute: typeof DashboardNotificationsRouteImport
-      parentRoute: typeof DashboardRoute
+    '/panel/notificaciones': {
+      id: '/panel/notificaciones'
+      path: '/notificaciones'
+      fullPath: '/panel/notificaciones'
+      preLoaderRoute: typeof PanelNotificacionesRouteImport
+      parentRoute: typeof PanelRoute
     }
-    '/dashboard/audit': {
-      id: '/dashboard/audit'
-      path: '/audit'
-      fullPath: '/dashboard/audit'
-      preLoaderRoute: typeof DashboardAuditRouteImport
-      parentRoute: typeof DashboardRoute
+    '/panel/flujo': {
+      id: '/panel/flujo'
+      path: '/flujo'
+      fullPath: '/panel/flujo'
+      preLoaderRoute: typeof PanelFlujoRouteImport
+      parentRoute: typeof PanelRoute
     }
-    '/dashboard/approvals': {
-      id: '/dashboard/approvals'
-      path: '/approvals'
-      fullPath: '/dashboard/approvals'
-      preLoaderRoute: typeof DashboardApprovalsRouteImport
-      parentRoute: typeof DashboardRoute
+    '/panel/configuracion': {
+      id: '/panel/configuracion'
+      path: '/configuracion'
+      fullPath: '/panel/configuracion'
+      preLoaderRoute: typeof PanelConfiguracionRouteImport
+      parentRoute: typeof PanelRoute
     }
-    '/dashboard/preorders/$id': {
-      id: '/dashboard/preorders/$id'
+    '/panel/auditoria': {
+      id: '/panel/auditoria'
+      path: '/auditoria'
+      fullPath: '/panel/auditoria'
+      preLoaderRoute: typeof PanelAuditoriaRouteImport
+      parentRoute: typeof PanelRoute
+    }
+    '/panel/preordenes/$id': {
+      id: '/panel/preordenes/$id'
       path: '/$id'
-      fullPath: '/dashboard/preorders/$id'
-      preLoaderRoute: typeof DashboardPreordersIdRouteImport
-      parentRoute: typeof DashboardPreordersRoute
+      fullPath: '/panel/preordenes/$id'
+      preLoaderRoute: typeof PanelPreordenesIdRouteImport
+      parentRoute: typeof PanelPreordenesRoute
     }
-    '/dashboard/peoplesoft/lookups': {
-      id: '/dashboard/peoplesoft/lookups'
-      path: '/lookups'
-      fullPath: '/dashboard/peoplesoft/lookups'
-      preLoaderRoute: typeof DashboardPeoplesoftLookupsRouteImport
-      parentRoute: typeof DashboardPeoplesoftRoute
+    '/panel/peoplesoft/catalogos': {
+      id: '/panel/peoplesoft/catalogos'
+      path: '/catalogos'
+      fullPath: '/panel/peoplesoft/catalogos'
+      preLoaderRoute: typeof PanelPeoplesoftCatalogosRouteImport
+      parentRoute: typeof PanelPeoplesoftRoute
     }
   }
 }
 
-interface DashboardPeoplesoftRouteChildren {
-  DashboardPeoplesoftLookupsRoute: typeof DashboardPeoplesoftLookupsRoute
+interface PanelPeoplesoftRouteChildren {
+  PanelPeoplesoftCatalogosRoute: typeof PanelPeoplesoftCatalogosRoute
 }
 
-const DashboardPeoplesoftRouteChildren: DashboardPeoplesoftRouteChildren = {
-  DashboardPeoplesoftLookupsRoute: DashboardPeoplesoftLookupsRoute,
+const PanelPeoplesoftRouteChildren: PanelPeoplesoftRouteChildren = {
+  PanelPeoplesoftCatalogosRoute: PanelPeoplesoftCatalogosRoute,
 }
 
-const DashboardPeoplesoftRouteWithChildren =
-  DashboardPeoplesoftRoute._addFileChildren(DashboardPeoplesoftRouteChildren)
-
-interface DashboardPreordersRouteChildren {
-  DashboardPreordersIdRoute: typeof DashboardPreordersIdRoute
-}
-
-const DashboardPreordersRouteChildren: DashboardPreordersRouteChildren = {
-  DashboardPreordersIdRoute: DashboardPreordersIdRoute,
-}
-
-const DashboardPreordersRouteWithChildren =
-  DashboardPreordersRoute._addFileChildren(DashboardPreordersRouteChildren)
-
-interface DashboardRouteChildren {
-  DashboardApprovalsRoute: typeof DashboardApprovalsRoute
-  DashboardAuditRoute: typeof DashboardAuditRoute
-  DashboardNotificationsRoute: typeof DashboardNotificationsRoute
-  DashboardPeoplesoftRoute: typeof DashboardPeoplesoftRouteWithChildren
-  DashboardPreordersRoute: typeof DashboardPreordersRouteWithChildren
-  DashboardProvidersRoute: typeof DashboardProvidersRoute
-  DashboardReportsRoute: typeof DashboardReportsRoute
-  DashboardResolutionsRoute: typeof DashboardResolutionsRoute
-  DashboardSalesRepRoute: typeof DashboardSalesRepRoute
-  DashboardSettingsRoute: typeof DashboardSettingsRoute
-  DashboardSupplierPortalRoute: typeof DashboardSupplierPortalRoute
-  DashboardSupportRoute: typeof DashboardSupportRoute
-  DashboardIndexRoute: typeof DashboardIndexRoute
-}
-
-const DashboardRouteChildren: DashboardRouteChildren = {
-  DashboardApprovalsRoute: DashboardApprovalsRoute,
-  DashboardAuditRoute: DashboardAuditRoute,
-  DashboardNotificationsRoute: DashboardNotificationsRoute,
-  DashboardPeoplesoftRoute: DashboardPeoplesoftRouteWithChildren,
-  DashboardPreordersRoute: DashboardPreordersRouteWithChildren,
-  DashboardProvidersRoute: DashboardProvidersRoute,
-  DashboardReportsRoute: DashboardReportsRoute,
-  DashboardResolutionsRoute: DashboardResolutionsRoute,
-  DashboardSalesRepRoute: DashboardSalesRepRoute,
-  DashboardSettingsRoute: DashboardSettingsRoute,
-  DashboardSupplierPortalRoute: DashboardSupplierPortalRoute,
-  DashboardSupportRoute: DashboardSupportRoute,
-  DashboardIndexRoute: DashboardIndexRoute,
-}
-
-const DashboardRouteWithChildren = DashboardRoute._addFileChildren(
-  DashboardRouteChildren,
+const PanelPeoplesoftRouteWithChildren = PanelPeoplesoftRoute._addFileChildren(
+  PanelPeoplesoftRouteChildren,
 )
+
+interface PanelPreordenesRouteChildren {
+  PanelPreordenesIdRoute: typeof PanelPreordenesIdRoute
+}
+
+const PanelPreordenesRouteChildren: PanelPreordenesRouteChildren = {
+  PanelPreordenesIdRoute: PanelPreordenesIdRoute,
+}
+
+const PanelPreordenesRouteWithChildren = PanelPreordenesRoute._addFileChildren(
+  PanelPreordenesRouteChildren,
+)
+
+interface PanelRouteChildren {
+  PanelAuditoriaRoute: typeof PanelAuditoriaRoute
+  PanelConfiguracionRoute: typeof PanelConfiguracionRoute
+  PanelFlujoRoute: typeof PanelFlujoRoute
+  PanelNotificacionesRoute: typeof PanelNotificacionesRoute
+  PanelPeoplesoftRoute: typeof PanelPeoplesoftRouteWithChildren
+  PanelPortalProveedorRoute: typeof PanelPortalProveedorRoute
+  PanelPreordenesRoute: typeof PanelPreordenesRouteWithChildren
+  PanelProveedoresRoute: typeof PanelProveedoresRoute
+  PanelReportesRoute: typeof PanelReportesRoute
+  PanelSeguimientoRoute: typeof PanelSeguimientoRoute
+  PanelSoporteRoute: typeof PanelSoporteRoute
+  PanelVendedorRoute: typeof PanelVendedorRoute
+  PanelIndexRoute: typeof PanelIndexRoute
+}
+
+const PanelRouteChildren: PanelRouteChildren = {
+  PanelAuditoriaRoute: PanelAuditoriaRoute,
+  PanelConfiguracionRoute: PanelConfiguracionRoute,
+  PanelFlujoRoute: PanelFlujoRoute,
+  PanelNotificacionesRoute: PanelNotificacionesRoute,
+  PanelPeoplesoftRoute: PanelPeoplesoftRouteWithChildren,
+  PanelPortalProveedorRoute: PanelPortalProveedorRoute,
+  PanelPreordenesRoute: PanelPreordenesRouteWithChildren,
+  PanelProveedoresRoute: PanelProveedoresRoute,
+  PanelReportesRoute: PanelReportesRoute,
+  PanelSeguimientoRoute: PanelSeguimientoRoute,
+  PanelSoporteRoute: PanelSoporteRoute,
+  PanelVendedorRoute: PanelVendedorRoute,
+  PanelIndexRoute: PanelIndexRoute,
+}
+
+const PanelRouteWithChildren = PanelRoute._addFileChildren(PanelRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  DashboardRoute: DashboardRouteWithChildren,
   LoginRoute: LoginRoute,
+  PanelRoute: PanelRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

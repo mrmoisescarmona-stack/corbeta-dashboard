@@ -11,7 +11,7 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 
-export const Route = createFileRoute("/dashboard/approvals")({
+export const Route = createFileRoute("/panel/flujo")({
   head: () => ({ meta: [{ title: "Parametrización del Flujo · Corbeta" }] }),
   component: ApprovalsPage,
   pendingComponent: ApprovalsSkeleton,

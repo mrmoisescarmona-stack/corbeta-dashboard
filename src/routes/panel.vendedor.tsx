@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { User, CheckCircle2, Clock, XCircle, Pencil, Eye } from "lucide-react";
 
-export const Route = createFileRoute("/dashboard/sales-rep")({
+export const Route = createFileRoute("/panel/vendedor")({
   head: () => ({ meta: [{ title: "Vista vendedor · Corbeta" }] }),
   component: SalesRepPage,
 });

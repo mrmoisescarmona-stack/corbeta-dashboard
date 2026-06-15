@@ -1,7 +1,7 @@
 import { createFileRoute, Link, Outlet, useRouterState } from "@tanstack/react-router";
 import { Database, CheckCircle2, RefreshCw, XCircle, AlertTriangle, Clock } from "lucide-react";
 
-export const Route = createFileRoute("/dashboard/peoplesoft")({
+export const Route = createFileRoute("/panel/peoplesoft")({
   head: () => ({ meta: [{ title: "PeopleSoft · Corbeta" }] }),
   component: PeopleSoftPage,
 });

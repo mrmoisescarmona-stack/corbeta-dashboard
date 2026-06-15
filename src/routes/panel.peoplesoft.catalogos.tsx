@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { CreditCard, Package, Building2 } from "lucide-react";
 
-export const Route = createFileRoute("/dashboard/peoplesoft/lookups")({
+export const Route = createFileRoute("/panel/peoplesoft/catalogos")({
   head: () => ({ meta: [{ title: "Catálogos PeopleSoft · Corbeta" }] }),
   component: LookupsPage,
 });

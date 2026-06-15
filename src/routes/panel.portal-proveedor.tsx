@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Mail, CheckCircle2, XCircle, Pencil, Paperclip, Building2, Clock, Bell } from "lucide-react";
 
-export const Route = createFileRoute("/dashboard/supplier-portal")({
+export const Route = createFileRoute("/panel/portal-proveedor")({
   head: () => ({ meta: [{ title: "Portal del proveedor · Corbeta" }] }),
   component: SupplierPortalPage,
 });

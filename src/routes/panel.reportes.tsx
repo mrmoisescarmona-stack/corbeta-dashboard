@@ -20,7 +20,7 @@ import {
   YAxis,
 } from "recharts";
 
-export const Route = createFileRoute("/dashboard/reports")({
+export const Route = createFileRoute("/panel/reportes")({
   head: () => ({ meta: [{ title: "Reportes · Corbeta" }] }),
   component: ReportsPage,
   pendingComponent: ReportsSkeleton,

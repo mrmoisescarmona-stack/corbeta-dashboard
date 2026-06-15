@@ -3,7 +3,7 @@ import { Search, ChevronDown, Filter, CheckCircle2, FileText, XCircle, Clock } f
 import { AuditSkeleton } from "@/components/dashboard/skeleton";
 import { useFakeLoading } from "@/hooks/use-fake-loading";
 
-export const Route = createFileRoute("/dashboard/audit")({
+export const Route = createFileRoute("/panel/auditoria")({
   head: () => ({ meta: [{ title: "Auditoría · Corbeta" }] }),
   component: AuditPage,
   pendingComponent: AuditSkeleton,

@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Flag, CheckCircle2, XCircle, Pencil, Send, Eye } from "lucide-react";
 
-export const Route = createFileRoute("/dashboard/resolutions")({
+export const Route = createFileRoute("/panel/seguimiento")({
   head: () => ({ meta: [{ title: "Seguimiento · Corbeta" }] }),
   component: ResolutionsPage,
 });

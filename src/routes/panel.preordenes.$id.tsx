@@ -19,7 +19,7 @@ import {
   History,
 } from "lucide-react";
 
-export const Route = createFileRoute("/dashboard/preorders/$id")({
+export const Route = createFileRoute("/panel/preordenes/$id")({
   head: ({ params }) => ({
     meta: [{ title: `Solicitud ${params.id} · Corbeta` }],
   }),
