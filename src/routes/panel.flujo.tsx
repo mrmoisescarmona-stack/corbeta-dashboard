@@ -199,6 +199,11 @@ function ScopeActionCard({
   const [justif, setJustif] = useState("");
   const [tipoDesc, setTipoDesc] = useState("Visible");
   const [tipoExcl, setTipoExcl] = useState("No mutuamente excluyente");
+  const [files, setFiles] = useState<{ name: string; size: string; by: string; date: string; status: "Validado" | "Pendiente" }[]>([
+    { name: "Aprobacion_Castrol.msg", size: "1.2 MB", by: "Ana Carolina", date: "28/05/2024 09:15 a. m.", status: "Validado" },
+    { name: "Correo_Proveedor.eml", size: "842 KB", by: "Ana Carolina", date: "28/05/2024 09:16 a. m.", status: "Validado" },
+    { name: "Soporte_Comercial.msg", size: "2.1 MB", by: "Ana Carolina", date: "28/05/2024 09:18 a. m.", status: "Validado" },
+  ]);
 
   const isPending = status === "Pendiente";
   const canConfirm = decision !== null && justif.trim().length > 0;
