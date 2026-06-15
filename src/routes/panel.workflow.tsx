@@ -12,7 +12,7 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 
-export const Route = createFileRoute("/panel/flujo")({
+export const Route = createFileRoute("/panel/workflow")({
   head: () => ({ meta: [{ title: "Parametrización del Workflow · Corbeta" }] }),
   component: ApprovalsPage,
   pendingComponent: ApprovalsSkeleton,
