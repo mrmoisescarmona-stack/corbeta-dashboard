@@ -80,14 +80,12 @@ function RequestDetailPage() {
   const [dragOver, setDragOver] = useState(false);
   const fileInput = useRef<HTMLInputElement>(null);
 
-  const providerApproved = useMemo(
-    () => lines.some((l) => l.status === "Aprobada" || l.status === "Modificada"),
-    [lines]
-  );
-  const uploadEnabled = providerApproved; // HU_005
-
-  const visibleLines = lines; // HU_004: solo líneas de mi gestión (mock: todas)
-  const summary = useMemo(() => {
+  type Attachment = { name: string; size: string; by: string; date: string; status: "Validado" | "Pendiente" };
+  const [attachments, setAttachments] = useState<Attachment[]>([
+    { name: "Aprobacion_Castrol.msg", size: "1.2 MB", by: "Ana Carolina", date: "28/05/2024 09:15 a. m.", status: "Validado" },
+    { name: "Correo_Proveedor.eml", size: "842 KB", by: "Ana Carolina", date: "28/05/2024 09:16 a. m.", status: "Validado" },
+    { name: "Soporte_Comercial.msg", size: "2.1 MB", by: "Ana Carolina", date: "28/05/2024 09:18 a. m.", status: "Validado" },
+  ]);
     const total = visibleLines.reduce((acc, l) => acc + l.qty * l.listPrice, 0);
     const pending = visibleLines.filter((l) => l.status === "Pendiente").length;
     return { total, pending, count: visibleLines.length };
