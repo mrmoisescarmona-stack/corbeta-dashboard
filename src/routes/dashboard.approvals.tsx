@@ -1,129 +1,254 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { ClipboardList, Search, Filter, ChevronDown, Eye, MoreHorizontal, CheckCircle2, Clock, XCircle, ListChecks } from "lucide-react";
+import { createFileRoute } from "@tanstack/react-router";
+import { useState } from "react";
+import { Plus, Pencil, Trash2, ArrowLeftRight } from "lucide-react";
 import { ApprovalsSkeleton } from "@/components/dashboard/skeleton";
 import { useFakeLoading } from "@/hooks/use-fake-loading";
 
 export const Route = createFileRoute("/dashboard/approvals")({
-  head: () => ({ meta: [{ title: "Mis aprobaciones · Corbeta" }] }),
+  head: () => ({ meta: [{ title: "Parametrización del Workflow · Corbeta" }] }),
   component: ApprovalsPage,
   pendingComponent: ApprovalsSkeleton,
 });
 
-const stats = [
-  { icon: ListChecks, label: "Asignadas a mí", value: 14, delta: "+2 hoy", tone: "bg-primary/10 text-primary" },
-  { icon: Clock, label: "Vencen hoy", value: 3, delta: "Atención", tone: "bg-warning/10 text-warning" },
-  { icon: CheckCircle2, label: "Aprobadas (semana)", value: 28, delta: "+12%", tone: "bg-success/20 text-foreground" },
-  { icon: XCircle, label: "Rechazadas (semana)", value: 4, delta: "-1", tone: "bg-destructive/10 text-destructive" },
+type TabKey = "aprobadores" | "sustitutos" | "proveedores" | "reasignacion";
+
+const TABS: { key: TabKey; label: string }[] = [
+  { key: "aprobadores", label: "Aprobadores" },
+  { key: "sustitutos", label: "Sustitutos" },
+  { key: "proveedores", label: "Proveedores" },
+  { key: "reasignacion", label: "Reasignación" },
 ];
 
-const rows = Array.from({ length: 8 }).map((_, i) => ({
-  id: `PR-2026-0002${40 + i}`,
-  client: ["Distribuidora del Valle", "Moto Repuestos Norte", "Comercializadora Andina", "Lubricantes del Sur", "Autopartes del Caribe"][i % 5],
-  date: "28/05/2026",
-  provider: "Castrol",
-  status: ["Pendiente", "Espera proveedor", "Pendiente", "Aprobada"][i % 4],
-  sla: ["2h", "vence hoy", "4h", "ok"][i % 4],
-  value: `$ ${(2 + i).toFixed(1)}M`,
-}));
+const approvers = [
+  { name: "María González", id: "52123456", direction: "Electrodomésticos", division: "Línea Blanca", active: true },
+  { name: "Pedro Martínez", id: "79123456", direction: "Tecnología", division: "Computación", active: true },
+  { name: "Laura Sánchez", id: "35123456", direction: "Hogar", division: "Muebles", active: false },
+];
+
+const substitutes = [
+  { approver: "Laura Sánchez", substitute: "María González", start: "2026-06-01", end: "2026-06-30" },
+];
+
+const providers = [
+  { id: "900123456", name: "Samsung Colombia S.A.", category: "Electrodomésticos", email: "aprobaciones@samsung.com.co", active: true },
+  { id: "900654321", name: "LG Electronics", category: "Tecnología", email: "descuentos@lg.com.co", active: true },
+  { id: "900789012", name: "Whirlpool Andina", category: "Línea Blanca", email: "comercial@whirlpool.com.co", active: true },
+];
+
+function StatusBadge({ active }: { active: boolean }) {
+  return (
+    <span
+      className={`inline-flex items-center rounded-full px-2.5 py-1 text-[11px] font-medium ${
+        active ? "bg-success/20 text-success-foreground" : "bg-muted text-muted-foreground"
+      }`}
+    >
+      {active ? "Activo" : "Inactivo"}
+    </span>
+  );
+}
+
+function SectionCard({
+  title,
+  subtitle,
+  action,
+  children,
+}: {
+  title: string;
+  subtitle: string;
+  action: React.ReactNode;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="rounded-xl border border-border bg-card">
+      <div className="flex flex-wrap items-start justify-between gap-3 p-5 border-b border-border">
+        <div>
+          <h3 className="text-base font-semibold">{title}</h3>
+          <p className="mt-0.5 text-xs text-muted-foreground">{subtitle}</p>
+        </div>
+        {action}
+      </div>
+      {children}
+    </div>
+  );
+}
+
+function PrimaryButton({ children }: { children: React.ReactNode }) {
+  return (
+    <button className="inline-flex items-center gap-2 rounded-lg bg-primary px-3.5 py-2 text-sm font-medium text-primary-foreground hover:opacity-90">
+      {children}
+    </button>
+  );
+}
 
 function ApprovalsPage() {
+  const [tab, setTab] = useState<TabKey>("aprobadores");
   if (useFakeLoading()) return <ApprovalsSkeleton />;
+
   return (
     <div className="space-y-6 animate-fade-in">
-      <div className="flex flex-wrap items-start justify-between gap-4">
-        <div>
-          <h2 className="text-2xl md:text-3xl font-semibold tracking-tight">Mis aprobaciones</h2>
-          <p className="mt-1 text-sm text-muted-foreground">Solicitudes asignadas a ti para revisión y aprobación.</p>
-        </div>
-        <button className="inline-flex items-center gap-2 rounded-lg bg-primary px-3.5 py-2 text-sm font-medium text-primary-foreground hover:opacity-90">
-          Revisar siguiente
-        </button>
+      <div>
+        <h2 className="text-2xl md:text-3xl font-semibold tracking-tight">Parametrización del Workflow</h2>
+        <p className="mt-1 text-sm text-muted-foreground">
+          Configuración de reglas, aprobadores, sustitutos y proveedores (HU_002)
+        </p>
       </div>
 
-      <section className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        {stats.map((s) => {
-          const Icon = s.icon;
-          return (
-            <div key={s.label} className="rounded-xl border border-border bg-card p-5">
-              <div className="flex items-start justify-between">
-                <div className={`flex h-10 w-10 items-center justify-center rounded-lg ${s.tone}`}><Icon className="h-5 w-5" /></div>
-                <span className="text-[11px] font-medium text-muted-foreground">{s.delta}</span>
-              </div>
-              <div className="mt-4 text-3xl font-semibold tabular-nums">{s.value}</div>
-              <div className="mt-0.5 text-xs text-muted-foreground">{s.label}</div>
-            </div>
-          );
-        })}
-      </section>
+      <div className="rounded-xl border border-border bg-card p-1.5">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-1">
+          {TABS.map((t) => {
+            const active = tab === t.key;
+            return (
+              <button
+                key={t.key}
+                onClick={() => setTab(t.key)}
+                className={`rounded-lg px-4 py-2.5 text-sm font-medium transition-colors ${
+                  active ? "bg-background shadow-sm text-foreground" : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                {t.label}
+              </button>
+            );
+          })}
+        </div>
+      </div>
 
-      <div className="rounded-xl border border-border bg-card">
-        <div className="flex items-center justify-between p-5 border-b border-border">
-          <div className="flex items-center gap-2.5">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 text-primary"><ClipboardList className="h-4 w-4" /></div>
-            <h3 className="text-base font-semibold">Cola de aprobaciones</h3>
-          </div>
-          <button className="text-xs font-medium text-primary hover:underline">Exportar</button>
-        </div>
-        <div className="flex flex-wrap items-center gap-2 p-5 border-b border-border">
-          <div className="relative flex-1 min-w-[200px]">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            <input placeholder="Buscar…" className="w-full rounded-lg border border-input bg-background pl-9 pr-3 py-2 text-sm" />
-          </div>
-          {["Estado: Pendiente", "Zona: Todas", "Proveedor: Todos"].map((f) => (
-            <button key={f} className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-background px-3 py-2 text-xs font-medium hover:bg-accent">
-              {f} <ChevronDown className="h-3.5 w-3.5 text-muted-foreground" />
-            </button>
-          ))}
-          <button className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-background px-3 py-2 text-xs font-medium hover:bg-accent">
-            <Filter className="h-3.5 w-3.5" /> Filtros
-          </button>
-        </div>
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="text-left text-[11px] uppercase tracking-wider text-muted-foreground">
-                <th className="font-medium px-5 py-3">Preorden</th>
-                <th className="font-medium px-3 py-3">Cliente</th>
-                <th className="font-medium px-3 py-3">Fecha</th>
-                <th className="font-medium px-3 py-3">Proveedor</th>
-                <th className="font-medium px-3 py-3">SLA</th>
-                <th className="font-medium px-3 py-3">Estado</th>
-                <th className="font-medium px-3 py-3 text-right">Valor</th>
-                <th className="font-medium px-5 py-3 text-right">Acciones</th>
-              </tr>
-            </thead>
-            <tbody>
-              {rows.map((r) => (
-                <tr key={r.id} className="border-t border-border hover:bg-muted/40">
-                  <td className="px-5 py-3.5 font-medium">{r.id}</td>
-                  <td className="px-3 py-3.5 text-foreground/90">{r.client}</td>
-                  <td className="px-3 py-3.5 text-muted-foreground">{r.date}</td>
-                  <td className="px-3 py-3.5">{r.provider}</td>
-                  <td className="px-3 py-3.5 text-xs text-muted-foreground">{r.sla}</td>
-                  <td className="px-3 py-3.5">
-                    <span className="inline-flex items-center rounded-full bg-primary/10 px-2.5 py-1 text-[11px] font-medium text-primary">{r.status}</span>
-                  </td>
-                  <td className="px-3 py-3.5 text-right font-medium tabular-nums">{r.value}</td>
-                  <td className="px-5 py-3.5">
-                    <div className="flex justify-end gap-1">
-                      <Link to="/dashboard/preorders/$id" params={{ id: r.id }} className="rounded-md p-1.5 hover:bg-accent" aria-label="Ver detalle"><Eye className="h-4 w-4" /></Link>
-                      <button className="rounded-md p-1.5 hover:bg-accent"><MoreHorizontal className="h-4 w-4" /></button>
-                    </div>
-                  </td>
+      {tab === "aprobadores" && (
+        <SectionCard
+          title="Aprobadores internos"
+          subtitle="Configuración por dirección y división (HU_002)"
+          action={
+            <PrimaryButton>
+              <Plus className="h-4 w-4" /> Agregar
+            </PrimaryButton>
+          }
+        >
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="text-left text-[11px] uppercase tracking-wider text-muted-foreground">
+                  <th className="font-medium px-5 py-3">Nombre</th>
+                  <th className="font-medium px-3 py-3">Identificación</th>
+                  <th className="font-medium px-3 py-3">Dirección</th>
+                  <th className="font-medium px-3 py-3">División</th>
+                  <th className="font-medium px-3 py-3">Estado</th>
+                  <th className="font-medium px-5 py-3 text-right">Acciones</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-        <div className="flex items-center justify-between p-5 border-t border-border">
-          <span className="text-xs text-muted-foreground">Mostrando 1 a 8 de 14</span>
-          <div className="flex items-center gap-1">
-            {["‹", "1", "2", "›"].map((p, i) => (
-              <button key={i} className={`min-w-8 h-8 rounded-md border border-border px-2 text-xs ${p === "1" ? "bg-primary text-primary-foreground border-primary" : "bg-background hover:bg-accent"}`}>{p}</button>
-            ))}
+              </thead>
+              <tbody>
+                {approvers.map((a) => (
+                  <tr key={a.id} className="border-t border-border hover:bg-muted/40">
+                    <td className="px-5 py-3.5 font-medium">{a.name}</td>
+                    <td className="px-3 py-3.5 text-muted-foreground tabular-nums">{a.id}</td>
+                    <td className="px-3 py-3.5">{a.direction}</td>
+                    <td className="px-3 py-3.5">{a.division}</td>
+                    <td className="px-3 py-3.5"><StatusBadge active={a.active} /></td>
+                    <td className="px-5 py-3.5">
+                      <div className="flex justify-end gap-1">
+                        <button className="rounded-md p-1.5 hover:bg-accent" aria-label="Editar"><Pencil className="h-4 w-4" /></button>
+                        <button className="rounded-md p-1.5 text-destructive hover:bg-destructive/10" aria-label="Eliminar"><Trash2 className="h-4 w-4" /></button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
-        </div>
-      </div>
+        </SectionCard>
+      )}
+
+      {tab === "sustitutos" && (
+        <SectionCard
+          title="Usuarios sustitutos"
+          subtitle="Parametrización manual de sustitutos por aprobador (HU_002)"
+          action={
+            <PrimaryButton>
+              <Plus className="h-4 w-4" /> Asignar sustituto
+            </PrimaryButton>
+          }
+        >
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="text-left text-[11px] uppercase tracking-wider text-muted-foreground">
+                  <th className="font-medium px-5 py-3">Aprobador</th>
+                  <th className="font-medium px-3 py-3">Sustituto</th>
+                  <th className="font-medium px-3 py-3">Fecha inicio</th>
+                  <th className="font-medium px-5 py-3">Fecha fin</th>
+                </tr>
+              </thead>
+              <tbody>
+                {substitutes.map((s, i) => (
+                  <tr key={i} className="border-t border-border hover:bg-muted/40">
+                    <td className="px-5 py-3.5 font-medium">{s.approver}</td>
+                    <td className="px-3 py-3.5">{s.substitute}</td>
+                    <td className="px-3 py-3.5 text-muted-foreground tabular-nums">{s.start}</td>
+                    <td className="px-5 py-3.5 text-muted-foreground tabular-nums">{s.end}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </SectionCard>
+      )}
+
+      {tab === "proveedores" && (
+        <SectionCard
+          title="Proveedores"
+          subtitle="Registro de proveedores por categoría — acuerdo SLS (HU_002)"
+          action={
+            <PrimaryButton>
+              <Plus className="h-4 w-4" /> Agregar
+            </PrimaryButton>
+          }
+        >
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="text-left text-[11px] uppercase tracking-wider text-muted-foreground">
+                  <th className="font-medium px-5 py-3">Identificación</th>
+                  <th className="font-medium px-3 py-3">Nombre</th>
+                  <th className="font-medium px-3 py-3">Categoría</th>
+                  <th className="font-medium px-3 py-3">Email</th>
+                  <th className="font-medium px-3 py-3">Estado</th>
+                  <th className="font-medium px-5 py-3 text-right">Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                {providers.map((p) => (
+                  <tr key={p.id} className="border-t border-border hover:bg-muted/40">
+                    <td className="px-5 py-3.5 font-medium tabular-nums">{p.id}</td>
+                    <td className="px-3 py-3.5">{p.name}</td>
+                    <td className="px-3 py-3.5">{p.category}</td>
+                    <td className="px-3 py-3.5 text-muted-foreground">{p.email}</td>
+                    <td className="px-3 py-3.5"><StatusBadge active={p.active} /></td>
+                    <td className="px-5 py-3.5">
+                      <div className="flex justify-end gap-1">
+                        <button className="rounded-md p-1.5 hover:bg-accent" aria-label="Editar"><Pencil className="h-4 w-4" /></button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </SectionCard>
+      )}
+
+      {tab === "reasignacion" && (
+        <SectionCard
+          title="Reasignación de solicitudes"
+          subtitle="Reasignación masiva o individual por rol superior (HU_002)"
+          action={
+            <PrimaryButton>
+              <ArrowLeftRight className="h-4 w-4" /> Reasignar
+            </PrimaryButton>
+          }
+        >
+          <div className="p-8 text-sm text-muted-foreground">
+            No hay reasignaciones registradas. Use el botón para reasignar solicitudes pendientes.
+          </div>
+        </SectionCard>
+      )}
     </div>
   );
 }
