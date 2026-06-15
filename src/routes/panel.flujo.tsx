@@ -162,11 +162,70 @@ function SectionCard({
   );
 }
 
-function PrimaryButton({ children }: { children: React.ReactNode }) {
+function PrimaryButton({ children, onClick }: { children: React.ReactNode; onClick?: () => void }) {
   return (
-    <button className="inline-flex items-center gap-2 rounded-lg bg-primary px-3.5 py-2 text-sm font-medium text-primary-foreground hover:opacity-90">
+    <button onClick={onClick} className="inline-flex items-center gap-2 rounded-lg bg-primary px-3.5 py-2 text-sm font-medium text-primary-foreground hover:opacity-90">
       {children}
     </button>
+  );
+}
+
+function NewApproverDialog({ open, onClose }: { open: boolean; onClose: () => void }) {
+  const [form, setForm] = useState({ name: "", id: "", email: "", direction: "", division: "" });
+  const [errors, setErrors] = useState<Record<string, string>>({});
+
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  const submit = () => {
+    const e: Record<string, string> = {};
+    if (!form.name.trim()) e.name = "Requerido";
+    if (!form.id.trim()) e.id = "Requerido";
+    if (!form.email.trim()) e.email = "Requerido";
+    else if (!emailRegex.test(form.email.trim())) e.email = "Email inválido";
+    if (!form.direction.trim()) e.direction = "Requerido";
+    if (!form.division.trim()) e.division = "Requerido";
+    setErrors(e);
+    if (Object.keys(e).length) return;
+    toast.success("Aprobador guardado");
+    setForm({ name: "", id: "", email: "", direction: "", division: "" });
+    onClose();
+  };
+
+  const field = (key: keyof typeof form, label: string, type = "text") => (
+    <div>
+      <label className="block text-sm font-medium mb-1.5">
+        {label} <span className="text-destructive">*</span>
+      </label>
+      <input
+        type={type}
+        value={form[key]}
+        onChange={(ev) => setForm({ ...form, [key]: ev.target.value })}
+        className={`w-full rounded-md border px-3 py-2 text-sm bg-background ${errors[key] ? "border-destructive" : "border-border"}`}
+        maxLength={key === "email" ? 255 : 100}
+      />
+      {errors[key] && <p className="mt-1 text-xs text-destructive">{errors[key]}</p>}
+    </div>
+  );
+
+  return (
+    <Dialog open={open} onOpenChange={(o) => !o && onClose()}>
+      <DialogContent className="max-w-md">
+        <DialogHeader>
+          <DialogTitle>Nuevo aprobador</DialogTitle>
+        </DialogHeader>
+        <div className="space-y-4 py-2">
+          {field("name", "Nombre")}
+          {field("id", "Identificación")}
+          {field("email", "Email", "email")}
+          {field("direction", "Dirección")}
+          {field("division", "División")}
+        </div>
+        <div className="flex justify-end gap-2 pt-2">
+          <button onClick={onClose} className="rounded-md border border-border px-4 py-2 text-sm hover:bg-accent">Cancelar</button>
+          <button onClick={submit} className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:opacity-90">Guardar</button>
+        </div>
+      </DialogContent>
+    </Dialog>
   );
 }
 
@@ -534,6 +593,7 @@ function ApproverDetailDialog({ approver, onClose }: { approver: Approver | null
 function ApprovalsPage() {
   const [tab, setTab] = useState<TabKey>("aprobadores");
   const [selected, setSelected] = useState<Approver | null>(null);
+  const [newApproverOpen, setNewApproverOpen] = useState(false);
   if (useFakeLoading()) return <ApprovalsSkeleton />;
 
   return (
@@ -567,7 +627,7 @@ function ApprovalsPage() {
           title="Aprobadores internos"
           subtitle="Configuración por dirección y división"
           action={
-            <PrimaryButton>
+            <PrimaryButton onClick={() => setNewApproverOpen(true)}>
               <Plus className="h-4 w-4" /> Agregar
             </PrimaryButton>
           }
@@ -723,6 +783,7 @@ function ApprovalsPage() {
       )}
 
       <ApproverDetailDialog approver={selected} onClose={() => setSelected(null)} />
+      <NewApproverDialog open={newApproverOpen} onClose={() => setNewApproverOpen(false)} />
     </div>
   );
 }
