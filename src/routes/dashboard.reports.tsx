@@ -195,7 +195,8 @@ function DualLineChartCard({ title, subtitle }: { title: string; subtitle?: stri
       <div className="h-72 -ml-2">
         <ResponsiveContainer width="100%" height="100%">
           <LineChart data={data} margin={{ top: 10, right: 8, left: 0, bottom: 0 }}>
-            <CartesianGrid strokeDasharray="4 4" stroke="hsl(var(--border))" vertical={false} opacity={0.5} />
+            <CartesianGrid strokeDasharray="4 4" stroke="hsl(var(--border))" opacity={0.5} />
+
             <XAxis dataKey="month" tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 11 }} tickLine={false} axisLine={false} />
             <YAxis tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 11 }} tickLine={false} axisLine={false} width={36} />
             <Tooltip cursor={{ stroke: "hsl(var(--muted-foreground))", strokeWidth: 1, strokeDasharray: "4 4" }} content={<ChartTooltip />} />
