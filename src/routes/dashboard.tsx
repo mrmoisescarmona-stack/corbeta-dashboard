@@ -48,12 +48,6 @@ const navGroups: NavGroup[] = [
     ],
   },
   {
-    title: "Aprobadores",
-    items: [
-      { icon: User, label: "Vista vendedor", to: "/dashboard/sales-rep" },
-    ],
-  },
-  {
     title: "Admin",
     items: [
       { icon: Mail, label: "Portal del proveedor", to: "/dashboard/supplier-portal" },
