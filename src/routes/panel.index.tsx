@@ -28,6 +28,9 @@ import {
 } from "lucide-react";
 import { DashboardOverviewSkeleton } from "@/components/dashboard/skeleton";
 import { useAuth, getUserDisplayName } from "@/hooks/use-auth";
+import { EvidenceAttachments, type EvidenceFile } from "@/components/evidence-attachments";
+import { toast } from "sonner";
+
 
 
 export const Route = createFileRoute("/panel/")({
