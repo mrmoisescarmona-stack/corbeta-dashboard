@@ -754,22 +754,310 @@ function ApproverDetailDialog({ approver, onClose }: { approver: Approver | null
   );
 }
 
+const APPROVER_OPTIONS = [
+  { name: "María González", id: "52123456" },
+  { name: "Pedro Martínez", id: "79123456" },
+  { name: "Laura Sánchez", id: "35123456" },
+];
+
+const emptyCategoryApprover: CategoryApprover = {
+  approver: "",
+  identification: "",
+  groupCode: "",
+  direction: "",
+  divisionCode: "",
+  subdirection: "",
+  lineCode: "",
+  line: "",
+  sublineCode: "",
+  sublineName: "",
+  categoryCode: "",
+  categoryName: "",
+  subcategoryCode: "",
+  subcategoryName: "",
+  familyCode: "",
+  familyName: "",
+  active: true,
+};
+
+function CategoryConfigDialog({
+  open,
+  initial,
+  mode,
+  onClose,
+  onSave,
+}: {
+  open: boolean;
+  initial: CategoryApprover | null;
+  mode: "create" | "edit";
+  onClose: () => void;
+  onSave: (row: CategoryApprover) => void;
+}) {
+  const [form, setForm] = useState<CategoryApprover>(emptyCategoryApprover);
+  const [errors, setErrors] = useState<Record<string, string>>({});
+
+  useEffect(() => {
+    if (open) {
+      setForm(initial ?? emptyCategoryApprover);
+      setErrors({});
+    }
+  }, [open, initial]);
+
+  const set = <K extends keyof CategoryApprover>(key: K, value: CategoryApprover[K]) =>
+    setForm((prev) => ({ ...prev, [key]: value }));
+
+  const requiredKeys: (keyof CategoryApprover)[] = [
+    "approver", "groupCode", "direction", "divisionCode", "subdirection",
+    "lineCode", "line", "sublineCode", "sublineName",
+    "categoryCode", "categoryName", "subcategoryCode", "subcategoryName",
+    "familyCode", "familyName",
+  ];
+
+  const submit = () => {
+    const e: Record<string, string> = {};
+    for (const k of requiredKeys) {
+      const v = form[k];
+      if (typeof v === "string" && !v.trim()) e[k] = "Requerido";
+    }
+    setErrors(e);
+    if (Object.keys(e).length) return;
+    onSave(form);
+  };
+
+  const field = (key: keyof CategoryApprover, label: string) => (
+    <div>
+      <label className="block text-sm font-medium mb-1.5">
+        {label} <span className="text-destructive">*</span>
+      </label>
+      <input
+        type="text"
+        value={form[key] as string}
+        onChange={(ev) => set(key, ev.target.value as any)}
+        className={`w-full rounded-md border px-3 py-2 text-sm bg-background ${errors[key] ? "border-destructive" : "border-border"}`}
+        maxLength={100}
+      />
+      {errors[key] && <p className="mt-1 text-xs text-destructive">{errors[key]}</p>}
+    </div>
+  );
+
+  return (
+    <Dialog open={open} onOpenChange={(o) => !o && onClose()}>
+      <DialogContent className="max-w-3xl max-h-[85vh] overflow-y-auto">
+        <DialogHeader>
+          <DialogTitle>
+            {mode === "create" ? "Nueva configuración por categoría" : "Editar configuración por categoría"}
+          </DialogTitle>
+          <DialogDescription>
+            Asignación del aprobador interno según el árbol de categorías del producto.
+          </DialogDescription>
+        </DialogHeader>
+
+        <div className="space-y-6 py-2">
+          <div>
+            <label className="block text-sm font-medium mb-1.5">
+              Aprobador interno <span className="text-destructive">*</span>
+            </label>
+            <select
+              value={form.approver}
+              onChange={(ev) => {
+                const opt = APPROVER_OPTIONS.find((o) => o.name === ev.target.value);
+                setForm((prev) => ({
+                  ...prev,
+                  approver: ev.target.value,
+                  identification: opt?.id ?? prev.identification,
+                }));
+              }}
+              className={`w-full rounded-md border px-3 py-2 text-sm bg-background ${errors.approver ? "border-destructive" : "border-border"}`}
+            >
+              <option value="">Seleccionar…</option>
+              {APPROVER_OPTIONS.map((o) => (
+                <option key={o.id} value={o.name}>{o.name} — {o.id}</option>
+              ))}
+            </select>
+            {errors.approver && <p className="mt-1 text-xs text-destructive">{errors.approver}</p>}
+          </div>
+
+          <div className="space-y-4">
+            <h4 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">Categorías del artículo</h4>
+
+            <div>
+              <h5 className="text-sm font-medium mb-3">Grupo y dirección</h5>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {field("groupCode", "Código Grupo")}
+                {field("direction", "Dirección")}
+                {field("divisionCode", "Código de División")}
+                {field("subdirection", "Subdirección")}
+              </div>
+            </div>
+
+            <div>
+              <h5 className="text-sm font-medium mb-3">Línea y sublínea</h5>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {field("lineCode", "Código Línea")}
+                {field("line", "Línea")}
+                {field("sublineCode", "Código Sublínea")}
+                {field("sublineName", "Nombre de la Sublínea")}
+              </div>
+            </div>
+
+            <div>
+              <h5 className="text-sm font-medium mb-3">Categoría y subcategoría</h5>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {field("categoryCode", "Categoría")}
+                {field("categoryName", "Nombre de la Categoría")}
+                {field("subcategoryCode", "Código de Subcategoría")}
+                {field("subcategoryName", "Nombre de la Subcategoría")}
+              </div>
+            </div>
+
+            <div>
+              <h5 className="text-sm font-medium mb-3">Familia</h5>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {field("familyCode", "Familia")}
+                {field("familyName", "Nombre de la Familia")}
+              </div>
+            </div>
+
+            <label className="flex items-center gap-2 text-sm">
+              <input
+                type="checkbox"
+                checked={form.active}
+                onChange={(ev) => set("active", ev.target.checked)}
+                className="h-4 w-4 rounded border-border"
+              />
+              Configuración activa
+            </label>
+          </div>
+        </div>
+
+        <div className="flex justify-end gap-2 pt-2 border-t border-border">
+          <button onClick={onClose} className="rounded-md border border-border px-4 py-2 text-sm hover:bg-accent">Cancelar</button>
+          <button onClick={submit} className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:opacity-90">
+            {mode === "create" ? "Guardar configuración" : "Guardar cambios"}
+          </button>
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+function CategoryViewDialog({ row, onClose }: { row: CategoryApprover | null; onClose: () => void }) {
+  const rows: { label: string; value: string }[] = row
+    ? [
+        { label: "Aprobador", value: row.approver },
+        { label: "Identificación", value: row.identification },
+        { label: "Código Grupo", value: row.groupCode },
+        { label: "Dirección", value: row.direction },
+        { label: "Código de División", value: row.divisionCode },
+        { label: "Subdirección", value: row.subdirection },
+        { label: "Código Línea", value: row.lineCode },
+        { label: "Línea", value: row.line },
+        { label: "Código Sublínea", value: row.sublineCode },
+        { label: "Nombre de la Sublínea", value: row.sublineName },
+        { label: "Categoría", value: row.categoryCode },
+        { label: "Nombre de la Categoría", value: row.categoryName },
+        { label: "Código de Subcategoría", value: row.subcategoryCode },
+        { label: "Nombre de la Subcategoría", value: row.subcategoryName },
+        { label: "Familia", value: row.familyCode },
+        { label: "Nombre de la Familia", value: row.familyName },
+        { label: "Estado", value: row.active ? "Activo" : "Inactivo" },
+      ]
+    : [];
+
+  return (
+    <Dialog open={!!row} onOpenChange={(o) => !o && onClose()}>
+      <DialogContent className="max-w-2xl max-h-[85vh] overflow-y-auto">
+        <DialogHeader>
+          <DialogTitle>Detalle de configuración por categoría</DialogTitle>
+          <DialogDescription>Información completa de la asignación.</DialogDescription>
+        </DialogHeader>
+        <dl className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-3 py-2">
+          {rows.map((r) => (
+            <div key={r.label} className="border-b border-border pb-2">
+              <dt className="text-xs text-muted-foreground">{r.label}</dt>
+              <dd className="text-sm font-medium">{r.value || "—"}</dd>
+            </div>
+          ))}
+        </dl>
+        <div className="flex justify-end pt-2">
+          <button onClick={onClose} className="rounded-md border border-border px-4 py-2 text-sm hover:bg-accent">Cerrar</button>
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+function CategoryDeleteDialog({
+  row,
+  onClose,
+  onConfirm,
+}: {
+  row: CategoryApprover | null;
+  onClose: () => void;
+  onConfirm: () => void;
+}) {
+  return (
+    <Dialog open={!!row} onOpenChange={(o) => !o && onClose()}>
+      <DialogContent className="max-w-sm">
+        <DialogHeader>
+          <DialogTitle>Eliminar configuración</DialogTitle>
+          <DialogDescription>
+            ¿Está seguro que desea eliminar la configuración de{" "}
+            <span className="font-medium text-foreground">{row?.approver}</span> para{" "}
+            <span className="font-medium text-foreground">{row?.categoryName}</span>? Esta acción no se puede deshacer.
+          </DialogDescription>
+        </DialogHeader>
+        <div className="flex justify-end gap-2 pt-2">
+          <button onClick={onClose} className="rounded-md border border-border px-4 py-2 text-sm hover:bg-accent">Cancelar</button>
+          <button onClick={onConfirm} className="rounded-md bg-destructive px-4 py-2 text-sm font-medium text-destructive-foreground hover:opacity-90">Eliminar</button>
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
 function CategoryApproversCard() {
+  const [list, setList] = useState<CategoryApprover[]>(initialCategoryApprovers);
   const [query, setQuery] = useState("");
+  const [createOpen, setCreateOpen] = useState(false);
+  const [editing, setEditing] = useState<CategoryApprover | null>(null);
+  const [viewing, setViewing] = useState<CategoryApprover | null>(null);
+  const [deleting, setDeleting] = useState<CategoryApprover | null>(null);
+
   const q = query.trim().toLowerCase();
   const rows = q
-    ? categoryApprovers.filter((r) =>
+    ? list.filter((r) =>
         [r.approver, r.identification, r.groupCode, r.categoryName, r.familyName, r.line]
           .some((v) => v.toLowerCase().includes(q))
       )
-    : categoryApprovers;
+    : list;
+
+  const handleCreate = (row: CategoryApprover) => {
+    setList((prev) => [...prev, row]);
+    toast.success("Configuración creada");
+    setCreateOpen(false);
+  };
+
+  const handleEdit = (row: CategoryApprover) => {
+    if (!editing) return;
+    setList((prev) => prev.map((r) => (r === editing ? row : r)));
+    toast.success("Configuración actualizada");
+    setEditing(null);
+  };
+
+  const handleDelete = () => {
+    if (!deleting) return;
+    setList((prev) => prev.filter((r) => r !== deleting));
+    toast.success("Configuración eliminada");
+    setDeleting(null);
+  };
 
   return (
     <SectionCard
       title="Aprobadores por categorías de artículos"
       subtitle="Asignación de aprobadores internos según el árbol de categorías del producto (HU_002)"
       action={
-        <PrimaryButton>
+        <PrimaryButton onClick={() => setCreateOpen(true)}>
           <Plus className="h-4 w-4" /> Nueva configuración
         </PrimaryButton>
       }
@@ -815,9 +1103,9 @@ function CategoryApproversCard() {
                 <td className="px-3 py-3.5"><StatusBadge active={r.active} /></td>
                 <td className="px-3 py-3.5">
                   <div className="flex justify-end gap-1">
-                    <button className="rounded-md p-1.5 hover:bg-accent" aria-label="Ver"><Eye className="h-4 w-4" /></button>
-                    <button className="rounded-md p-1.5 hover:bg-accent" aria-label="Editar"><Pencil className="h-4 w-4" /></button>
-                    <button className="rounded-md p-1.5 text-destructive hover:bg-destructive/10" aria-label="Eliminar"><Trash2 className="h-4 w-4" /></button>
+                    <button onClick={() => setViewing(r)} className="rounded-md p-1.5 hover:bg-accent" aria-label="Ver" title="Ver"><Eye className="h-4 w-4" /></button>
+                    <button onClick={() => setEditing(r)} className="rounded-md p-1.5 hover:bg-accent" aria-label="Editar" title="Editar"><Pencil className="h-4 w-4" /></button>
+                    <button onClick={() => setDeleting(r)} className="rounded-md p-1.5 text-destructive hover:bg-destructive/10" aria-label="Eliminar" title="Eliminar"><Trash2 className="h-4 w-4" /></button>
                   </div>
                 </td>
               </tr>
@@ -832,9 +1120,27 @@ function CategoryApproversCard() {
           </tbody>
         </table>
       </div>
+
+      <CategoryConfigDialog
+        open={createOpen}
+        initial={null}
+        mode="create"
+        onClose={() => setCreateOpen(false)}
+        onSave={handleCreate}
+      />
+      <CategoryConfigDialog
+        open={!!editing}
+        initial={editing}
+        mode="edit"
+        onClose={() => setEditing(null)}
+        onSave={handleEdit}
+      />
+      <CategoryViewDialog row={viewing} onClose={() => setViewing(null)} />
+      <CategoryDeleteDialog row={deleting} onClose={() => setDeleting(null)} onConfirm={handleDelete} />
     </SectionCard>
   );
 }
+
 
 function ApprovalsPage() {
   const [tab, setTab] = useState<TabKey>("aprobadores");
