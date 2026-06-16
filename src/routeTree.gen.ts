@@ -16,14 +16,19 @@ import { Route as PanelIndexRouteImport } from './routes/panel.index'
 import { Route as PanelWorkflowRouteImport } from './routes/panel.workflow'
 import { Route as PanelVendedorRouteImport } from './routes/panel.vendedor'
 import { Route as PanelSoporteRouteImport } from './routes/panel.soporte'
+import { Route as PanelSolicitudesRouteImport } from './routes/panel.solicitudes'
 import { Route as PanelSeguimientoRouteImport } from './routes/panel.seguimiento'
 import { Route as PanelReportesRouteImport } from './routes/panel.reportes'
+import { Route as PanelReasignacionesRouteImport } from './routes/panel.reasignaciones'
 import { Route as PanelProveedoresRouteImport } from './routes/panel.proveedores'
 import { Route as PanelPortalProveedorRouteImport } from './routes/panel.portal-proveedor'
 import { Route as PanelPeoplesoftRouteImport } from './routes/panel.peoplesoft'
 import { Route as PanelNotificacionesRouteImport } from './routes/panel.notificaciones'
+import { Route as PanelMisSolicitudesRouteImport } from './routes/panel.mis-solicitudes'
+import { Route as PanelHistorialRouteImport } from './routes/panel.historial'
 import { Route as PanelConfiguracionRouteImport } from './routes/panel.configuracion'
 import { Route as PanelAuditoriaRouteImport } from './routes/panel.auditoria'
+import { Route as PanelAprobadoresRouteImport } from './routes/panel.aprobadores'
 import { Route as PanelPreordenesIndexRouteImport } from './routes/panel.preordenes.index'
 import { Route as PanelPreordenesIdRouteImport } from './routes/panel.preordenes.$id'
 import { Route as PanelPeoplesoftCatalogosRouteImport } from './routes/panel.peoplesoft.catalogos'
@@ -63,6 +68,11 @@ const PanelSoporteRoute = PanelSoporteRouteImport.update({
   path: '/soporte',
   getParentRoute: () => PanelRoute,
 } as any)
+const PanelSolicitudesRoute = PanelSolicitudesRouteImport.update({
+  id: '/solicitudes',
+  path: '/solicitudes',
+  getParentRoute: () => PanelRoute,
+} as any)
 const PanelSeguimientoRoute = PanelSeguimientoRouteImport.update({
   id: '/seguimiento',
   path: '/seguimiento',
@@ -71,6 +81,11 @@ const PanelSeguimientoRoute = PanelSeguimientoRouteImport.update({
 const PanelReportesRoute = PanelReportesRouteImport.update({
   id: '/reportes',
   path: '/reportes',
+  getParentRoute: () => PanelRoute,
+} as any)
+const PanelReasignacionesRoute = PanelReasignacionesRouteImport.update({
+  id: '/reasignaciones',
+  path: '/reasignaciones',
   getParentRoute: () => PanelRoute,
 } as any)
 const PanelProveedoresRoute = PanelProveedoresRouteImport.update({
@@ -93,6 +108,16 @@ const PanelNotificacionesRoute = PanelNotificacionesRouteImport.update({
   path: '/notificaciones',
   getParentRoute: () => PanelRoute,
 } as any)
+const PanelMisSolicitudesRoute = PanelMisSolicitudesRouteImport.update({
+  id: '/mis-solicitudes',
+  path: '/mis-solicitudes',
+  getParentRoute: () => PanelRoute,
+} as any)
+const PanelHistorialRoute = PanelHistorialRouteImport.update({
+  id: '/historial',
+  path: '/historial',
+  getParentRoute: () => PanelRoute,
+} as any)
 const PanelConfiguracionRoute = PanelConfiguracionRouteImport.update({
   id: '/configuracion',
   path: '/configuracion',
@@ -101,6 +126,11 @@ const PanelConfiguracionRoute = PanelConfiguracionRouteImport.update({
 const PanelAuditoriaRoute = PanelAuditoriaRouteImport.update({
   id: '/auditoria',
   path: '/auditoria',
+  getParentRoute: () => PanelRoute,
+} as any)
+const PanelAprobadoresRoute = PanelAprobadoresRouteImport.update({
+  id: '/aprobadores',
+  path: '/aprobadores',
   getParentRoute: () => PanelRoute,
 } as any)
 const PanelPreordenesIndexRoute = PanelPreordenesIndexRouteImport.update({
@@ -124,14 +154,19 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
   '/panel': typeof PanelRouteWithChildren
+  '/panel/aprobadores': typeof PanelAprobadoresRoute
   '/panel/auditoria': typeof PanelAuditoriaRoute
   '/panel/configuracion': typeof PanelConfiguracionRoute
+  '/panel/historial': typeof PanelHistorialRoute
+  '/panel/mis-solicitudes': typeof PanelMisSolicitudesRoute
   '/panel/notificaciones': typeof PanelNotificacionesRoute
   '/panel/peoplesoft': typeof PanelPeoplesoftRouteWithChildren
   '/panel/portal-proveedor': typeof PanelPortalProveedorRoute
   '/panel/proveedores': typeof PanelProveedoresRoute
+  '/panel/reasignaciones': typeof PanelReasignacionesRoute
   '/panel/reportes': typeof PanelReportesRoute
   '/panel/seguimiento': typeof PanelSeguimientoRoute
+  '/panel/solicitudes': typeof PanelSolicitudesRoute
   '/panel/soporte': typeof PanelSoporteRoute
   '/panel/vendedor': typeof PanelVendedorRoute
   '/panel/workflow': typeof PanelWorkflowRoute
@@ -143,14 +178,19 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
+  '/panel/aprobadores': typeof PanelAprobadoresRoute
   '/panel/auditoria': typeof PanelAuditoriaRoute
   '/panel/configuracion': typeof PanelConfiguracionRoute
+  '/panel/historial': typeof PanelHistorialRoute
+  '/panel/mis-solicitudes': typeof PanelMisSolicitudesRoute
   '/panel/notificaciones': typeof PanelNotificacionesRoute
   '/panel/peoplesoft': typeof PanelPeoplesoftRouteWithChildren
   '/panel/portal-proveedor': typeof PanelPortalProveedorRoute
   '/panel/proveedores': typeof PanelProveedoresRoute
+  '/panel/reasignaciones': typeof PanelReasignacionesRoute
   '/panel/reportes': typeof PanelReportesRoute
   '/panel/seguimiento': typeof PanelSeguimientoRoute
+  '/panel/solicitudes': typeof PanelSolicitudesRoute
   '/panel/soporte': typeof PanelSoporteRoute
   '/panel/vendedor': typeof PanelVendedorRoute
   '/panel/workflow': typeof PanelWorkflowRoute
@@ -164,14 +204,19 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
   '/panel': typeof PanelRouteWithChildren
+  '/panel/aprobadores': typeof PanelAprobadoresRoute
   '/panel/auditoria': typeof PanelAuditoriaRoute
   '/panel/configuracion': typeof PanelConfiguracionRoute
+  '/panel/historial': typeof PanelHistorialRoute
+  '/panel/mis-solicitudes': typeof PanelMisSolicitudesRoute
   '/panel/notificaciones': typeof PanelNotificacionesRoute
   '/panel/peoplesoft': typeof PanelPeoplesoftRouteWithChildren
   '/panel/portal-proveedor': typeof PanelPortalProveedorRoute
   '/panel/proveedores': typeof PanelProveedoresRoute
+  '/panel/reasignaciones': typeof PanelReasignacionesRoute
   '/panel/reportes': typeof PanelReportesRoute
   '/panel/seguimiento': typeof PanelSeguimientoRoute
+  '/panel/solicitudes': typeof PanelSolicitudesRoute
   '/panel/soporte': typeof PanelSoporteRoute
   '/panel/vendedor': typeof PanelVendedorRoute
   '/panel/workflow': typeof PanelWorkflowRoute
@@ -186,14 +231,19 @@ export interface FileRouteTypes {
     | '/'
     | '/login'
     | '/panel'
+    | '/panel/aprobadores'
     | '/panel/auditoria'
     | '/panel/configuracion'
+    | '/panel/historial'
+    | '/panel/mis-solicitudes'
     | '/panel/notificaciones'
     | '/panel/peoplesoft'
     | '/panel/portal-proveedor'
     | '/panel/proveedores'
+    | '/panel/reasignaciones'
     | '/panel/reportes'
     | '/panel/seguimiento'
+    | '/panel/solicitudes'
     | '/panel/soporte'
     | '/panel/vendedor'
     | '/panel/workflow'
@@ -205,14 +255,19 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/login'
+    | '/panel/aprobadores'
     | '/panel/auditoria'
     | '/panel/configuracion'
+    | '/panel/historial'
+    | '/panel/mis-solicitudes'
     | '/panel/notificaciones'
     | '/panel/peoplesoft'
     | '/panel/portal-proveedor'
     | '/panel/proveedores'
+    | '/panel/reasignaciones'
     | '/panel/reportes'
     | '/panel/seguimiento'
+    | '/panel/solicitudes'
     | '/panel/soporte'
     | '/panel/vendedor'
     | '/panel/workflow'
@@ -225,14 +280,19 @@ export interface FileRouteTypes {
     | '/'
     | '/login'
     | '/panel'
+    | '/panel/aprobadores'
     | '/panel/auditoria'
     | '/panel/configuracion'
+    | '/panel/historial'
+    | '/panel/mis-solicitudes'
     | '/panel/notificaciones'
     | '/panel/peoplesoft'
     | '/panel/portal-proveedor'
     | '/panel/proveedores'
+    | '/panel/reasignaciones'
     | '/panel/reportes'
     | '/panel/seguimiento'
+    | '/panel/solicitudes'
     | '/panel/soporte'
     | '/panel/vendedor'
     | '/panel/workflow'
@@ -299,6 +359,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PanelSoporteRouteImport
       parentRoute: typeof PanelRoute
     }
+    '/panel/solicitudes': {
+      id: '/panel/solicitudes'
+      path: '/solicitudes'
+      fullPath: '/panel/solicitudes'
+      preLoaderRoute: typeof PanelSolicitudesRouteImport
+      parentRoute: typeof PanelRoute
+    }
     '/panel/seguimiento': {
       id: '/panel/seguimiento'
       path: '/seguimiento'
@@ -311,6 +378,13 @@ declare module '@tanstack/react-router' {
       path: '/reportes'
       fullPath: '/panel/reportes'
       preLoaderRoute: typeof PanelReportesRouteImport
+      parentRoute: typeof PanelRoute
+    }
+    '/panel/reasignaciones': {
+      id: '/panel/reasignaciones'
+      path: '/reasignaciones'
+      fullPath: '/panel/reasignaciones'
+      preLoaderRoute: typeof PanelReasignacionesRouteImport
       parentRoute: typeof PanelRoute
     }
     '/panel/proveedores': {
@@ -341,6 +415,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PanelNotificacionesRouteImport
       parentRoute: typeof PanelRoute
     }
+    '/panel/mis-solicitudes': {
+      id: '/panel/mis-solicitudes'
+      path: '/mis-solicitudes'
+      fullPath: '/panel/mis-solicitudes'
+      preLoaderRoute: typeof PanelMisSolicitudesRouteImport
+      parentRoute: typeof PanelRoute
+    }
+    '/panel/historial': {
+      id: '/panel/historial'
+      path: '/historial'
+      fullPath: '/panel/historial'
+      preLoaderRoute: typeof PanelHistorialRouteImport
+      parentRoute: typeof PanelRoute
+    }
     '/panel/configuracion': {
       id: '/panel/configuracion'
       path: '/configuracion'
@@ -353,6 +441,13 @@ declare module '@tanstack/react-router' {
       path: '/auditoria'
       fullPath: '/panel/auditoria'
       preLoaderRoute: typeof PanelAuditoriaRouteImport
+      parentRoute: typeof PanelRoute
+    }
+    '/panel/aprobadores': {
+      id: '/panel/aprobadores'
+      path: '/aprobadores'
+      fullPath: '/panel/aprobadores'
+      preLoaderRoute: typeof PanelAprobadoresRouteImport
       parentRoute: typeof PanelRoute
     }
     '/panel/preordenes/': {
@@ -392,14 +487,19 @@ const PanelPeoplesoftRouteWithChildren = PanelPeoplesoftRoute._addFileChildren(
 )
 
 interface PanelRouteChildren {
+  PanelAprobadoresRoute: typeof PanelAprobadoresRoute
   PanelAuditoriaRoute: typeof PanelAuditoriaRoute
   PanelConfiguracionRoute: typeof PanelConfiguracionRoute
+  PanelHistorialRoute: typeof PanelHistorialRoute
+  PanelMisSolicitudesRoute: typeof PanelMisSolicitudesRoute
   PanelNotificacionesRoute: typeof PanelNotificacionesRoute
   PanelPeoplesoftRoute: typeof PanelPeoplesoftRouteWithChildren
   PanelPortalProveedorRoute: typeof PanelPortalProveedorRoute
   PanelProveedoresRoute: typeof PanelProveedoresRoute
+  PanelReasignacionesRoute: typeof PanelReasignacionesRoute
   PanelReportesRoute: typeof PanelReportesRoute
   PanelSeguimientoRoute: typeof PanelSeguimientoRoute
+  PanelSolicitudesRoute: typeof PanelSolicitudesRoute
   PanelSoporteRoute: typeof PanelSoporteRoute
   PanelVendedorRoute: typeof PanelVendedorRoute
   PanelWorkflowRoute: typeof PanelWorkflowRoute
@@ -409,14 +509,19 @@ interface PanelRouteChildren {
 }
 
 const PanelRouteChildren: PanelRouteChildren = {
+  PanelAprobadoresRoute: PanelAprobadoresRoute,
   PanelAuditoriaRoute: PanelAuditoriaRoute,
   PanelConfiguracionRoute: PanelConfiguracionRoute,
+  PanelHistorialRoute: PanelHistorialRoute,
+  PanelMisSolicitudesRoute: PanelMisSolicitudesRoute,
   PanelNotificacionesRoute: PanelNotificacionesRoute,
   PanelPeoplesoftRoute: PanelPeoplesoftRouteWithChildren,
   PanelPortalProveedorRoute: PanelPortalProveedorRoute,
   PanelProveedoresRoute: PanelProveedoresRoute,
+  PanelReasignacionesRoute: PanelReasignacionesRoute,
   PanelReportesRoute: PanelReportesRoute,
   PanelSeguimientoRoute: PanelSeguimientoRoute,
+  PanelSolicitudesRoute: PanelSolicitudesRoute,
   PanelSoporteRoute: PanelSoporteRoute,
   PanelVendedorRoute: PanelVendedorRoute,
   PanelWorkflowRoute: PanelWorkflowRoute,
