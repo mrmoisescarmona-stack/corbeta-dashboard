@@ -370,7 +370,7 @@ function AprobadoresPage() {
   return (
     <div className="space-y-6 p-6">
       <header>
-        <h1 className="text-2xl font-semibold">Aprobadores</h1>
+        <h1 className="text-2xl font-semibold">Categorias de Productos</h1>
         <p className="text-sm text-muted-foreground">
           Consulta del árbol completo de categorías y aprobadores asignados por categoría
         </p>

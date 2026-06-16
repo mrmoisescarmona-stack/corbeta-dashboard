@@ -56,7 +56,7 @@ const navGroups: NavGroup[] = [
   {
     title: "Admin",
     items: [
-      { icon: Users, label: "Aprobadores", to: "/panel/aprobadores", roles: ["supervisor", "administrador"] },
+      { icon: Users, label: "Categorias de Productos", to: "/panel/aprobadores", roles: ["supervisor", "administrador"] },
       { icon: Building2, label: "Proveedores", to: "/panel/proveedores", roles: ["supervisor", "administrador"] },
       { icon: Repeat, label: "Reasignaciones", to: "/panel/reasignaciones", roles: ["supervisor", "administrador"] },
       { icon: Flag, label: "Seguimiento", to: "/panel/seguimiento", roles: ["administrador"] },
