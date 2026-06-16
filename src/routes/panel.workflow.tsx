@@ -598,6 +598,88 @@ function ApproverDetailDialog({ approver, onClose }: { approver: Approver | null
   );
 }
 
+function CategoryApproversCard() {
+  const [query, setQuery] = useState("");
+  const q = query.trim().toLowerCase();
+  const rows = q
+    ? categoryApprovers.filter((r) =>
+        [r.approver, r.identification, r.groupCode, r.categoryName, r.familyName, r.line]
+          .some((v) => v.toLowerCase().includes(q))
+      )
+    : categoryApprovers;
+
+  return (
+    <SectionCard
+      title="Aprobadores por categorías de artículos"
+      subtitle="Asignación de aprobadores internos según el árbol de categorías del producto (HU_002)"
+      action={
+        <PrimaryButton>
+          <Plus className="h-4 w-4" /> Nueva configuración
+        </PrimaryButton>
+      }
+    >
+      <div className="p-5 pb-0">
+        <div className="relative max-w-md">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <input
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Buscar por aprobador, código o nombre de categoría…"
+            className="w-full rounded-lg border border-border bg-background pl-9 pr-3 py-2 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring/30"
+          />
+        </div>
+      </div>
+      <div className="overflow-x-auto p-5 pt-4">
+        <table className="w-full text-sm">
+          <thead>
+            <tr className="text-left text-[11px] uppercase tracking-wider text-muted-foreground">
+              <th className="font-medium px-3 py-3">Aprobador</th>
+              <th className="font-medium px-3 py-3">Identificación</th>
+              <th className="font-medium px-3 py-3">Código Grupo</th>
+              <th className="font-medium px-3 py-3">Dirección</th>
+              <th className="font-medium px-3 py-3">Código de División</th>
+              <th className="font-medium px-3 py-3">Línea</th>
+              <th className="font-medium px-3 py-3">Nombre de la Categoría</th>
+              <th className="font-medium px-3 py-3">Nombre de la Familia</th>
+              <th className="font-medium px-3 py-3">Estado</th>
+              <th className="font-medium px-3 py-3 text-right">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map((r, i) => (
+              <tr key={i} className="border-t border-border hover:bg-muted/40">
+                <td className="px-3 py-3.5 font-medium">{r.approver}</td>
+                <td className="px-3 py-3.5 text-muted-foreground tabular-nums">{r.identification}</td>
+                <td className="px-3 py-3.5">{r.groupCode}</td>
+                <td className="px-3 py-3.5">{r.direction}</td>
+                <td className="px-3 py-3.5 tabular-nums">{r.divisionCode}</td>
+                <td className="px-3 py-3.5">{r.line}</td>
+                <td className="px-3 py-3.5">{r.categoryName}</td>
+                <td className="px-3 py-3.5">{r.familyName}</td>
+                <td className="px-3 py-3.5"><StatusBadge active={r.active} /></td>
+                <td className="px-3 py-3.5">
+                  <div className="flex justify-end gap-1">
+                    <button className="rounded-md p-1.5 hover:bg-accent" aria-label="Ver"><Eye className="h-4 w-4" /></button>
+                    <button className="rounded-md p-1.5 hover:bg-accent" aria-label="Editar"><Pencil className="h-4 w-4" /></button>
+                    <button className="rounded-md p-1.5 text-destructive hover:bg-destructive/10" aria-label="Eliminar"><Trash2 className="h-4 w-4" /></button>
+                  </div>
+                </td>
+              </tr>
+            ))}
+            {rows.length === 0 && (
+              <tr>
+                <td colSpan={10} className="px-3 py-8 text-center text-sm text-muted-foreground">
+                  Sin resultados para "{query}"
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
+    </SectionCard>
+  );
+}
+
 function ApprovalsPage() {
   const [tab, setTab] = useState<TabKey>("aprobadores");
   const [selected, setSelected] = useState<Approver | null>(null);
