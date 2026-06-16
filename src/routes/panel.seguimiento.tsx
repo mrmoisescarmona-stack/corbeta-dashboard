@@ -97,7 +97,7 @@ function ResolutionsPage() {
       </div>
 
       <div>
-        <span className="inline-flex items-center rounded-full bg-destructive/10 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-destructive">Cierre</span>
+        
         <h2 className="mt-2 text-xl md:text-2xl font-semibold tracking-tight">Resultados finales</h2>
         <p className="mt-1 text-sm text-muted-foreground">
           Preórdenes con decisión cerrada en todas sus líneas. Desde aquí se dispara la notificación al vendedor.
