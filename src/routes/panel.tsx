@@ -26,6 +26,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { useAuth, getRoleLabel, getUserDisplayName, getUserEmail, getUserInitials, type AppRole } from "@/hooks/use-auth";
 import { canAccessRoute } from "@/lib/rbac";
+import { ThemeToggle } from "@/components/theme-toggle";
+
 
 export const Route = createFileRoute("/panel")({
   ssr: false,
