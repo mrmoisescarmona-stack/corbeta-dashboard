@@ -25,7 +25,6 @@ import { Route as PanelPortalProveedorRouteImport } from './routes/panel.portal-
 import { Route as PanelPeoplesoftRouteImport } from './routes/panel.peoplesoft'
 import { Route as PanelNotificacionesRouteImport } from './routes/panel.notificaciones'
 import { Route as PanelMisSolicitudesRouteImport } from './routes/panel.mis-solicitudes'
-import { Route as PanelHistorialRouteImport } from './routes/panel.historial'
 import { Route as PanelConfiguracionRouteImport } from './routes/panel.configuracion'
 import { Route as PanelAuditoriaRouteImport } from './routes/panel.auditoria'
 import { Route as PanelAprobadoresRouteImport } from './routes/panel.aprobadores'
@@ -113,11 +112,6 @@ const PanelMisSolicitudesRoute = PanelMisSolicitudesRouteImport.update({
   path: '/mis-solicitudes',
   getParentRoute: () => PanelRoute,
 } as any)
-const PanelHistorialRoute = PanelHistorialRouteImport.update({
-  id: '/historial',
-  path: '/historial',
-  getParentRoute: () => PanelRoute,
-} as any)
 const PanelConfiguracionRoute = PanelConfiguracionRouteImport.update({
   id: '/configuracion',
   path: '/configuracion',
@@ -157,7 +151,6 @@ export interface FileRoutesByFullPath {
   '/panel/aprobadores': typeof PanelAprobadoresRoute
   '/panel/auditoria': typeof PanelAuditoriaRoute
   '/panel/configuracion': typeof PanelConfiguracionRoute
-  '/panel/historial': typeof PanelHistorialRoute
   '/panel/mis-solicitudes': typeof PanelMisSolicitudesRoute
   '/panel/notificaciones': typeof PanelNotificacionesRoute
   '/panel/peoplesoft': typeof PanelPeoplesoftRouteWithChildren
@@ -181,7 +174,6 @@ export interface FileRoutesByTo {
   '/panel/aprobadores': typeof PanelAprobadoresRoute
   '/panel/auditoria': typeof PanelAuditoriaRoute
   '/panel/configuracion': typeof PanelConfiguracionRoute
-  '/panel/historial': typeof PanelHistorialRoute
   '/panel/mis-solicitudes': typeof PanelMisSolicitudesRoute
   '/panel/notificaciones': typeof PanelNotificacionesRoute
   '/panel/peoplesoft': typeof PanelPeoplesoftRouteWithChildren
@@ -207,7 +199,6 @@ export interface FileRoutesById {
   '/panel/aprobadores': typeof PanelAprobadoresRoute
   '/panel/auditoria': typeof PanelAuditoriaRoute
   '/panel/configuracion': typeof PanelConfiguracionRoute
-  '/panel/historial': typeof PanelHistorialRoute
   '/panel/mis-solicitudes': typeof PanelMisSolicitudesRoute
   '/panel/notificaciones': typeof PanelNotificacionesRoute
   '/panel/peoplesoft': typeof PanelPeoplesoftRouteWithChildren
@@ -234,7 +225,6 @@ export interface FileRouteTypes {
     | '/panel/aprobadores'
     | '/panel/auditoria'
     | '/panel/configuracion'
-    | '/panel/historial'
     | '/panel/mis-solicitudes'
     | '/panel/notificaciones'
     | '/panel/peoplesoft'
@@ -258,7 +248,6 @@ export interface FileRouteTypes {
     | '/panel/aprobadores'
     | '/panel/auditoria'
     | '/panel/configuracion'
-    | '/panel/historial'
     | '/panel/mis-solicitudes'
     | '/panel/notificaciones'
     | '/panel/peoplesoft'
@@ -283,7 +272,6 @@ export interface FileRouteTypes {
     | '/panel/aprobadores'
     | '/panel/auditoria'
     | '/panel/configuracion'
-    | '/panel/historial'
     | '/panel/mis-solicitudes'
     | '/panel/notificaciones'
     | '/panel/peoplesoft'
@@ -422,13 +410,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PanelMisSolicitudesRouteImport
       parentRoute: typeof PanelRoute
     }
-    '/panel/historial': {
-      id: '/panel/historial'
-      path: '/historial'
-      fullPath: '/panel/historial'
-      preLoaderRoute: typeof PanelHistorialRouteImport
-      parentRoute: typeof PanelRoute
-    }
     '/panel/configuracion': {
       id: '/panel/configuracion'
       path: '/configuracion'
@@ -490,7 +471,6 @@ interface PanelRouteChildren {
   PanelAprobadoresRoute: typeof PanelAprobadoresRoute
   PanelAuditoriaRoute: typeof PanelAuditoriaRoute
   PanelConfiguracionRoute: typeof PanelConfiguracionRoute
-  PanelHistorialRoute: typeof PanelHistorialRoute
   PanelMisSolicitudesRoute: typeof PanelMisSolicitudesRoute
   PanelNotificacionesRoute: typeof PanelNotificacionesRoute
   PanelPeoplesoftRoute: typeof PanelPeoplesoftRouteWithChildren
@@ -512,7 +492,6 @@ const PanelRouteChildren: PanelRouteChildren = {
   PanelAprobadoresRoute: PanelAprobadoresRoute,
   PanelAuditoriaRoute: PanelAuditoriaRoute,
   PanelConfiguracionRoute: PanelConfiguracionRoute,
-  PanelHistorialRoute: PanelHistorialRoute,
   PanelMisSolicitudesRoute: PanelMisSolicitudesRoute,
   PanelNotificacionesRoute: PanelNotificacionesRoute,
   PanelPeoplesoftRoute: PanelPeoplesoftRouteWithChildren,
