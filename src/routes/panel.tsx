@@ -1,7 +1,6 @@
 import { createFileRoute, Link, Outlet, redirect, useNavigate, useRouterState } from "@tanstack/react-router";
 import {
   LayoutDashboard,
-  CheckSquare,
   Inbox,
   BarChart3,
   Settings,
@@ -11,16 +10,21 @@ import {
   Menu,
   ChevronDown,
   LogOut,
-  Mail,
-  User,
   Flag,
   Database,
   Building2,
   Headphones,
+  Users,
+  Repeat,
+  FileText,
+  History,
+  ShieldAlert,
 } from "lucide-react";
 import logoAsset from "@/assets/logo_corbeta.png.asset.json";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { useAuth, getRoleLabel, getUserDisplayName, getUserInitials, type AppRole } from "@/hooks/use-auth";
+import { canAccessRoute } from "@/lib/rbac";
 
 export const Route = createFileRoute("/panel")({
   ssr: false,
@@ -31,28 +35,35 @@ export const Route = createFileRoute("/panel")({
   component: DashboardLayout,
 });
 
-type NavItem = { icon: any; label: string; to: string; exact?: boolean };
+type NavItem = { icon: any; label: string; to: string; exact?: boolean; roles: AppRole[] };
 type NavGroup = { title: string; items: NavItem[] };
+
+const ALL: AppRole[] = ["supervisor", "aprobador", "proveedor", "administrador"];
 
 const navGroups: NavGroup[] = [
   {
     title: "General",
     items: [
-      { icon: LayoutDashboard, label: "Dashboard", to: "/panel", exact: true },
-      { icon: Inbox, label: "Workflow", to: "/panel/workflow" },
-      { icon: BarChart3, label: "Reportes", to: "/panel/reportes" },
+      { icon: LayoutDashboard, label: "Dashboard", to: "/panel", exact: true, roles: ALL },
+      { icon: Inbox, label: "Solicitudes", to: "/panel/solicitudes", roles: ["supervisor", "administrador"] },
+      { icon: FileText, label: "Mis Solicitudes", to: "/panel/mis-solicitudes", roles: ["aprobador", "proveedor"] },
+      { icon: History, label: "Historial", to: "/panel/historial", roles: ["proveedor"] },
+      { icon: Inbox, label: "Workflow", to: "/panel/workflow", roles: ["supervisor", "administrador"] },
+      { icon: BarChart3, label: "Reportes", to: "/panel/reportes", roles: ["supervisor", "aprobador", "administrador"] },
     ],
   },
   {
     title: "Admin",
     items: [
-      { icon: Flag, label: "Seguimiento", to: "/panel/seguimiento" },
-      { icon: Database, label: "Envío PeopleSoft", to: "/panel/peoplesoft" },
-      { icon: Building2, label: "Proveedores", to: "/panel/proveedores" },
-      { icon: Bell, label: "Notificaciones", to: "/panel/notificaciones" },
-      { icon: ShieldCheck, label: "Auditoría", to: "/panel/auditoria" },
-      { icon: Headphones, label: "Soporte", to: "/panel/soporte" },
-      { icon: Settings, label: "Configuración", to: "/panel/configuracion" },
+      { icon: Users, label: "Aprobadores", to: "/panel/aprobadores", roles: ["supervisor", "administrador"] },
+      { icon: Building2, label: "Proveedores", to: "/panel/proveedores", roles: ["supervisor", "administrador"] },
+      { icon: Repeat, label: "Reasignaciones", to: "/panel/reasignaciones", roles: ["supervisor", "administrador"] },
+      { icon: Flag, label: "Seguimiento", to: "/panel/seguimiento", roles: ["supervisor", "administrador"] },
+      { icon: Database, label: "Envío PeopleSoft", to: "/panel/peoplesoft", roles: ["supervisor", "administrador"] },
+      { icon: Bell, label: "Notificaciones", to: "/panel/notificaciones", roles: ["supervisor", "administrador"] },
+      { icon: ShieldCheck, label: "Auditoría", to: "/panel/auditoria", roles: ["supervisor", "administrador"] },
+      { icon: Headphones, label: "Soporte", to: "/panel/soporte", roles: ALL },
+      { icon: Settings, label: "Configuración", to: "/panel/configuracion", roles: ["supervisor", "administrador"] },
     ],
   },
 ];
@@ -60,6 +71,7 @@ const navGroups: NavGroup[] = [
 function DashboardLayout() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const navigate = useNavigate();
+  const auth = useAuth();
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
@@ -70,6 +82,19 @@ function DashboardLayout() {
   const isActive = (to: string, exact?: boolean) =>
     exact ? pathname === to : pathname === to || pathname.startsWith(to + "/");
 
+  const userRoles = auth.roles;
+  const hasAccess = userRoles.length === 0 || canAccessRoute(pathname, userRoles);
+
+  // Filter nav items by current user roles (administrador sees everything)
+  const visibleGroups = navGroups
+    .map((g) => ({
+      ...g,
+      items: g.items.filter((item) =>
+        userRoles.includes("administrador") || item.roles.some((r) => userRoles.includes(r))
+      ),
+    }))
+    .filter((g) => g.items.length > 0);
+
   return (
     <div className="min-h-screen bg-background text-foreground">
       <div className="flex">
@@ -78,7 +103,7 @@ function DashboardLayout() {
             <img src={logoAsset.url} alt="Corbeta" className="h-6 w-auto" />
           </div>
           <nav className="flex-1 overflow-y-auto px-3 py-4 space-y-4">
-            {navGroups.map((group) => (
+            {visibleGroups.map((group) => (
               <div key={group.title} className="space-y-0.5">
                 <div className="px-3 pb-1.5 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
                   {group.title}
@@ -129,7 +154,6 @@ function DashboardLayout() {
             </div>
 
             <div className="flex items-center gap-3">
-
               <button className="relative rounded-lg p-2 text-muted-foreground hover:bg-accent hover:text-foreground">
                 <Bell className="h-5 w-5" />
                 <span className="absolute top-1 right-1 flex h-4 w-4 items-center justify-center rounded-full bg-warning text-[10px] font-semibold text-warning-foreground">
@@ -138,12 +162,13 @@ function DashboardLayout() {
               </button>
               <div className="flex items-center gap-3 rounded-lg border border-border bg-card pl-1 pr-3 py-1">
                 <div className="flex h-8 w-8 items-center justify-center rounded-md bg-primary text-primary-foreground text-xs font-semibold">
-                  MC
+                  {getUserInitials(auth.user)}
                 </div>
                 <div className="hidden sm:block leading-tight">
-                  <div className="text-xs font-semibold">Moises Carmona</div>
+                  <div className="text-xs font-semibold">{getUserDisplayName(auth.user)}</div>
                   <div className="text-[11px] text-muted-foreground">
-                    Supervisor
+                    {getRoleLabel(auth.primaryRole)}
+                    {auth.user?.email ? ` · ${auth.user.email}` : ""}
                   </div>
                 </div>
                 <ChevronDown className="h-4 w-4 text-muted-foreground" />
@@ -159,10 +184,38 @@ function DashboardLayout() {
           </header>
 
           <main className="px-4 md:px-8 py-6 md:py-8">
-            <Outlet />
+            {auth.loading ? (
+              <div className="flex items-center justify-center py-20 text-sm text-muted-foreground">
+                Cargando…
+              </div>
+            ) : !hasAccess ? (
+              <AccessDenied role={auth.primaryRole} />
+            ) : (
+              <Outlet />
+            )}
           </main>
         </div>
       </div>
+    </div>
+  );
+}
+
+function AccessDenied({ role }: { role: AppRole | null }) {
+  return (
+    <div className="mx-auto max-w-md text-center py-20">
+      <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-destructive/10 text-destructive">
+        <ShieldAlert className="h-6 w-6" />
+      </div>
+      <h1 className="text-xl font-semibold text-foreground">Acceso no autorizado</h1>
+      <p className="mt-2 text-sm text-muted-foreground">
+        Tu rol actual ({getRoleLabel(role)}) no tiene permisos para acceder a esta sección.
+      </p>
+      <Link
+        to="/panel"
+        className="mt-6 inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90"
+      >
+        Volver al Dashboard
+      </Link>
     </div>
   );
 }
