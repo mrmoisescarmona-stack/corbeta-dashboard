@@ -106,13 +106,34 @@ const providers = [
   { id: "900789012", name: "Whirlpool Andina", category: "Línea Blanca", email: "comercial@whirlpool.com.co", phone: "+57 601 6512200", active: true },
 ];
 
-const categoryApprovers = [
-  { approver: "María González", identification: "52123456", groupCode: "GRP-01", direction: "Electrodomésticos", divisionCode: "DIV-10", line: "Refrigeración", categoryName: "Neveras", familyName: "Neveras Samsung", active: true },
-  { approver: "Pedro Martínez", identification: "79123456", groupCode: "GRP-02", direction: "Tecnología", divisionCode: "DIV-20", line: "Televisores", categoryName: "Televisores premium", familyName: "LG OLED", active: true },
-  { approver: "María González", identification: "52123456", groupCode: "GRP-01", direction: "Electrodomésticos", divisionCode: "DIV-10", line: "Lavado", categoryName: "Lavadoras automáticas", familyName: "Lavadoras Samsung", active: true },
-  { approver: "María González", identification: "52123456", groupCode: "GRP-02", direction: "Tecnología", divisionCode: "DIV-21", line: "Tablets", categoryName: "Tablets", familyName: "Samsung Galaxy Tab", active: true },
-  { approver: "Pedro Martínez", identification: "79123456", groupCode: "GRP-02", direction: "Tecnología", divisionCode: "DIV-21", line: "Tablets", categoryName: "Tablets", familyName: "Samsung Galaxy Tab", active: true },
+type CategoryApprover = {
+  approver: string;
+  identification: string;
+  groupCode: string;
+  direction: string;
+  divisionCode: string;
+  subdirection: string;
+  lineCode: string;
+  line: string;
+  sublineCode: string;
+  sublineName: string;
+  categoryCode: string;
+  categoryName: string;
+  subcategoryCode: string;
+  subcategoryName: string;
+  familyCode: string;
+  familyName: string;
+  active: boolean;
+};
+
+const initialCategoryApprovers: CategoryApprover[] = [
+  { approver: "María González", identification: "52123456", groupCode: "GRP-01", direction: "Electrodomésticos", divisionCode: "DIV-10", subdirection: "Línea Blanca", lineCode: "LIN-01", line: "Refrigeración", sublineCode: "SUB-01", sublineName: "Neveras No Frost", categoryCode: "CAT-01", categoryName: "Neveras", subcategoryCode: "SCAT-01", subcategoryName: "Side by Side", familyCode: "FAM-01", familyName: "Neveras Samsung", active: true },
+  { approver: "Pedro Martínez", identification: "79123456", groupCode: "GRP-02", direction: "Tecnología", divisionCode: "DIV-20", subdirection: "Audio y Video", lineCode: "LIN-10", line: "Televisores", sublineCode: "SUB-10", sublineName: "Smart TV", categoryCode: "CAT-10", categoryName: "Televisores premium", subcategoryCode: "SCAT-10", subcategoryName: "OLED 4K", familyCode: "FAM-10", familyName: "LG OLED", active: true },
+  { approver: "María González", identification: "52123456", groupCode: "GRP-01", direction: "Electrodomésticos", divisionCode: "DIV-10", subdirection: "Línea Blanca", lineCode: "LIN-02", line: "Lavado", sublineCode: "SUB-02", sublineName: "Lavadoras carga frontal", categoryCode: "CAT-02", categoryName: "Lavadoras automáticas", subcategoryCode: "SCAT-02", subcategoryName: "Inverter", familyCode: "FAM-02", familyName: "Lavadoras Samsung", active: true },
+  { approver: "María González", identification: "52123456", groupCode: "GRP-02", direction: "Tecnología", divisionCode: "DIV-21", subdirection: "Cómputo móvil", lineCode: "LIN-20", line: "Tablets", sublineCode: "SUB-20", sublineName: "Tablets Android", categoryCode: "CAT-20", categoryName: "Tablets", subcategoryCode: "SCAT-20", subcategoryName: "10 pulgadas", familyCode: "FAM-20", familyName: "Samsung Galaxy Tab", active: true },
+  { approver: "Pedro Martínez", identification: "79123456", groupCode: "GRP-02", direction: "Tecnología", divisionCode: "DIV-21", subdirection: "Cómputo móvil", lineCode: "LIN-20", line: "Tablets", sublineCode: "SUB-20", sublineName: "Tablets Android", categoryCode: "CAT-20", categoryName: "Tablets", subcategoryCode: "SCAT-21", subcategoryName: "11 pulgadas", familyCode: "FAM-21", familyName: "Samsung Galaxy Tab", active: true },
 ];
+
 
 function StatusBadge({ active, status }: { active: boolean; status?: "Activo" | "Inactivo" | "Pendiente" }) {
   const resolved = status ?? (active ? "Activo" : "Inactivo");
