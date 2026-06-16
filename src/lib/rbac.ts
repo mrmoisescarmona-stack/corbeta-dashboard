@@ -7,8 +7,8 @@ import type { AppRole } from "@/hooks/use-auth";
 export const ROUTE_PERMISSIONS: Record<string, AppRole[]> = {
   "/panel": ["supervisor", "aprobador", "proveedor", "administrador"], // dashboard
   "/panel/solicitudes": ["supervisor", "administrador"],
-  "/panel/mis-solicitudes": ["aprobador", "proveedor"],
-  "/panel/historial": ["proveedor"],
+  "/panel/mis-solicitudes": ["aprobador", "proveedor", "administrador"],
+  "/panel/historial": ["proveedor", "administrador"],
   "/panel/workflow": ["supervisor", "administrador"],
   "/panel/aprobadores": ["supervisor", "administrador"],
   "/panel/proveedores": ["supervisor", "administrador"],
@@ -17,11 +17,13 @@ export const ROUTE_PERMISSIONS: Record<string, AppRole[]> = {
   "/panel/reportes": ["supervisor", "aprobador", "administrador"],
   "/panel/auditoria": ["supervisor", "administrador"],
   "/panel/configuracion": ["supervisor", "administrador"],
-  // Legacy / additional
-  "/panel/preordenes": ["supervisor", "administrador"],
-  "/panel/seguimiento": ["supervisor", "administrador"],
-  "/panel/peoplesoft": ["supervisor", "administrador"],
-  "/panel/soporte": ["supervisor", "aprobador", "proveedor", "administrador"],
+  // Módulos solo para administrador (técnicos/soporte)
+  "/panel/preordenes": ["administrador"],
+  "/panel/seguimiento": ["administrador"],
+  "/panel/peoplesoft": ["administrador"],
+  "/panel/soporte": ["administrador"],
+  "/panel/portal-proveedor": ["proveedor", "administrador"],
+  "/panel/vendedor": ["administrador"],
 };
 
 export function canAccessRoute(pathname: string, roles: AppRole[]): boolean {
