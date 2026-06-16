@@ -24,7 +24,7 @@ import {
 import logoAsset from "@/assets/logo_corbeta.png.asset.json";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { useAuth, getRoleLabel, getUserDisplayName, getUserInitials, type AppRole } from "@/hooks/use-auth";
+import { useAuth, getRoleLabel, getUserDisplayName, getUserEmail, getUserInitials, type AppRole } from "@/hooks/use-auth";
 import { canAccessRoute } from "@/lib/rbac";
 
 export const Route = createFileRoute("/panel")({
