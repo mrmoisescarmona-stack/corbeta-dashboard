@@ -24,7 +24,7 @@ import {
 import logoAsset from "@/assets/logo_corbeta.png.asset.json";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { useAuth, getRoleLabel, getUserDisplayName, getUserInitials, type AppRole } from "@/hooks/use-auth";
+import { useAuth, getRoleLabel, getUserDisplayName, getUserEmail, getUserInitials, type AppRole } from "@/hooks/use-auth";
 import { canAccessRoute } from "@/lib/rbac";
 
 export const Route = createFileRoute("/panel")({
@@ -173,8 +173,9 @@ function DashboardLayout() {
                   <div className="text-xs font-semibold">{getUserDisplayName(auth.user)}</div>
                   <div className="text-[11px] text-muted-foreground">
                     {getRoleLabel(auth.primaryRole)}
-                    {auth.user?.email ? ` · ${auth.user.email}` : ""}
+                    {` · ${getUserEmail(auth.user)}`}
                   </div>
+
                 </div>
                 <ChevronDown className="h-4 w-4 text-muted-foreground" />
               </div>

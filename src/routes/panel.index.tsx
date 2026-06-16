@@ -27,6 +27,8 @@ import {
   X,
 } from "lucide-react";
 import { DashboardOverviewSkeleton } from "@/components/dashboard/skeleton";
+import { useAuth, getUserDisplayName } from "@/hooks/use-auth";
+
 
 export const Route = createFileRoute("/panel/")({
   head: () => ({
@@ -404,7 +406,11 @@ function GestionModal({
 }
 
 function DashboardOverview() {
+  const auth = useAuth();
+  const displayName = getUserDisplayName(auth.user);
+  const firstName = displayName.split(" ")[0] ?? displayName;
   const [loading, setLoading] = useState(true);
+
   const [donutMode, setDonutMode] = useState<"count" | "value">("count");
   const [processed, setProcessed] = useState<Set<string>>(new Set());
   const [gestion, setGestion] = useState<OverdueItem | null>(null);
@@ -435,7 +441,7 @@ function DashboardOverview() {
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
           <h2 className="text-2xl md:text-3xl font-semibold tracking-tight">
-            ¡Bienvenido, Moises Carmona! <span className="inline-block">👋</span>
+            ¡Bienvenido, {firstName}! <span className="inline-block">👋</span>
           </h2>
           <p className="mt-1 text-sm text-muted-foreground">
             Aquí tienes el resumen de tus solicitudes y aprobaciones.
