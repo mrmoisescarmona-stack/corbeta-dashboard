@@ -19,7 +19,6 @@ import { Route as PanelSoporteRouteImport } from './routes/panel.soporte'
 import { Route as PanelSolicitudesRouteImport } from './routes/panel.solicitudes'
 import { Route as PanelSeguimientoRouteImport } from './routes/panel.seguimiento'
 import { Route as PanelReportesRouteImport } from './routes/panel.reportes'
-import { Route as PanelReasignacionesRouteImport } from './routes/panel.reasignaciones'
 import { Route as PanelProveedoresRouteImport } from './routes/panel.proveedores'
 import { Route as PanelPortalProveedorRouteImport } from './routes/panel.portal-proveedor'
 import { Route as PanelPeoplesoftRouteImport } from './routes/panel.peoplesoft'
@@ -80,11 +79,6 @@ const PanelSeguimientoRoute = PanelSeguimientoRouteImport.update({
 const PanelReportesRoute = PanelReportesRouteImport.update({
   id: '/reportes',
   path: '/reportes',
-  getParentRoute: () => PanelRoute,
-} as any)
-const PanelReasignacionesRoute = PanelReasignacionesRouteImport.update({
-  id: '/reasignaciones',
-  path: '/reasignaciones',
   getParentRoute: () => PanelRoute,
 } as any)
 const PanelProveedoresRoute = PanelProveedoresRouteImport.update({
@@ -156,7 +150,6 @@ export interface FileRoutesByFullPath {
   '/panel/peoplesoft': typeof PanelPeoplesoftRouteWithChildren
   '/panel/portal-proveedor': typeof PanelPortalProveedorRoute
   '/panel/proveedores': typeof PanelProveedoresRoute
-  '/panel/reasignaciones': typeof PanelReasignacionesRoute
   '/panel/reportes': typeof PanelReportesRoute
   '/panel/seguimiento': typeof PanelSeguimientoRoute
   '/panel/solicitudes': typeof PanelSolicitudesRoute
@@ -179,7 +172,6 @@ export interface FileRoutesByTo {
   '/panel/peoplesoft': typeof PanelPeoplesoftRouteWithChildren
   '/panel/portal-proveedor': typeof PanelPortalProveedorRoute
   '/panel/proveedores': typeof PanelProveedoresRoute
-  '/panel/reasignaciones': typeof PanelReasignacionesRoute
   '/panel/reportes': typeof PanelReportesRoute
   '/panel/seguimiento': typeof PanelSeguimientoRoute
   '/panel/solicitudes': typeof PanelSolicitudesRoute
@@ -204,7 +196,6 @@ export interface FileRoutesById {
   '/panel/peoplesoft': typeof PanelPeoplesoftRouteWithChildren
   '/panel/portal-proveedor': typeof PanelPortalProveedorRoute
   '/panel/proveedores': typeof PanelProveedoresRoute
-  '/panel/reasignaciones': typeof PanelReasignacionesRoute
   '/panel/reportes': typeof PanelReportesRoute
   '/panel/seguimiento': typeof PanelSeguimientoRoute
   '/panel/solicitudes': typeof PanelSolicitudesRoute
@@ -230,7 +221,6 @@ export interface FileRouteTypes {
     | '/panel/peoplesoft'
     | '/panel/portal-proveedor'
     | '/panel/proveedores'
-    | '/panel/reasignaciones'
     | '/panel/reportes'
     | '/panel/seguimiento'
     | '/panel/solicitudes'
@@ -253,7 +243,6 @@ export interface FileRouteTypes {
     | '/panel/peoplesoft'
     | '/panel/portal-proveedor'
     | '/panel/proveedores'
-    | '/panel/reasignaciones'
     | '/panel/reportes'
     | '/panel/seguimiento'
     | '/panel/solicitudes'
@@ -277,7 +266,6 @@ export interface FileRouteTypes {
     | '/panel/peoplesoft'
     | '/panel/portal-proveedor'
     | '/panel/proveedores'
-    | '/panel/reasignaciones'
     | '/panel/reportes'
     | '/panel/seguimiento'
     | '/panel/solicitudes'
@@ -366,13 +354,6 @@ declare module '@tanstack/react-router' {
       path: '/reportes'
       fullPath: '/panel/reportes'
       preLoaderRoute: typeof PanelReportesRouteImport
-      parentRoute: typeof PanelRoute
-    }
-    '/panel/reasignaciones': {
-      id: '/panel/reasignaciones'
-      path: '/reasignaciones'
-      fullPath: '/panel/reasignaciones'
-      preLoaderRoute: typeof PanelReasignacionesRouteImport
       parentRoute: typeof PanelRoute
     }
     '/panel/proveedores': {
@@ -476,7 +457,6 @@ interface PanelRouteChildren {
   PanelPeoplesoftRoute: typeof PanelPeoplesoftRouteWithChildren
   PanelPortalProveedorRoute: typeof PanelPortalProveedorRoute
   PanelProveedoresRoute: typeof PanelProveedoresRoute
-  PanelReasignacionesRoute: typeof PanelReasignacionesRoute
   PanelReportesRoute: typeof PanelReportesRoute
   PanelSeguimientoRoute: typeof PanelSeguimientoRoute
   PanelSolicitudesRoute: typeof PanelSolicitudesRoute
@@ -497,7 +477,6 @@ const PanelRouteChildren: PanelRouteChildren = {
   PanelPeoplesoftRoute: PanelPeoplesoftRouteWithChildren,
   PanelPortalProveedorRoute: PanelPortalProveedorRoute,
   PanelProveedoresRoute: PanelProveedoresRoute,
-  PanelReasignacionesRoute: PanelReasignacionesRoute,
   PanelReportesRoute: PanelReportesRoute,
   PanelSeguimientoRoute: PanelSeguimientoRoute,
   PanelSolicitudesRoute: PanelSolicitudesRoute,

@@ -12,7 +12,7 @@ export const ROUTE_PERMISSIONS: Record<string, AppRole[]> = {
   "/panel/workflow": ["supervisor", "administrador"],
   "/panel/aprobadores": ["supervisor", "administrador"],
   "/panel/proveedores": ["supervisor", "administrador"],
-  "/panel/reasignaciones": ["supervisor", "administrador"],
+  
   "/panel/notificaciones": ["supervisor", "administrador"],
   "/panel/reportes": ["supervisor", "aprobador", "administrador"],
   "/panel/auditoria": ["supervisor", "administrador"],
