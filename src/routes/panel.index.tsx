@@ -400,6 +400,16 @@ function GestionModal({
           </div>
         </div>
 
+        <div className="px-5 pb-5">
+          <EvidenceAttachments
+            files={files}
+            onAdd={handleAddFiles}
+            onRemove={(i) => setFiles((prev) => prev.filter((_, idx) => idx !== i))}
+          />
+        </div>
+
+
+
         <div className="border-t border-border p-5 space-y-3">
           <div className="flex flex-col sm:flex-row gap-2">
             <Link
