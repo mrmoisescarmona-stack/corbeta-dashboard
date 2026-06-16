@@ -173,8 +173,9 @@ function DashboardLayout() {
                   <div className="text-xs font-semibold">{getUserDisplayName(auth.user)}</div>
                   <div className="text-[11px] text-muted-foreground">
                     {getRoleLabel(auth.primaryRole)}
-                    {auth.user?.email ? ` · ${auth.user.email}` : ""}
+                    {` · ${getUserEmail(auth.user)}`}
                   </div>
+
                 </div>
                 <ChevronDown className="h-4 w-4 text-muted-foreground" />
               </div>
