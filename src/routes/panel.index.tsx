@@ -237,6 +237,26 @@ function GestionModal({
   const [justif, setJustif] = useState("");
   const [tipoDesc, setTipoDesc] = useState("Visible");
   const [tipoExcl, setTipoExcl] = useState("No mutuamente excluyente");
+  const [files, setFiles] = useState<EvidenceFile[]>([]);
+
+  const handleAddFiles = (fl: File[]) => {
+    const now = new Date();
+    const stamp = `${now.toLocaleDateString("es-CO")} ${now.toLocaleTimeString("es-CO", { hour: "2-digit", minute: "2-digit" })}`;
+    setFiles((prev) => [
+      ...prev,
+      ...fl.map((f) => ({
+        name: f.name,
+        size: f.size > 1024 * 1024 ? `${(f.size / 1024 / 1024).toFixed(1)} MB` : `${Math.round(f.size / 1024)} KB`,
+        by: "Usuario actual",
+        date: stamp,
+        status: "Pendiente" as const,
+      })),
+    ]);
+    toast.success(
+      fl.length === 1 ? `Archivo adjuntado: ${fl[0].name}` : `${fl.length} archivos adjuntados correctamente`
+    );
+  };
+
 
   const canConfirm = decision !== null && justif.trim().length > 0;
 
