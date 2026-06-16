@@ -86,12 +86,16 @@ function DashboardLayout() {
   const userRoles = auth.roles;
   const hasAccess = userRoles.length === 0 || canAccessRoute(pathname, userRoles);
 
-  // Filter nav items by current user roles (administrador sees everything)
+  // Filter nav items by current user roles (administrador sees everything).
+  // While auth is loading, show all items so the menu doesn't flash empty.
   const visibleGroups = navGroups
     .map((g) => ({
       ...g,
       items: g.items.filter((item) =>
-        userRoles.includes("administrador") || item.roles.some((r) => userRoles.includes(r))
+        auth.loading ||
+        userRoles.length === 0 ||
+        userRoles.includes("administrador") ||
+        item.roles.some((r) => userRoles.includes(r))
       ),
     }))
     .filter((g) => g.items.length > 0);
