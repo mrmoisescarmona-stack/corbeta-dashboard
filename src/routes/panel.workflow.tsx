@@ -911,6 +911,8 @@ function ApprovalsPage() {
 
       <ApproverDetailDialog approver={selected} onClose={() => setSelected(null)} />
       <NewApproverDialog open={newApproverOpen} onClose={() => setNewApproverOpen(false)} />
+      <EditApproverDialog approver={editing} onClose={() => setEditing(null)} onSave={saveEdit} />
+      <DeleteApproverDialog approver={deleting} onClose={() => setDeleting(null)} onConfirm={confirmDelete} />
     </div>
   );
 }
