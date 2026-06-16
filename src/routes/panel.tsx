@@ -17,7 +17,7 @@ import {
   Users,
   Repeat,
   FileText,
-  History,
+  History as _History,
   ShieldAlert,
   Workflow as WorkflowIcon,
 } from "lucide-react";
