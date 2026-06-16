@@ -753,7 +753,7 @@ function ApprovalsPage() {
                 </tr>
               </thead>
               <tbody>
-                {approvers.map((a) => (
+                {list.map((a) => (
                   <tr key={a.id} className="border-t border-border hover:bg-muted/40">
                     <td className="px-5 py-3.5 font-medium">{a.name}</td>
                     <td className="px-3 py-3.5 text-muted-foreground tabular-nums">{a.id}</td>
@@ -765,15 +765,32 @@ function ApprovalsPage() {
                         <button
                           onClick={() => setSelected(a)}
                           className="rounded-md p-1.5 hover:bg-accent"
+                          aria-label="Ver detalles"
+                          title="Ver detalles"
+                        >
+                          <Eye className="h-4 w-4" />
+                        </button>
+                        <button
+                          onClick={() => setEditing(a)}
+                          className="rounded-md p-1.5 hover:bg-accent"
                           aria-label="Editar"
+                          title="Editar"
                         >
                           <Pencil className="h-4 w-4" />
                         </button>
-                        <button className="rounded-md p-1.5 text-destructive hover:bg-destructive/10" aria-label="Eliminar"><Trash2 className="h-4 w-4" /></button>
+                        <button
+                          onClick={() => setDeleting(a)}
+                          className="rounded-md p-1.5 text-destructive hover:bg-destructive/10"
+                          aria-label="Eliminar"
+                          title="Eliminar"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </button>
                       </div>
                     </td>
                   </tr>
                 ))}
+
               </tbody>
             </table>
           </div>
