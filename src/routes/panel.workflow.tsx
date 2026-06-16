@@ -106,6 +106,14 @@ const providers = [
   { id: "900789012", name: "Whirlpool Andina", category: "Línea Blanca", email: "comercial@whirlpool.com.co", phone: "+57 601 6512200", active: true },
 ];
 
+const categoryApprovers = [
+  { approver: "María González", identification: "52123456", groupCode: "GRP-01", direction: "Electrodomésticos", divisionCode: "DIV-10", line: "Refrigeración", categoryName: "Neveras", familyName: "Neveras Samsung", active: true },
+  { approver: "Pedro Martínez", identification: "79123456", groupCode: "GRP-02", direction: "Tecnología", divisionCode: "DIV-20", line: "Televisores", categoryName: "Televisores premium", familyName: "LG OLED", active: true },
+  { approver: "María González", identification: "52123456", groupCode: "GRP-01", direction: "Electrodomésticos", divisionCode: "DIV-10", line: "Lavado", categoryName: "Lavadoras automáticas", familyName: "Lavadoras Samsung", active: true },
+  { approver: "María González", identification: "52123456", groupCode: "GRP-02", direction: "Tecnología", divisionCode: "DIV-21", line: "Tablets", categoryName: "Tablets", familyName: "Samsung Galaxy Tab", active: true },
+  { approver: "Pedro Martínez", identification: "79123456", groupCode: "GRP-02", direction: "Tecnología", divisionCode: "DIV-21", line: "Tablets", categoryName: "Tablets", familyName: "Samsung Galaxy Tab", active: true },
+];
+
 function StatusBadge({ active, status }: { active: boolean; status?: "Activo" | "Inactivo" | "Pendiente" }) {
   const resolved = status ?? (active ? "Activo" : "Inactivo");
   const styles =
