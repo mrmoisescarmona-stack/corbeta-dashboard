@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { toast } from "sonner";
-import { Plus, Pencil, Trash2, ArrowLeftRight, Check, X, Ban, UploadCloud, Mail, Phone, Eye, Download } from "lucide-react";
+import { Plus, Pencil, Trash2, ArrowLeftRight, Check, X, Ban, UploadCloud, Mail, Phone, Eye, Download, Search } from "lucide-react";
 import { ApprovalsSkeleton } from "@/components/dashboard/skeleton";
 import { useFakeLoading } from "@/hooks/use-fake-loading";
 import {
@@ -104,6 +104,14 @@ const providers = [
   { id: "900123456", name: "Samsung Colombia S.A.", category: "Electrodomésticos", email: "aprobaciones@samsung.com.co", phone: "+57 601 5953000", active: true },
   { id: "900654321", name: "LG Electronics", category: "Tecnología", email: "descuentos@lg.com.co", phone: "+57 601 4327100", active: true },
   { id: "900789012", name: "Whirlpool Andina", category: "Línea Blanca", email: "comercial@whirlpool.com.co", phone: "+57 601 6512200", active: true },
+];
+
+const categoryApprovers = [
+  { approver: "María González", identification: "52123456", groupCode: "GRP-01", direction: "Electrodomésticos", divisionCode: "DIV-10", line: "Refrigeración", categoryName: "Neveras", familyName: "Neveras Samsung", active: true },
+  { approver: "Pedro Martínez", identification: "79123456", groupCode: "GRP-02", direction: "Tecnología", divisionCode: "DIV-20", line: "Televisores", categoryName: "Televisores premium", familyName: "LG OLED", active: true },
+  { approver: "María González", identification: "52123456", groupCode: "GRP-01", direction: "Electrodomésticos", divisionCode: "DIV-10", line: "Lavado", categoryName: "Lavadoras automáticas", familyName: "Lavadoras Samsung", active: true },
+  { approver: "María González", identification: "52123456", groupCode: "GRP-02", direction: "Tecnología", divisionCode: "DIV-21", line: "Tablets", categoryName: "Tablets", familyName: "Samsung Galaxy Tab", active: true },
+  { approver: "Pedro Martínez", identification: "79123456", groupCode: "GRP-02", direction: "Tecnología", divisionCode: "DIV-21", line: "Tablets", categoryName: "Tablets", familyName: "Samsung Galaxy Tab", active: true },
 ];
 
 function StatusBadge({ active, status }: { active: boolean; status?: "Activo" | "Inactivo" | "Pendiente" }) {
@@ -590,6 +598,88 @@ function ApproverDetailDialog({ approver, onClose }: { approver: Approver | null
   );
 }
 
+function CategoryApproversCard() {
+  const [query, setQuery] = useState("");
+  const q = query.trim().toLowerCase();
+  const rows = q
+    ? categoryApprovers.filter((r) =>
+        [r.approver, r.identification, r.groupCode, r.categoryName, r.familyName, r.line]
+          .some((v) => v.toLowerCase().includes(q))
+      )
+    : categoryApprovers;
+
+  return (
+    <SectionCard
+      title="Aprobadores por categorías de artículos"
+      subtitle="Asignación de aprobadores internos según el árbol de categorías del producto (HU_002)"
+      action={
+        <PrimaryButton>
+          <Plus className="h-4 w-4" /> Nueva configuración
+        </PrimaryButton>
+      }
+    >
+      <div className="p-5 pb-0">
+        <div className="relative max-w-md">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <input
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Buscar por aprobador, código o nombre de categoría…"
+            className="w-full rounded-lg border border-border bg-background pl-9 pr-3 py-2 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring/30"
+          />
+        </div>
+      </div>
+      <div className="overflow-x-auto p-5 pt-4">
+        <table className="w-full text-sm">
+          <thead>
+            <tr className="text-left text-[11px] uppercase tracking-wider text-muted-foreground">
+              <th className="font-medium px-3 py-3">Aprobador</th>
+              <th className="font-medium px-3 py-3">Identificación</th>
+              <th className="font-medium px-3 py-3">Código Grupo</th>
+              <th className="font-medium px-3 py-3">Dirección</th>
+              <th className="font-medium px-3 py-3">Código de División</th>
+              <th className="font-medium px-3 py-3">Línea</th>
+              <th className="font-medium px-3 py-3">Nombre de la Categoría</th>
+              <th className="font-medium px-3 py-3">Nombre de la Familia</th>
+              <th className="font-medium px-3 py-3">Estado</th>
+              <th className="font-medium px-3 py-3 text-right">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map((r, i) => (
+              <tr key={i} className="border-t border-border hover:bg-muted/40">
+                <td className="px-3 py-3.5 font-medium">{r.approver}</td>
+                <td className="px-3 py-3.5 text-muted-foreground tabular-nums">{r.identification}</td>
+                <td className="px-3 py-3.5">{r.groupCode}</td>
+                <td className="px-3 py-3.5">{r.direction}</td>
+                <td className="px-3 py-3.5 tabular-nums">{r.divisionCode}</td>
+                <td className="px-3 py-3.5">{r.line}</td>
+                <td className="px-3 py-3.5">{r.categoryName}</td>
+                <td className="px-3 py-3.5">{r.familyName}</td>
+                <td className="px-3 py-3.5"><StatusBadge active={r.active} /></td>
+                <td className="px-3 py-3.5">
+                  <div className="flex justify-end gap-1">
+                    <button className="rounded-md p-1.5 hover:bg-accent" aria-label="Ver"><Eye className="h-4 w-4" /></button>
+                    <button className="rounded-md p-1.5 hover:bg-accent" aria-label="Editar"><Pencil className="h-4 w-4" /></button>
+                    <button className="rounded-md p-1.5 text-destructive hover:bg-destructive/10" aria-label="Eliminar"><Trash2 className="h-4 w-4" /></button>
+                  </div>
+                </td>
+              </tr>
+            ))}
+            {rows.length === 0 && (
+              <tr>
+                <td colSpan={10} className="px-3 py-8 text-center text-sm text-muted-foreground">
+                  Sin resultados para "{query}"
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
+    </SectionCard>
+  );
+}
+
 function ApprovalsPage() {
   const [tab, setTab] = useState<TabKey>("aprobadores");
   const [selected, setSelected] = useState<Approver | null>(null);
@@ -623,6 +713,7 @@ function ApprovalsPage() {
       </div>
 
       {tab === "aprobadores" && (
+        <>
         <SectionCard
           title="Aprobadores internos"
           subtitle="Configuración por dirección y división"
@@ -670,6 +761,8 @@ function ApprovalsPage() {
             </table>
           </div>
         </SectionCard>
+        <CategoryApproversCard />
+        </>
       )}
 
       {tab === "sustitutos" && (
