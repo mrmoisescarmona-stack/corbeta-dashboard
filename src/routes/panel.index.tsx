@@ -28,6 +28,9 @@ import {
 } from "lucide-react";
 import { DashboardOverviewSkeleton } from "@/components/dashboard/skeleton";
 import { useAuth, getUserDisplayName } from "@/hooks/use-auth";
+import { EvidenceAttachments, type EvidenceFile } from "@/components/evidence-attachments";
+import { toast } from "sonner";
+
 
 
 export const Route = createFileRoute("/panel/")({
@@ -237,6 +240,26 @@ function GestionModal({
   const [justif, setJustif] = useState("");
   const [tipoDesc, setTipoDesc] = useState("Visible");
   const [tipoExcl, setTipoExcl] = useState("No mutuamente excluyente");
+  const [files, setFiles] = useState<EvidenceFile[]>([]);
+
+  const handleAddFiles = (fl: File[]) => {
+    const now = new Date();
+    const stamp = `${now.toLocaleDateString("es-CO")} ${now.toLocaleTimeString("es-CO", { hour: "2-digit", minute: "2-digit" })}`;
+    setFiles((prev) => [
+      ...prev,
+      ...fl.map((f) => ({
+        name: f.name,
+        size: f.size > 1024 * 1024 ? `${(f.size / 1024 / 1024).toFixed(1)} MB` : `${Math.round(f.size / 1024)} KB`,
+        by: "Usuario actual",
+        date: stamp,
+        status: "Pendiente" as const,
+      })),
+    ]);
+    toast.success(
+      fl.length === 1 ? `Archivo adjuntado: ${fl[0].name}` : `${fl.length} archivos adjuntados correctamente`
+    );
+  };
+
 
   const canConfirm = decision !== null && justif.trim().length > 0;
 
@@ -376,6 +399,16 @@ function GestionModal({
             </div>
           </div>
         </div>
+
+        <div className="px-5 pb-5">
+          <EvidenceAttachments
+            files={files}
+            onAdd={handleAddFiles}
+            onRemove={(i) => setFiles((prev) => prev.filter((_, idx) => idx !== i))}
+          />
+        </div>
+
+
 
         <div className="border-t border-border p-5 space-y-3">
           <div className="flex flex-col sm:flex-row gap-2">
