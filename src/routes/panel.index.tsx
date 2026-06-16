@@ -27,6 +27,8 @@ import {
   X,
 } from "lucide-react";
 import { DashboardOverviewSkeleton } from "@/components/dashboard/skeleton";
+import { useAuth, getUserDisplayName } from "@/hooks/use-auth";
+
 
 export const Route = createFileRoute("/panel/")({
   head: () => ({
