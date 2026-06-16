@@ -47,17 +47,23 @@ const sections = [
 ];
 
 function PasswordSection() {
+  const [currentPassword, setCurrentPassword] = useState("");
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
   const [loading, setLoading] = useState(false);
 
   const reset = () => {
+    setCurrentPassword("");
     setPassword("");
     setConfirm("");
   };
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!currentPassword) {
+      toast.error("Ingresa tu contraseña actual.");
+      return;
+    }
     if (password.length < 8) {
       toast.error("La contraseña debe tener al menos 8 caracteres.");
       return;
@@ -66,7 +72,27 @@ function PasswordSection() {
       toast.error("Las contraseñas no coinciden.");
       return;
     }
+    if (password === currentPassword) {
+      toast.error("La nueva contraseña debe ser distinta a la actual.");
+      return;
+    }
     setLoading(true);
+    const { data: userData } = await supabase.auth.getUser();
+    const email = userData.user?.email;
+    if (!email) {
+      setLoading(false);
+      toast.error("No se pudo verificar la sesión.");
+      return;
+    }
+    const { error: signInError } = await supabase.auth.signInWithPassword({
+      email,
+      password: currentPassword,
+    });
+    if (signInError) {
+      setLoading(false);
+      toast.error("La contraseña actual es incorrecta.");
+      return;
+    }
     const { error } = await supabase.auth.updateUser({ password });
     setLoading(false);
     if (error) {
@@ -82,10 +108,21 @@ function PasswordSection() {
       <div>
         <h3 className="text-base font-semibold">Cambiar contraseña</h3>
         <p className="mt-1 text-sm text-muted-foreground">
-          Actualiza la contraseña asociada a tu cuenta. Debes ingresarla dos veces para confirmar.
+          Confirma tu contraseña actual y luego ingresa la nueva dos veces.
         </p>
       </div>
       <form onSubmit={onSubmit} className="space-y-5">
+        <div className="space-y-1.5">
+          <label className="text-xs font-medium text-muted-foreground">Contraseña actual</label>
+          <input
+            type="password"
+            value={currentPassword}
+            onChange={(e) => setCurrentPassword(e.target.value)}
+            autoComplete="current-password"
+            required
+            className="w-full rounded-lg border border-input bg-background px-3 py-2 text-sm md:max-w-[calc(50%-0.5rem)]"
+          />
+        </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="space-y-1.5">
             <label className="text-xs font-medium text-muted-foreground">Nueva contraseña</label>
@@ -133,6 +170,7 @@ function PasswordSection() {
     </section>
   );
 }
+
 
 function SettingsPage() {
   if (useFakeLoading()) return <SettingsSkeleton />;
