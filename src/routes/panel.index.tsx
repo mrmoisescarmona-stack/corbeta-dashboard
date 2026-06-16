@@ -406,7 +406,11 @@ function GestionModal({
 }
 
 function DashboardOverview() {
+  const auth = useAuth();
+  const displayName = getUserDisplayName(auth.user);
+  const firstName = displayName.split(" ")[0] ?? displayName;
   const [loading, setLoading] = useState(true);
+
   const [donutMode, setDonutMode] = useState<"count" | "value">("count");
   const [processed, setProcessed] = useState<Set<string>>(new Set());
   const [gestion, setGestion] = useState<OverdueItem | null>(null);
