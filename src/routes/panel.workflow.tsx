@@ -684,7 +684,24 @@ function ApprovalsPage() {
   const [tab, setTab] = useState<TabKey>("aprobadores");
   const [selected, setSelected] = useState<Approver | null>(null);
   const [newApproverOpen, setNewApproverOpen] = useState(false);
+  const [list, setList] = useState<Approver[]>(approvers);
+  const [editing, setEditing] = useState<Approver | null>(null);
+  const [deleting, setDeleting] = useState<Approver | null>(null);
   if (useFakeLoading()) return <ApprovalsSkeleton />;
+
+  const confirmDelete = () => {
+    if (!deleting) return;
+    setList((prev) => prev.filter((a) => a.id !== deleting.id));
+    toast.success(`Aprobador "${deleting.name}" eliminado`);
+    setDeleting(null);
+  };
+
+  const saveEdit = (updated: Approver) => {
+    setList((prev) => prev.map((a) => (a.id === editing?.id ? updated : a)));
+    toast.success("Aprobador actualizado");
+    setEditing(null);
+  };
+
 
   return (
     <div className="space-y-6 animate-fade-in">
