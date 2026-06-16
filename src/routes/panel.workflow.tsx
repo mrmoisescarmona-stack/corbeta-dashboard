@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { toast } from "sonner";
 import { Plus, Pencil, Trash2, ArrowLeftRight, Check, X, Ban, UploadCloud, Mail, Phone, Eye, Download, Search } from "lucide-react";
 import { ApprovalsSkeleton } from "@/components/dashboard/skeleton";
@@ -236,6 +236,141 @@ function NewApproverDialog({ open, onClose }: { open: boolean; onClose: () => vo
     </Dialog>
   );
 }
+
+function EditApproverDialog({
+  approver,
+  onClose,
+  onSave,
+}: {
+  approver: Approver | null;
+  onClose: () => void;
+  onSave: (updated: Approver) => void;
+}) {
+  const [form, setForm] = useState({
+    name: "",
+    id: "",
+    email: "",
+    direction: "",
+    division: "",
+    active: true,
+  });
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  useEffect(() => {
+    if (approver) {
+      setForm({
+        name: approver.name,
+        id: approver.id,
+        email: approver.email,
+        direction: approver.direction,
+        division: approver.division,
+        active: approver.active,
+      });
+      setErrors({});
+    }
+  }, [approver]);
+
+  const submit = () => {
+    if (!approver) return;
+    const e: Record<string, string> = {};
+    if (!form.name.trim()) e.name = "Requerido";
+    if (!form.id.trim()) e.id = "Requerido";
+    if (!form.email.trim()) e.email = "Requerido";
+    else if (!emailRegex.test(form.email.trim())) e.email = "Email inválido";
+    if (!form.direction.trim()) e.direction = "Requerido";
+    if (!form.division.trim()) e.division = "Requerido";
+    setErrors(e);
+    if (Object.keys(e).length) return;
+    onSave({
+      ...approver,
+      name: form.name.trim(),
+      id: form.id.trim(),
+      email: form.email.trim(),
+      direction: form.direction.trim(),
+      division: form.division.trim(),
+      active: form.active,
+      status: form.active ? "Activo" : "Inactivo",
+    });
+  };
+
+  const field = (key: "name" | "id" | "email" | "direction" | "division", label: string, type = "text") => (
+    <div>
+      <label className="block text-sm font-medium mb-1.5">
+        {label} <span className="text-destructive">*</span>
+      </label>
+      <input
+        type={type}
+        value={form[key]}
+        onChange={(ev) => setForm({ ...form, [key]: ev.target.value })}
+        className={`w-full rounded-md border px-3 py-2 text-sm bg-background ${errors[key] ? "border-destructive" : "border-border"}`}
+        maxLength={key === "email" ? 255 : 100}
+      />
+      {errors[key] && <p className="mt-1 text-xs text-destructive">{errors[key]}</p>}
+    </div>
+  );
+
+  return (
+    <Dialog open={!!approver} onOpenChange={(o) => !o && onClose()}>
+      <DialogContent className="max-w-md">
+        <DialogHeader>
+          <DialogTitle>Editar aprobador</DialogTitle>
+          <DialogDescription>Actualice la información del aprobador.</DialogDescription>
+        </DialogHeader>
+        <div className="space-y-4 py-2">
+          {field("name", "Nombre")}
+          {field("id", "Identificación")}
+          {field("email", "Email", "email")}
+          {field("direction", "Dirección")}
+          {field("division", "División")}
+          <label className="flex items-center gap-2 text-sm">
+            <input
+              type="checkbox"
+              checked={form.active}
+              onChange={(ev) => setForm({ ...form, active: ev.target.checked })}
+              className="h-4 w-4 rounded border-border"
+            />
+            Activo
+          </label>
+        </div>
+        <div className="flex justify-end gap-2 pt-2">
+          <button onClick={onClose} className="rounded-md border border-border px-4 py-2 text-sm hover:bg-accent">Cancelar</button>
+          <button onClick={submit} className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:opacity-90">Guardar cambios</button>
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+function DeleteApproverDialog({
+  approver,
+  onClose,
+  onConfirm,
+}: {
+  approver: Approver | null;
+  onClose: () => void;
+  onConfirm: () => void;
+}) {
+  return (
+    <Dialog open={!!approver} onOpenChange={(o) => !o && onClose()}>
+      <DialogContent className="max-w-sm">
+        <DialogHeader>
+          <DialogTitle>Eliminar aprobador</DialogTitle>
+          <DialogDescription>
+            ¿Está seguro que desea eliminar a{" "}
+            <span className="font-medium text-foreground">{approver?.name}</span>? Esta acción no se puede deshacer.
+          </DialogDescription>
+        </DialogHeader>
+        <div className="flex justify-end gap-2 pt-2">
+          <button onClick={onClose} className="rounded-md border border-border px-4 py-2 text-sm hover:bg-accent">Cancelar</button>
+          <button onClick={onConfirm} className="rounded-md bg-destructive px-4 py-2 text-sm font-medium text-destructive-foreground hover:opacity-90">Eliminar</button>
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+
 
 function InfoCard({ title, rows }: { title: string; rows: { label: string; value: string }[] }) {
   return (
@@ -684,7 +819,24 @@ function ApprovalsPage() {
   const [tab, setTab] = useState<TabKey>("aprobadores");
   const [selected, setSelected] = useState<Approver | null>(null);
   const [newApproverOpen, setNewApproverOpen] = useState(false);
+  const [list, setList] = useState<Approver[]>(approvers);
+  const [editing, setEditing] = useState<Approver | null>(null);
+  const [deleting, setDeleting] = useState<Approver | null>(null);
   if (useFakeLoading()) return <ApprovalsSkeleton />;
+
+  const confirmDelete = () => {
+    if (!deleting) return;
+    setList((prev) => prev.filter((a) => a.id !== deleting.id));
+    toast.success(`Aprobador "${deleting.name}" eliminado`);
+    setDeleting(null);
+  };
+
+  const saveEdit = (updated: Approver) => {
+    setList((prev) => prev.map((a) => (a.id === editing?.id ? updated : a)));
+    toast.success("Aprobador actualizado");
+    setEditing(null);
+  };
+
 
   return (
     <div className="space-y-6 animate-fade-in">
@@ -736,7 +888,7 @@ function ApprovalsPage() {
                 </tr>
               </thead>
               <tbody>
-                {approvers.map((a) => (
+                {list.map((a) => (
                   <tr key={a.id} className="border-t border-border hover:bg-muted/40">
                     <td className="px-5 py-3.5 font-medium">{a.name}</td>
                     <td className="px-3 py-3.5 text-muted-foreground tabular-nums">{a.id}</td>
@@ -748,15 +900,32 @@ function ApprovalsPage() {
                         <button
                           onClick={() => setSelected(a)}
                           className="rounded-md p-1.5 hover:bg-accent"
+                          aria-label="Ver detalles"
+                          title="Ver detalles"
+                        >
+                          <Eye className="h-4 w-4" />
+                        </button>
+                        <button
+                          onClick={() => setEditing(a)}
+                          className="rounded-md p-1.5 hover:bg-accent"
                           aria-label="Editar"
+                          title="Editar"
                         >
                           <Pencil className="h-4 w-4" />
                         </button>
-                        <button className="rounded-md p-1.5 text-destructive hover:bg-destructive/10" aria-label="Eliminar"><Trash2 className="h-4 w-4" /></button>
+                        <button
+                          onClick={() => setDeleting(a)}
+                          className="rounded-md p-1.5 text-destructive hover:bg-destructive/10"
+                          aria-label="Eliminar"
+                          title="Eliminar"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </button>
                       </div>
                     </td>
                   </tr>
                 ))}
+
               </tbody>
             </table>
           </div>
@@ -877,6 +1046,8 @@ function ApprovalsPage() {
 
       <ApproverDetailDialog approver={selected} onClose={() => setSelected(null)} />
       <NewApproverDialog open={newApproverOpen} onClose={() => setNewApproverOpen(false)} />
+      <EditApproverDialog approver={editing} onClose={() => setEditing(null)} onSave={saveEdit} />
+      <DeleteApproverDialog approver={deleting} onClose={() => setDeleting(null)} onConfirm={confirmDelete} />
     </div>
   );
 }
