@@ -154,8 +154,8 @@ function SettingsPage() {
 
         <div className="space-y-6">
           {sections.map((s, idx) => (
-            <>
-              <section key={s.title} className="rounded-xl border border-border bg-card p-6 space-y-5">
+            <div key={s.title} className="space-y-6">
+              <section className="rounded-xl border border-border bg-card p-6 space-y-5">
                 <div>
                   <h3 className="text-base font-semibold">{s.title}</h3>
                   <p className="mt-1 text-sm text-muted-foreground">{s.description}</p>
@@ -173,8 +173,8 @@ function SettingsPage() {
                   <button className="rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:opacity-90">Guardar cambios</button>
                 </div>
               </section>
-              {idx === 0 && <PasswordSection key="password-section" />}
-            </>
+              {idx === 0 && <PasswordSection />}
+            </div>
           ))}
         </div>
       </div>
