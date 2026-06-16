@@ -19,6 +19,7 @@ import {
   FileText,
   History,
   ShieldAlert,
+  Workflow as WorkflowIcon,
 } from "lucide-react";
 import logoAsset from "@/assets/logo_corbeta.png.asset.json";
 import { supabase } from "@/integrations/supabase/client";
@@ -48,7 +49,7 @@ const navGroups: NavGroup[] = [
       { icon: Inbox, label: "Solicitudes", to: "/panel/solicitudes", roles: ["supervisor", "administrador"] },
       { icon: FileText, label: "Mis Solicitudes", to: "/panel/mis-solicitudes", roles: ["aprobador", "proveedor"] },
       { icon: History, label: "Historial", to: "/panel/historial", roles: ["proveedor"] },
-      { icon: Inbox, label: "Workflow", to: "/panel/workflow", roles: ["supervisor", "administrador"] },
+      { icon: WorkflowIcon, label: "Workflow", to: "/panel/workflow", roles: ["supervisor", "administrador"] },
       { icon: BarChart3, label: "Reportes", to: "/panel/reportes", roles: ["supervisor", "aprobador", "administrador"] },
     ],
   },
