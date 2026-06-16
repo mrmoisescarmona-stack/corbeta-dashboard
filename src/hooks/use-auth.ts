@@ -22,8 +22,47 @@ export function getRoleLabel(role: AppRole | null): string {
   return role ? ROLE_LABEL[role] : "Sin rol";
 }
 
+interface UserProfile {
+  name: string;
+  position: string;
+  email: string;
+  company?: string;
+}
+
+// Perfiles de usuarios de prueba (mapeados por correo de login)
+const USER_PROFILES: Record<string, UserProfile> = {
+  "supervisor@corbeta.com.co": {
+    name: "Carlos Andrés Gómez",
+    position: "Supervisor de Aprobaciones",
+    email: "carlos.gomez@corbeta.com.co",
+  },
+  "aprobador@corbeta.com.co": {
+    name: "Juan Sebastián Rodríguez",
+    position: "Analista de Aprobaciones Comerciales",
+    email: "juan.rodriguez@corbeta.com.co",
+  },
+  "proveedor@corbeta.com.co": {
+    name: "María Fernanda Restrepo",
+    position: "Ejecutiva Comercial de Proveedor",
+    email: "maria.restrepo@alimentosandinos.com.co",
+    company: "Alimentos Andinos S.A.",
+  },
+  "admin@corbeta.com.co": {
+    name: "Andrés Felipe Ramírez",
+    position: "Administrador del Sistema",
+    email: "andres.ramirez@corbeta.com.co",
+  },
+};
+
+export function getUserProfile(user: User | null): UserProfile | null {
+  if (!user?.email) return null;
+  return USER_PROFILES[user.email.toLowerCase()] ?? null;
+}
+
 export function getUserDisplayName(user: User | null): string {
   if (!user) return "Invitado";
+  const profile = getUserProfile(user);
+  if (profile) return profile.name;
   const meta = (user.user_metadata ?? {}) as Record<string, unknown>;
   const name = (meta.full_name as string) || (meta.name as string);
   if (name) return name;
@@ -38,6 +77,17 @@ export function getUserDisplayName(user: User | null): string {
     .join(" ");
 }
 
+export function getUserEmail(user: User | null): string {
+  const profile = getUserProfile(user);
+  return profile?.email ?? user?.email ?? "";
+}
+
+export function getUserPosition(user: User | null, role: AppRole | null): string {
+  const profile = getUserProfile(user);
+  if (profile) return profile.position;
+  return getRoleLabel(role);
+}
+
 export function getUserInitials(user: User | null): string {
   const name = getUserDisplayName(user);
   return name
@@ -46,6 +96,7 @@ export function getUserInitials(user: User | null): string {
     .map((w) => w.charAt(0).toUpperCase())
     .join("");
 }
+
 
 export function useAuth(): AuthState & {
   hasRole: (r: AppRole) => boolean;
