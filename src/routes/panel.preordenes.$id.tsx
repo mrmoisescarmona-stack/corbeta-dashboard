@@ -181,7 +181,7 @@ function RequestDetailPage() {
             }}
             className="mb-2 inline-flex items-center gap-1.5 text-xs font-medium text-muted-foreground hover:text-foreground"
           >
-            <ArrowLeft className="h-3.5 w-3.5" /> Volver a {from === "reportes" ? "Reportes" : from === "panel" ? "Panel" : "Preórdenes"}
+            <ArrowLeft className="h-3.5 w-3.5" /> Volver a {from === "reportes" ? "Reportes" : from === "panel" ? "Dashboard" : "Solicitudes"}
           </button>
           <h2 className="mt-2 text-2xl md:text-3xl font-semibold tracking-tight">Preorden {id}</h2>
           <p className="mt-1 text-sm text-muted-foreground">
