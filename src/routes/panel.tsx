@@ -26,6 +26,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { useAuth, getRoleLabel, getUserDisplayName, getUserEmail, getUserInitials, type AppRole } from "@/hooks/use-auth";
 import { canAccessRoute } from "@/lib/rbac";
+import { ThemeToggle } from "@/components/theme-toggle";
+
 
 export const Route = createFileRoute("/panel")({
   ssr: false,
@@ -134,10 +136,14 @@ function DashboardLayout() {
               </div>
             ))}
           </nav>
-          <div className="px-6 py-4 border-t border-sidebar-border">
-            <div className="text-xs font-medium text-foreground">Corbeta S.A.</div>
-            <div className="text-[11px] text-muted-foreground">Versión 1.0.0</div>
+          <div className="px-4 py-4 border-t border-sidebar-border space-y-3">
+            <ThemeToggle />
+            <div>
+              <div className="text-xs font-medium text-foreground">Corbeta S.A.</div>
+              <div className="text-[11px] text-muted-foreground">Versión 1.0.0</div>
+            </div>
           </div>
+
         </aside>
 
         <div className="flex-1 min-w-0">
