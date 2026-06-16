@@ -631,6 +631,7 @@ function ApprovalsPage() {
       </div>
 
       {tab === "aprobadores" && (
+        <>
         <SectionCard
           title="Aprobadores internos"
           subtitle="Configuración por dirección y división"
@@ -678,6 +679,8 @@ function ApprovalsPage() {
             </table>
           </div>
         </SectionCard>
+        <CategoryApproversCard />
+        </>
       )}
 
       {tab === "sustitutos" && (
