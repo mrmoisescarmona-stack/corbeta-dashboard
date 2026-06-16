@@ -15,7 +15,7 @@ import {
   Building2,
   Headphones,
   Users,
-  Repeat,
+  
   FileText,
   
   ShieldAlert,
