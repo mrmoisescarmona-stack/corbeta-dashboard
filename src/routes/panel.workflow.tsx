@@ -141,7 +141,9 @@ const approvers: Approver[] = [
   },
 ];
 
-const substitutes = [
+type Substitute = { approver: string; substitute: string; start: string; end: string };
+
+const substitutes: Substitute[] = [
   { approver: "Laura Sánchez", substitute: "María González", start: "2026-06-01", end: "2026-06-30" },
 ];
 
