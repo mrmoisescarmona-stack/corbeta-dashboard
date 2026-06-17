@@ -95,10 +95,23 @@ function RequestDetailPage() {
     }
     return initialLines;
   });
-  const [trace, setTrace] = useState<TraceEntry[]>([
-    { at: "28/05/2026 09:12", who: "CorbeMóvil", action: "Preorden recibida" },
-    { at: "28/05/2026 09:12", who: "Sistema", action: "Asignada a Moises Carmona" },
-  ]);
+  const [trace, setTrace] = useState<TraceEntry[]>(() => {
+    const base: TraceEntry[] = [
+      { at: "28/05/2026 09:12", who: "CorbeMóvil", action: "Preorden recibida" },
+      { at: "28/05/2026 09:12", who: "Sistema", action: "Asignada a Moises Carmona" },
+    ];
+    if (status === "Rechazada") {
+      base.push(
+        {
+          at: "28/05/2026 09:18",
+          who: "Sistema",
+          action: "Rechazada por regla de negocio",
+          detail: "El % asumido por Corbeta (0%) y el % asumido por proveedor (0%) no superan el mínimo permitido (≥ 1%). La preorden queda en estado solo lectura.",
+        },
+      );
+    }
+    return base;
+  });
   const [modal, setModal] = useState<{ kind: "modify" | "reject" | "cancel"; idx: number } | null>(null);
   const [fileError, setFileError] = useState<string | null>(null);
   const [dragOver, setDragOver] = useState(false);
@@ -222,6 +235,35 @@ function RequestDetailPage() {
           <div><span className="text-foreground/70 font-medium">Catálogo:</span> Lubricantes 2026</div>
         </div>
       </section>
+
+      {status === "Rechazada" && (
+        <section className="rounded-xl border border-destructive/30 bg-destructive/5 p-5">
+          <div className="flex gap-3">
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-destructive/10 text-destructive">
+              <AlertCircle className="h-5 w-5" />
+            </div>
+            <div className="space-y-2">
+              <div className="flex flex-wrap items-center gap-2">
+                <h3 className="text-sm font-semibold text-destructive">Preorden rechazada por regla de negocio</h3>
+                <span className="inline-flex items-center rounded-full bg-destructive/10 px-2 py-0.5 text-[11px] font-medium text-destructive ring-1 ring-inset ring-destructive/20">
+                  Solo lectura
+                </span>
+              </div>
+              <p className="text-sm text-foreground/80">
+                El % asumido por <span className="font-medium">Corbeta (0%)</span> y el % asumido por
+                <span className="font-medium"> proveedor (0%)</span> no superan el mínimo permitido
+                <span className="font-medium"> (≥ 1%)</span>. Por esta razón el sistema rechazó la preorden
+                automáticamente y no se puede aprobar, modificar ni reenviar.
+              </p>
+              <ul className="mt-1 space-y-1 text-xs text-muted-foreground">
+                <li>• Las acciones de gestión sobre las líneas están deshabilitadas.</li>
+                <li>• Para procesar el descuento, el vendedor debe crear una nueva preorden con porcentajes válidos.</li>
+                <li>• Consulta la trazabilidad al final de la página para ver el detalle del rechazo.</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Stats */}
       <section className="grid grid-cols-2 md:grid-cols-3 gap-4">
