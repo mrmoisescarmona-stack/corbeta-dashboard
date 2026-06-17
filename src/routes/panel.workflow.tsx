@@ -27,6 +27,51 @@ const TABS: { key: TabKey; label: string }[] = [
   { key: "reasignacion", label: "Reasignación" },
 ];
 
+const DIRECTION_DIVISIONS: Record<string, string[]> = {
+  "Electrodomésticos": ["Línea Blanca", "Línea Marrón", "Pequeños Electrodomésticos"],
+  "Tecnología": ["Computación", "Audio y Video", "Cómputo móvil", "Telefonía"],
+  "Hogar": ["Muebles", "Decoración", "Cocina"],
+};
+const DIRECTIONS = Object.keys(DIRECTION_DIVISIONS);
+
+function SelectField({
+  label,
+  value,
+  onChange,
+  options,
+  error,
+  disabled,
+  placeholder = "Seleccionar…",
+}: {
+  label: string;
+  value: string;
+  onChange: (v: string) => void;
+  options: string[];
+  error?: string;
+  disabled?: boolean;
+  placeholder?: string;
+}) {
+  return (
+    <div>
+      <label className="block text-sm font-medium mb-1.5">
+        {label} <span className="text-destructive">*</span>
+      </label>
+      <select
+        value={value}
+        onChange={(ev) => onChange(ev.target.value)}
+        disabled={disabled}
+        className={`w-full rounded-md border px-3 py-2 text-sm bg-background ${error ? "border-destructive" : "border-border"} ${disabled ? "opacity-60 cursor-not-allowed" : ""}`}
+      >
+        <option value="">{placeholder}</option>
+        {options.map((o) => (
+          <option key={o} value={o}>{o}</option>
+        ))}
+      </select>
+      {error && <p className="mt-1 text-xs text-destructive">{error}</p>}
+    </div>
+  );
+}
+
 type Approver = {
   name: string;
   id: string;
@@ -246,8 +291,22 @@ function NewApproverDialog({ open, onClose }: { open: boolean; onClose: () => vo
           {field("name", "Nombre")}
           {field("id", "Identificación")}
           {field("email", "Email", "email")}
-          {field("direction", "Dirección")}
-          {field("division", "División")}
+          <SelectField
+            label="Dirección"
+            value={form.direction}
+            onChange={(v) => setForm({ ...form, direction: v, division: "" })}
+            options={DIRECTIONS}
+            error={errors.direction}
+          />
+          <SelectField
+            label="División"
+            value={form.division}
+            onChange={(v) => setForm({ ...form, division: v })}
+            options={form.direction ? DIRECTION_DIVISIONS[form.direction] ?? [] : []}
+            error={errors.division}
+            disabled={!form.direction}
+            placeholder={form.direction ? "Seleccionar…" : "Seleccione una dirección primero"}
+          />
         </div>
         <div className="flex justify-end gap-2 pt-2">
           <button onClick={onClose} className="rounded-md border border-border px-4 py-2 text-sm hover:bg-accent">Cancelar</button>
@@ -342,8 +401,22 @@ function EditApproverDialog({
           {field("name", "Nombre")}
           {field("id", "Identificación")}
           {field("email", "Email", "email")}
-          {field("direction", "Dirección")}
-          {field("division", "División")}
+          <SelectField
+            label="Dirección"
+            value={form.direction}
+            onChange={(v) => setForm({ ...form, direction: v, division: "" })}
+            options={DIRECTIONS}
+            error={errors.direction}
+          />
+          <SelectField
+            label="División"
+            value={form.division}
+            onChange={(v) => setForm({ ...form, division: v })}
+            options={form.direction ? DIRECTION_DIVISIONS[form.direction] ?? [] : []}
+            error={errors.division}
+            disabled={!form.direction}
+            placeholder={form.direction ? "Seleccionar…" : "Seleccione una dirección primero"}
+          />
           <label className="flex items-center gap-2 text-sm">
             <input
               type="checkbox"
