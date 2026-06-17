@@ -90,7 +90,6 @@ function RequestDetailPage() {
         pctProveedor: 0,
         requiresMyAction: false,
         status: "Rechazada" as LineStatus,
-        reason: "Preorden rechazada",
       }));
     }
     return initialLines;
