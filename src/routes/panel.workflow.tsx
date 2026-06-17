@@ -1577,11 +1577,56 @@ function ApprovalsPage() {
         open={newProviderOpen}
         onClose={() => setNewProviderOpen(false)}
         onSave={(p) => {
+          if (providerList.some((x) => x.id === p.id)) {
+            toast.error(`Ya existe un proveedor con identificación ${p.id}`);
+            return;
+          }
           setProviderList((prev) => [...prev, p]);
           toast.success(`Proveedor "${p.name}" agregado`);
           setNewProviderOpen(false);
         }}
       />
+      <NewProviderDialog
+        open={!!editingProvider}
+        initial={editingProvider}
+        onClose={() => setEditingProvider(null)}
+        onSave={(p) => {
+          if (!editingProvider) return;
+          setProviderList((prev) => prev.map((x) => (x.id === editingProvider.id ? p : x)));
+          toast.success(`Proveedor "${p.name}" actualizado`);
+          setEditingProvider(null);
+        }}
+      />
+      <Dialog open={!!deletingProvider} onOpenChange={(o) => !o && setDeletingProvider(null)}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Eliminar proveedor</DialogTitle>
+            <DialogDescription>
+              {deletingProvider && `¿Eliminar al proveedor "${deletingProvider.name}"? Esta acción no se puede deshacer.`}
+            </DialogDescription>
+          </DialogHeader>
+          <div className="flex justify-end gap-2 pt-4">
+            <button
+              onClick={() => setDeletingProvider(null)}
+              className="rounded-md border border-border bg-background px-3.5 py-2 text-sm hover:bg-accent"
+            >
+              Cancelar
+            </button>
+            <button
+              onClick={() => {
+                if (!deletingProvider) return;
+                setProviderList((prev) => prev.filter((p) => p.id !== deletingProvider.id));
+                toast.success(`Proveedor "${deletingProvider.name}" eliminado`);
+                setDeletingProvider(null);
+              }}
+              className="rounded-md bg-destructive px-3.5 py-2 text-sm font-medium text-destructive-foreground hover:opacity-90"
+            >
+              Eliminar
+            </button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
       <ProviderPreviewDialog
         provider={previewProvider}
         onClose={() => setPreviewProvider(null)}
