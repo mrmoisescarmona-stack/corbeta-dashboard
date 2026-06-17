@@ -95,10 +95,23 @@ function RequestDetailPage() {
     }
     return initialLines;
   });
-  const [trace, setTrace] = useState<TraceEntry[]>([
-    { at: "28/05/2026 09:12", who: "CorbeMóvil", action: "Preorden recibida" },
-    { at: "28/05/2026 09:12", who: "Sistema", action: "Asignada a Moises Carmona" },
-  ]);
+  const [trace, setTrace] = useState<TraceEntry[]>(() => {
+    const base: TraceEntry[] = [
+      { at: "28/05/2026 09:12", who: "CorbeMóvil", action: "Preorden recibida" },
+      { at: "28/05/2026 09:12", who: "Sistema", action: "Asignada a Moises Carmona" },
+    ];
+    if (status === "Rechazada") {
+      base.push(
+        {
+          at: "28/05/2026 09:18",
+          who: "Sistema",
+          action: "Rechazada por regla de negocio",
+          detail: "El % asumido por Corbeta (0%) y el % asumido por proveedor (0%) no superan el mínimo permitido (≥ 1%). La preorden queda en estado solo lectura.",
+        },
+      );
+    }
+    return base;
+  });
   const [modal, setModal] = useState<{ kind: "modify" | "reject" | "cancel"; idx: number } | null>(null);
   const [fileError, setFileError] = useState<string | null>(null);
   const [dragOver, setDragOver] = useState(false);
