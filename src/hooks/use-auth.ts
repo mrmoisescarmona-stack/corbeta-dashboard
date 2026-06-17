@@ -27,6 +27,8 @@ interface UserProfile {
   position: string;
   email: string;
   company?: string;
+  role: AppRole;
+  loginEmail: string;
 }
 
 // Perfiles de usuarios de prueba (mapeados por correo de login)
@@ -35,29 +37,57 @@ const USER_PROFILES: Record<string, UserProfile> = {
     name: "Carlos Andrés Gómez",
     position: "Supervisor de Aprobaciones",
     email: "carlos.gomez@corbeta.com.co",
+    role: "supervisor",
+    loginEmail: "supervisor@corbeta.com.co",
   },
   "aprobador@corbeta.com.co": {
     name: "Juan Sebastián Rodríguez",
     position: "Analista de Aprobaciones Comerciales",
     email: "juan.rodriguez@corbeta.com.co",
+    role: "aprobador",
+    loginEmail: "aprobador@corbeta.com.co",
   },
   "proveedor@corbeta.com.co": {
     name: "María Fernanda Restrepo",
     position: "Ejecutiva Comercial de Proveedor",
     email: "maria.restrepo@alimentosandinos.com.co",
     company: "Alimentos Andinos S.A.",
+    role: "proveedor",
+    loginEmail: "proveedor@corbeta.com.co",
   },
   "admin@corbeta.com.co": {
     name: "Andrés Felipe Ramírez",
     position: "Administrador del Sistema",
     email: "andres.ramirez@corbeta.com.co",
+    role: "administrador",
+    loginEmail: "admin@corbeta.com.co",
   },
 };
+
+export function getAllDemoProfiles(): UserProfile[] {
+  return Object.values(USER_PROFILES);
+}
+
+const IMPERSONATION_KEY = "demo.impersonation.loginEmail";
+const IMPERSONATION_EVENT = "auth:impersonation";
+
+export function getImpersonatedLogin(): string | null {
+  if (typeof window === "undefined") return null;
+  return window.localStorage.getItem(IMPERSONATION_KEY);
+}
+
+export function setImpersonatedLogin(loginEmail: string | null) {
+  if (typeof window === "undefined") return;
+  if (loginEmail) window.localStorage.setItem(IMPERSONATION_KEY, loginEmail);
+  else window.localStorage.removeItem(IMPERSONATION_KEY);
+  window.dispatchEvent(new Event(IMPERSONATION_EVENT));
+}
 
 export function getUserProfile(user: User | null): UserProfile | null {
   if (!user?.email) return null;
   return USER_PROFILES[user.email.toLowerCase()] ?? null;
 }
+
 
 export function getUserDisplayName(user: User | null): string {
   if (!user) return "Invitado";
