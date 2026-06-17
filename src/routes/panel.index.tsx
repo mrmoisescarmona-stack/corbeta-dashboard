@@ -387,6 +387,7 @@ function GestionModal({
                 </p>
               </div>
             )}
+          </div>
         </div>
 
         <div className="px-5 pb-5">
