@@ -30,8 +30,7 @@ function NotificationsPage() {
     <div className="space-y-6 animate-fade-in">
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
-          <span className="inline-flex items-center rounded-full bg-success/15 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-foreground ring-1 ring-success/30">Proveedor</span>
-          <h2 className="mt-2 text-2xl md:text-3xl font-semibold tracking-tight">Notificaciones</h2>
+          <h2 className="text-2xl md:text-3xl font-semibold tracking-tight">Notificaciones</h2>
           <p className="mt-1 text-sm text-muted-foreground">Log completo de notificaciones enviadas a proveedores y respuestas recibidas por línea.</p>
         </div>
         <button className="text-sm font-medium text-primary hover:underline">Marcar todas como leídas</button>
