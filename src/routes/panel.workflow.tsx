@@ -27,6 +27,51 @@ const TABS: { key: TabKey; label: string }[] = [
   { key: "reasignacion", label: "Reasignación" },
 ];
 
+const DIRECTION_DIVISIONS: Record<string, string[]> = {
+  "Electrodomésticos": ["Línea Blanca", "Línea Marrón", "Pequeños Electrodomésticos"],
+  "Tecnología": ["Computación", "Audio y Video", "Cómputo móvil", "Telefonía"],
+  "Hogar": ["Muebles", "Decoración", "Cocina"],
+};
+const DIRECTIONS = Object.keys(DIRECTION_DIVISIONS);
+
+function SelectField({
+  label,
+  value,
+  onChange,
+  options,
+  error,
+  disabled,
+  placeholder = "Seleccionar…",
+}: {
+  label: string;
+  value: string;
+  onChange: (v: string) => void;
+  options: string[];
+  error?: string;
+  disabled?: boolean;
+  placeholder?: string;
+}) {
+  return (
+    <div>
+      <label className="block text-sm font-medium mb-1.5">
+        {label} <span className="text-destructive">*</span>
+      </label>
+      <select
+        value={value}
+        onChange={(ev) => onChange(ev.target.value)}
+        disabled={disabled}
+        className={`w-full rounded-md border px-3 py-2 text-sm bg-background ${error ? "border-destructive" : "border-border"} ${disabled ? "opacity-60 cursor-not-allowed" : ""}`}
+      >
+        <option value="">{placeholder}</option>
+        {options.map((o) => (
+          <option key={o} value={o}>{o}</option>
+        ))}
+      </select>
+      {error && <p className="mt-1 text-xs text-destructive">{error}</p>}
+    </div>
+  );
+}
+
 type Approver = {
   name: string;
   id: string;
