@@ -113,6 +113,7 @@ function RequestDetailPage() {
     return base;
   });
   const [modal, setModal] = useState<{ kind: "modify" | "reject" | "cancel"; idx: number } | null>(null);
+  const [gestionIdx, setGestionIdx] = useState<number | null>(null);
   const [fileError, setFileError] = useState<string | null>(null);
   const [dragOver, setDragOver] = useState(false);
   const fileInput = useRef<HTMLInputElement>(null);
