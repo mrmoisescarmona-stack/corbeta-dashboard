@@ -203,6 +203,14 @@ export function useAuth(): AuthState & {
   const hasRole = (r: AppRole) => effState.roles.includes(r);
   const hasAnyRole = (rs: AppRole[]) => rs.some((r) => effState.roles.includes(r));
 
-  return { ...effState, hasRole, hasAnyRole };
+  return {
+    ...effState,
+    hasRole,
+    hasAnyRole,
+    impersonating: !!imp && !!state.user && imp.toLowerCase() !== state.user.email?.toLowerCase(),
+    realPrimaryRole: state.primaryRole,
+    realUserEmail: state.user?.email ?? null,
+  };
 }
+
 
