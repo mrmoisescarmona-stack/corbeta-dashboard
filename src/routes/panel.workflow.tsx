@@ -1874,3 +1874,117 @@ function ProviderPreviewDialog({
     </Dialog>
   );
 }
+
+function SubstituteDialog({
+  open,
+  approvers,
+  initial,
+  onClose,
+  onSave,
+}: {
+  open: boolean;
+  approvers: string[];
+  initial: Substitute | null;
+  onClose: () => void;
+  onSave: (s: Substitute) => void;
+}) {
+  const empty: Substitute = { approver: "", substitute: "", start: "", end: "" };
+  const [form, setForm] = useState<Substitute>(empty);
+  const [errors, setErrors] = useState<Partial<Record<keyof Substitute, string>>>({});
+
+  useEffect(() => {
+    if (open) {
+      setForm(initial ?? empty);
+      setErrors({});
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open, initial]);
+
+  const set = <K extends keyof Substitute>(k: K, v: Substitute[K]) =>
+    setForm((prev) => ({ ...prev, [k]: v }));
+
+  const submit = () => {
+    const next: Partial<Record<keyof Substitute, string>> = {};
+    if (!form.approver) next.approver = "Requerido";
+    if (!form.substitute) next.substitute = "Requerido";
+    else if (form.substitute === form.approver) next.substitute = "Debe ser distinto al aprobador";
+    if (!form.start) next.start = "Requerido";
+    if (!form.end) next.end = "Requerido";
+    else if (form.start && form.end < form.start) next.end = "Debe ser posterior a inicio";
+    setErrors(next);
+    if (Object.keys(next).length > 0) return;
+    onSave(form);
+  };
+
+  const substituteOptions = approvers.filter((a) => a !== form.approver);
+
+  return (
+    <Dialog open={open} onOpenChange={(o) => !o && onClose()}>
+      <DialogContent className="sm:max-w-lg">
+        <DialogHeader>
+          <DialogTitle>{initial ? "Editar sustituto" : "Asignar sustituto"}</DialogTitle>
+          <DialogDescription>
+            Seleccione el aprobador y el sustituto, e indique el período de la asignación.
+          </DialogDescription>
+        </DialogHeader>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+          <SelectField
+            label="Aprobador"
+            value={form.approver}
+            onChange={(v) => set("approver", v)}
+            options={approvers}
+            error={errors.approver}
+          />
+          <SelectField
+            label="Sustituto"
+            value={form.substitute}
+            onChange={(v) => set("substitute", v)}
+            options={substituteOptions}
+            error={errors.substitute}
+            disabled={!form.approver}
+            placeholder={form.approver ? "Seleccionar…" : "Seleccione aprobador primero"}
+          />
+          <div>
+            <label className="block text-sm font-medium mb-1.5">
+              Fecha inicio <span className="text-destructive">*</span>
+            </label>
+            <input
+              type="date"
+              value={form.start}
+              onChange={(e) => set("start", e.target.value)}
+              className={`w-full rounded-md border px-3 py-2 text-sm bg-background ${errors.start ? "border-destructive" : "border-border"}`}
+            />
+            {errors.start && <p className="mt-1 text-xs text-destructive">{errors.start}</p>}
+          </div>
+          <div>
+            <label className="block text-sm font-medium mb-1.5">
+              Fecha fin <span className="text-destructive">*</span>
+            </label>
+            <input
+              type="date"
+              value={form.end}
+              min={form.start || undefined}
+              onChange={(e) => set("end", e.target.value)}
+              className={`w-full rounded-md border px-3 py-2 text-sm bg-background ${errors.end ? "border-destructive" : "border-border"}`}
+            />
+            {errors.end && <p className="mt-1 text-xs text-destructive">{errors.end}</p>}
+          </div>
+        </div>
+        <div className="flex justify-end gap-2 pt-4">
+          <button
+            onClick={onClose}
+            className="rounded-md border border-border bg-background px-3.5 py-2 text-sm hover:bg-accent"
+          >
+            Cancelar
+          </button>
+          <button
+            onClick={submit}
+            className="rounded-md bg-primary px-3.5 py-2 text-sm font-medium text-primary-foreground hover:opacity-90"
+          >
+            {initial ? "Guardar" : "Asignar"}
+          </button>
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+}
