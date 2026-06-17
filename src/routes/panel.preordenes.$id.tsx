@@ -553,6 +553,32 @@ function RequestDetailPage() {
           }}
         />
       )}
+
+      {gestionIdx != null && lines[gestionIdx] && (
+        <GestionModal
+          item={{
+            id,
+            sku: lines[gestionIdx].ean,
+            item: lines[gestionIdx].description,
+            desc: "DTO-001",
+            providerName: "Castrol",
+            qty: lines[gestionIdx].qty,
+            listPrice: fmtCOP(lines[gestionIdx].listPrice),
+            corbetaPct: lines[gestionIdx].pctCorbeta != null ? `${lines[gestionIdx].pctCorbeta}%` : "—",
+            supplierPct: lines[gestionIdx].pctProveedor != null ? `${lines[gestionIdx].pctProveedor}%` : "—",
+            totalPct: `${(lines[gestionIdx].pctCorbeta ?? 0) + (lines[gestionIdx].pctProveedor ?? 0)}%`,
+          }}
+          onClose={() => setGestionIdx(null)}
+          onConfirm={(_id, decision) => {
+            const idx = gestionIdx;
+            if (decision === "approve") approve(idx);
+            else if (decision === "reject") applyReject(idx, "Rechazado por aprobador");
+            else if (decision === "modify") applyModify(idx, lines[idx].pctCorbeta ?? 0);
+            else if (decision === "cancel") applyCancel(idx, "Cancelado por aprobador");
+            setGestionIdx(null);
+          }}
+        />
+      )}
     </div>
   );
 }
