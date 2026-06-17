@@ -1388,7 +1388,7 @@ function ApprovalsPage() {
           title="Proveedores"
           subtitle="Registro de proveedores por categoría — acuerdo SLS (HU_002)"
           action={
-            <PrimaryButton>
+            <PrimaryButton onClick={() => setNewProviderOpen(true)}>
               <Plus className="h-4 w-4" /> Agregar
             </PrimaryButton>
           }
@@ -1401,20 +1401,30 @@ function ApprovalsPage() {
                   <th className="font-medium px-3 py-3">Nombre</th>
                   <th className="font-medium px-3 py-3">Categoría</th>
                   <th className="font-medium px-3 py-3">Email</th>
+                  <th className="font-medium px-3 py-3">Teléfono</th>
                   <th className="font-medium px-3 py-3">Estado</th>
                   <th className="font-medium px-5 py-3 text-right">Acciones</th>
                 </tr>
               </thead>
               <tbody>
-                {providers.map((p) => (
+                {providerList.map((p) => (
                   <tr key={p.id} className="border-t border-border hover:bg-muted/40">
                     <td className="px-5 py-3.5 font-medium tabular-nums">{p.id}</td>
                     <td className="px-3 py-3.5">{p.name}</td>
                     <td className="px-3 py-3.5">{p.category}</td>
                     <td className="px-3 py-3.5 text-muted-foreground">{p.email}</td>
+                    <td className="px-3 py-3.5 text-muted-foreground tabular-nums">{p.phone}</td>
                     <td className="px-3 py-3.5"><StatusBadge active={p.active} /></td>
                     <td className="px-5 py-3.5">
                       <div className="flex justify-end gap-1">
+                        <button
+                          onClick={() => setPreviewProvider(p)}
+                          className="rounded-md p-1.5 hover:bg-accent"
+                          aria-label={`Previsualizar ${p.name}`}
+                          title="Previsualizar / habilitar"
+                        >
+                          <Eye className="h-4 w-4" />
+                        </button>
                         <a
                           href={`mailto:${p.email}`}
                           className="rounded-md p-1.5 hover:bg-accent text-primary"
