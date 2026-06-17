@@ -1514,6 +1514,27 @@ function ApprovalsPage() {
       <NewApproverDialog open={newApproverOpen} onClose={() => setNewApproverOpen(false)} />
       <EditApproverDialog approver={editing} onClose={() => setEditing(null)} onSave={saveEdit} />
       <DeleteApproverDialog approver={deleting} onClose={() => setDeleting(null)} onConfirm={confirmDelete} />
+      <NewProviderDialog
+        open={newProviderOpen}
+        onClose={() => setNewProviderOpen(false)}
+        onSave={(p) => {
+          setProviderList((prev) => [...prev, p]);
+          toast.success(`Proveedor "${p.name}" agregado`);
+          setNewProviderOpen(false);
+        }}
+      />
+      <ProviderPreviewDialog
+        provider={previewProvider}
+        onClose={() => setPreviewProvider(null)}
+        onToggle={(active) => {
+          if (!previewProvider) return;
+          setProviderList((prev) =>
+            prev.map((p) => (p.id === previewProvider.id ? { ...p, active } : p))
+          );
+          setPreviewProvider((prev) => (prev ? { ...prev, active } : prev));
+          toast.success(`Proveedor ${active ? "habilitado" : "deshabilitado"}`);
+        }}
+      />
     </div>
   );
 }
