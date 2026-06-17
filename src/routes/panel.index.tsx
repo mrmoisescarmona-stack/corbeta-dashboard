@@ -324,10 +324,6 @@ function GestionModal({
               <div className="text-xs text-muted-foreground">% Total</div>
               <div className="font-medium tabular-nums">{item.totalPct}</div>
             </div>
-            <div>
-              <div className="text-xs text-muted-foreground">Respuesta proveedor</div>
-              <div className="font-medium">{item.supplierResp}</div>
-            </div>
           </div>
 
           {/* Acción del aprobador */}
