@@ -175,8 +175,34 @@ export function useAuth(): AuthState & {
     };
   }, [loadRoles]);
 
-  const hasRole = (r: AppRole) => state.roles.includes(r);
-  const hasAnyRole = (rs: AppRole[]) => rs.some((r) => state.roles.includes(r));
+  const [imp, setImp] = useState<string | null>(() => getImpersonatedLogin());
+  useEffect(() => {
+    const sync = () => setImp(getImpersonatedLogin());
+    window.addEventListener("auth:impersonation", sync);
+    window.addEventListener("storage", sync);
+    return () => {
+      window.removeEventListener("auth:impersonation", sync);
+      window.removeEventListener("storage", sync);
+    };
+  }, []);
 
-  return { ...state, hasRole, hasAnyRole };
+  // Apply impersonation override (demo only)
+  let effState = state;
+  if (imp && state.user) {
+    const profile = USER_PROFILES[imp.toLowerCase()];
+    if (profile) {
+      effState = {
+        loading: state.loading,
+        user: { ...state.user, email: profile.loginEmail } as User,
+        roles: [profile.role],
+        primaryRole: profile.role,
+      };
+    }
+  }
+
+  const hasRole = (r: AppRole) => effState.roles.includes(r);
+  const hasAnyRole = (rs: AppRole[]) => rs.some((r) => effState.roles.includes(r));
+
+  return { ...effState, hasRole, hasAnyRole };
 }
+
