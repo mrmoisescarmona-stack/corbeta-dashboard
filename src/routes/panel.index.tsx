@@ -238,8 +238,7 @@ function GestionModal({
 }) {
   const [decision, setDecision] = useState<Decision | null>(null);
   const [justif, setJustif] = useState("");
-  const [tipoDesc, setTipoDesc] = useState("Visible");
-  const [tipoExcl, setTipoExcl] = useState("No mutuamente excluyente");
+  const [nuevoPct, setNuevoPct] = useState("");
   const [files, setFiles] = useState<EvidenceFile[]>([]);
 
   const handleAddFiles = (fl: File[]) => {
@@ -261,7 +260,7 @@ function GestionModal({
   };
 
 
-  const canConfirm = decision !== null && justif.trim().length > 0;
+  const canConfirm = decision !== null;
 
   const actions: { key: Decision; label: string; icon: any; cls: string }[] = [
     { key: "approve", label: "Aprobar", icon: Check, cls: "hover:border-success hover:bg-success/5" },
@@ -282,15 +281,15 @@ function GestionModal({
         <div className="flex items-start justify-between gap-4 border-b border-border p-5">
           <div className="min-w-0">
             <div className="flex items-center gap-3">
-              <h3 className="text-base font-semibold text-foreground truncate">
-                {item.sku} — {item.item}
+              <h3 className="text-2xl font-semibold text-foreground truncate">
+                Respuesta del Proveedor
               </h3>
               <span className="inline-flex items-center rounded-full bg-warning/15 px-2.5 py-0.5 text-[11px] font-medium text-warning ring-1 ring-inset ring-warning/30">
                 Pendiente
               </span>
             </div>
             <p className="mt-1 text-xs text-muted-foreground">
-              Descuento: {item.desc} · Proveedor: {item.providerName}
+              {item.sku} — {item.item} · Descuento: {item.desc} · Proveedor: {item.providerName}
             </p>
           </div>
           <button
@@ -325,10 +324,6 @@ function GestionModal({
               <div className="text-xs text-muted-foreground">% Total</div>
               <div className="font-medium tabular-nums">{item.totalPct}</div>
             </div>
-            <div>
-              <div className="text-xs text-muted-foreground">Respuesta proveedor</div>
-              <div className="font-medium">{item.supplierResp}</div>
-            </div>
           </div>
 
           {/* Acción del aprobador */}
@@ -358,7 +353,7 @@ function GestionModal({
 
             <div>
               <label className="text-sm font-medium text-foreground">
-                Justificación <span className="text-destructive">*</span>
+                Justificación <span className="text-muted-foreground text-xs">(opcional)</span>
               </label>
               <textarea
                 value={justif}
@@ -369,34 +364,29 @@ function GestionModal({
               />
             </div>
 
-            <div className="grid grid-cols-2 gap-3">
+            {decision === "modify" && (
               <div>
-                <label className="text-xs font-medium text-foreground">
-                  Tipo de descuento <span className="text-destructive">*</span>
+                <label className="text-sm font-medium text-foreground">
+                  Nuevo porcentaje <span className="text-destructive">*</span>
                 </label>
-                <select
-                  value={tipoDesc}
-                  onChange={(e) => setTipoDesc(e.target.value)}
-                  className="mt-1 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring/30"
-                >
-                  <option>Visible</option>
-                  <option>No visible</option>
-                </select>
+                <div className="mt-1.5 relative">
+                  <input
+                    type="number"
+                    value={nuevoPct}
+                    onChange={(e) => setNuevoPct(e.target.value)}
+                    placeholder="Ej: 7.5"
+                    min={0}
+                    max={100}
+                    step="0.1"
+                    className="w-full rounded-lg border border-input bg-background px-3 py-2 pr-8 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring/30 tabular-nums"
+                  />
+                  <span className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground">%</span>
+                </div>
+                <p className="mt-1 text-xs text-muted-foreground">
+                  Anexar nuevo porcentaje aprobado para esta línea.
+                </p>
               </div>
-              <div>
-                <label className="text-xs font-medium text-foreground">
-                  Tipo de exclusión <span className="text-destructive">*</span>
-                </label>
-                <select
-                  value={tipoExcl}
-                  onChange={(e) => setTipoExcl(e.target.value)}
-                  className="mt-1 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring/30"
-                >
-                  <option>No mutuamente excluyente</option>
-                  <option>Mutuamente excluyente</option>
-                </select>
-              </div>
-            </div>
+            )}
           </div>
         </div>
 
