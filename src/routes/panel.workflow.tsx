@@ -1498,10 +1498,12 @@ function ApprovalsPage() {
                         >
                           <Phone className="h-4 w-4" />
                         </a>
-                        <button className="rounded-md p-1.5 hover:bg-accent" aria-label="Editar"><Pencil className="h-4 w-4" /></button>
+                        <button onClick={() => setEditingProvider(p)} className="rounded-md p-1.5 hover:bg-accent" aria-label="Editar" title="Editar"><Pencil className="h-4 w-4" /></button>
+                        <button onClick={() => setDeletingProvider(p)} className="rounded-md p-1.5 text-destructive hover:bg-destructive/10" aria-label="Eliminar" title="Eliminar"><Trash2 className="h-4 w-4" /></button>
                       </div>
                     </td>
                   </tr>
+
                 ))}
               </tbody>
             </table>
