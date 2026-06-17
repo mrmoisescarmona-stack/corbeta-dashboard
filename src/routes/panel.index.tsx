@@ -281,15 +281,15 @@ function GestionModal({
         <div className="flex items-start justify-between gap-4 border-b border-border p-5">
           <div className="min-w-0">
             <div className="flex items-center gap-3">
-              <h3 className="text-base font-semibold text-foreground truncate">
-                {item.sku} — {item.item}
+              <h3 className="text-2xl font-semibold text-foreground truncate">
+                Respuesta del Proveedor
               </h3>
               <span className="inline-flex items-center rounded-full bg-warning/15 px-2.5 py-0.5 text-[11px] font-medium text-warning ring-1 ring-inset ring-warning/30">
                 Pendiente
               </span>
             </div>
             <p className="mt-1 text-xs text-muted-foreground">
-              Descuento: {item.desc} · Proveedor: {item.providerName}
+              {item.sku} — {item.item} · Descuento: {item.desc} · Proveedor: {item.providerName}
             </p>
           </div>
           <button
