@@ -23,6 +23,7 @@ import {
   Trash2,
   Check,
 } from "lucide-react";
+import { GestionModal } from "@/components/gestion-modal";
 
 export const Route = createFileRoute("/panel/preordenes/$id")({
   head: ({ params }) => ({
