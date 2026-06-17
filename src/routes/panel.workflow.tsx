@@ -1233,6 +1233,9 @@ function ApprovalsPage() {
   const [list, setList] = useState<Approver[]>(approvers);
   const [editing, setEditing] = useState<Approver | null>(null);
   const [deleting, setDeleting] = useState<Approver | null>(null);
+  const [providerList, setProviderList] = useState<Provider[]>(providers);
+  const [newProviderOpen, setNewProviderOpen] = useState(false);
+  const [previewProvider, setPreviewProvider] = useState<Provider | null>(null);
   if (useFakeLoading()) return <ApprovalsSkeleton />;
 
   const confirmDelete = () => {
