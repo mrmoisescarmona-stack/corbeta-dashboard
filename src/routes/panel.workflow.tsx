@@ -257,7 +257,7 @@ function PrimaryButton({ children, onClick }: { children: React.ReactNode; onCli
   );
 }
 
-function NewApproverDialog({ open, onClose }: { open: boolean; onClose: () => void }) {
+function NewApproverDialog({ open, onClose, onSave }: { open: boolean; onClose: () => void; onSave: (a: Approver) => void }) {
   const [form, setForm] = useState({ name: "", id: "", email: "", direction: "", division: "" });
   const [errors, setErrors] = useState<Record<string, string>>({});
 
@@ -273,10 +273,24 @@ function NewApproverDialog({ open, onClose }: { open: boolean; onClose: () => vo
     if (!form.division.trim()) e.division = "Requerido";
     setErrors(e);
     if (Object.keys(e).length) return;
-    toast.success("Aprobador guardado");
+    onSave({
+      name: form.name.trim(),
+      id: form.id.trim(),
+      email: form.email.trim(),
+      direction: form.direction.trim(),
+      division: form.division.trim(),
+      active: true,
+      status: "Activo",
+      phone: "",
+      manager: "",
+      zone: "",
+      unit: "",
+      startDate: new Date().toISOString().slice(0, 10),
+      scopes: [],
+    });
     setForm({ name: "", id: "", email: "", direction: "", division: "" });
-    onClose();
   };
+
 
   const field = (key: keyof typeof form, label: string, type = "text") => (
     <div>
@@ -1228,19 +1242,48 @@ function CategoryApproversCard() {
 }
 
 
+const STORAGE_KEY = "workflow.data.v1";
+
+function loadStored<T>(key: "approvers" | "providers" | "substitutes", fallback: T): T {
+  if (typeof window === "undefined") return fallback;
+  try {
+    const raw = window.localStorage.getItem(STORAGE_KEY);
+    if (!raw) return fallback;
+    const parsed = JSON.parse(raw);
+    return (parsed?.[key] as T) ?? fallback;
+  } catch {
+    return fallback;
+  }
+}
+
 function ApprovalsPage() {
   const [tab, setTab] = useState<TabKey>("aprobadores");
   const [selected, setSelected] = useState<Approver | null>(null);
   const [newApproverOpen, setNewApproverOpen] = useState(false);
-  const [list, setList] = useState<Approver[]>(approvers);
+  const [list, setList] = useState<Approver[]>(() => loadStored("approvers", approvers));
   const [editing, setEditing] = useState<Approver | null>(null);
   const [deleting, setDeleting] = useState<Approver | null>(null);
-  const [providerList, setProviderList] = useState<Provider[]>(providers);
+  const [providerList, setProviderList] = useState<Provider[]>(() => loadStored("providers", providers));
   const [newProviderOpen, setNewProviderOpen] = useState(false);
+  const [editingProvider, setEditingProvider] = useState<Provider | null>(null);
+  const [deletingProvider, setDeletingProvider] = useState<Provider | null>(null);
   const [previewProvider, setPreviewProvider] = useState<Provider | null>(null);
-  const [substituteList, setSubstituteList] = useState<Substitute[]>(substitutes);
+  const [substituteList, setSubstituteList] = useState<Substitute[]>(() => loadStored("substitutes", substitutes));
   const [substituteDialog, setSubstituteDialog] = useState<{ open: boolean; editIndex: number | null }>({ open: false, editIndex: null });
   const [deletingSubstitute, setDeletingSubstitute] = useState<{ index: number; item: Substitute } | null>(null);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    try {
+      window.localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify({ approvers: list, providers: providerList, substitutes: substituteList })
+      );
+    } catch {
+      /* ignore quota */
+    }
+  }, [list, providerList, substituteList]);
+
   if (useFakeLoading()) return <ApprovalsSkeleton />;
 
   const confirmDelete = () => {
@@ -1255,6 +1298,8 @@ function ApprovalsPage() {
     toast.success("Aprobador actualizado");
     setEditing(null);
   };
+
+
 
 
   return (
@@ -1467,10 +1512,12 @@ function ApprovalsPage() {
                         >
                           <Phone className="h-4 w-4" />
                         </a>
-                        <button className="rounded-md p-1.5 hover:bg-accent" aria-label="Editar"><Pencil className="h-4 w-4" /></button>
+                        <button onClick={() => setEditingProvider(p)} className="rounded-md p-1.5 hover:bg-accent" aria-label="Editar" title="Editar"><Pencil className="h-4 w-4" /></button>
+                        <button onClick={() => setDeletingProvider(p)} className="rounded-md p-1.5 text-destructive hover:bg-destructive/10" aria-label="Eliminar" title="Eliminar"><Trash2 className="h-4 w-4" /></button>
                       </div>
                     </td>
                   </tr>
+
                 ))}
               </tbody>
             </table>
@@ -1537,18 +1584,76 @@ function ApprovalsPage() {
       )}
 
       <ApproverDetailDialog approver={selected} onClose={() => setSelected(null)} />
-      <NewApproverDialog open={newApproverOpen} onClose={() => setNewApproverOpen(false)} />
+      <NewApproverDialog
+        open={newApproverOpen}
+        onClose={() => setNewApproverOpen(false)}
+        onSave={(a) => {
+          if (list.some((x) => x.id === a.id)) {
+            toast.error(`Ya existe un aprobador con identificación ${a.id}`);
+            return;
+          }
+          setList((prev) => [...prev, a]);
+          toast.success(`Aprobador "${a.name}" agregado`);
+          setNewApproverOpen(false);
+        }}
+      />
+
       <EditApproverDialog approver={editing} onClose={() => setEditing(null)} onSave={saveEdit} />
       <DeleteApproverDialog approver={deleting} onClose={() => setDeleting(null)} onConfirm={confirmDelete} />
       <NewProviderDialog
         open={newProviderOpen}
         onClose={() => setNewProviderOpen(false)}
         onSave={(p) => {
+          if (providerList.some((x) => x.id === p.id)) {
+            toast.error(`Ya existe un proveedor con identificación ${p.id}`);
+            return;
+          }
           setProviderList((prev) => [...prev, p]);
           toast.success(`Proveedor "${p.name}" agregado`);
           setNewProviderOpen(false);
         }}
       />
+      <NewProviderDialog
+        open={!!editingProvider}
+        initial={editingProvider}
+        onClose={() => setEditingProvider(null)}
+        onSave={(p) => {
+          if (!editingProvider) return;
+          setProviderList((prev) => prev.map((x) => (x.id === editingProvider.id ? p : x)));
+          toast.success(`Proveedor "${p.name}" actualizado`);
+          setEditingProvider(null);
+        }}
+      />
+      <Dialog open={!!deletingProvider} onOpenChange={(o) => !o && setDeletingProvider(null)}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Eliminar proveedor</DialogTitle>
+            <DialogDescription>
+              {deletingProvider && `¿Eliminar al proveedor "${deletingProvider.name}"? Esta acción no se puede deshacer.`}
+            </DialogDescription>
+          </DialogHeader>
+          <div className="flex justify-end gap-2 pt-4">
+            <button
+              onClick={() => setDeletingProvider(null)}
+              className="rounded-md border border-border bg-background px-3.5 py-2 text-sm hover:bg-accent"
+            >
+              Cancelar
+            </button>
+            <button
+              onClick={() => {
+                if (!deletingProvider) return;
+                setProviderList((prev) => prev.filter((p) => p.id !== deletingProvider.id));
+                toast.success(`Proveedor "${deletingProvider.name}" eliminado`);
+                setDeletingProvider(null);
+              }}
+              className="rounded-md bg-destructive px-3.5 py-2 text-sm font-medium text-destructive-foreground hover:opacity-90"
+            >
+              Eliminar
+            </button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
       <ProviderPreviewDialog
         provider={previewProvider}
         onClose={() => setPreviewProvider(null)}
@@ -1676,24 +1781,27 @@ function FileDropzone({ onFiles }: { onFiles: (files: File[]) => void }) {
 
 function NewProviderDialog({
   open,
+  initial,
   onClose,
   onSave,
 }: {
   open: boolean;
+  initial?: Provider | null;
   onClose: () => void;
   onSave: (p: Provider) => void;
 }) {
   const empty: Provider = { id: "", name: "", category: "", email: "", phone: "", active: true };
   const [form, setForm] = useState<Provider>(empty);
   const [errors, setErrors] = useState<Partial<Record<keyof Provider, string>>>({});
+  const isEdit = !!initial;
 
   useEffect(() => {
     if (open) {
-      setForm(empty);
+      setForm(initial ?? empty);
       setErrors({});
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [open]);
+  }, [open, initial]);
 
   const set = <K extends keyof Provider>(k: K, v: Provider[K]) =>
     setForm((prev) => ({ ...prev, [k]: v }));
@@ -1715,9 +1823,12 @@ function NewProviderDialog({
     <Dialog open={open} onOpenChange={(o) => !o && onClose()}>
       <DialogContent className="sm:max-w-lg">
         <DialogHeader>
-          <DialogTitle>Agregar proveedor</DialogTitle>
-          <DialogDescription>Complete los datos del nuevo proveedor.</DialogDescription>
+          <DialogTitle>{isEdit ? "Editar proveedor" : "Agregar proveedor"}</DialogTitle>
+          <DialogDescription>
+            {isEdit ? "Actualice los datos del proveedor." : "Complete los datos del nuevo proveedor."}
+          </DialogDescription>
         </DialogHeader>
+
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
           <div>
             <label className="block text-sm font-medium mb-1.5">Identificación <span className="text-destructive">*</span></label>
