@@ -145,7 +145,18 @@ const substitutes = [
   { approver: "Laura Sánchez", substitute: "María González", start: "2026-06-01", end: "2026-06-30" },
 ];
 
-const providers = [
+type Provider = {
+  id: string;
+  name: string;
+  category: string;
+  email: string;
+  phone: string;
+  active: boolean;
+};
+
+const PROVIDER_CATEGORIES = ["Electrodomésticos", "Tecnología", "Hogar", "Línea Blanca", "Lubricantes"];
+
+const providers: Provider[] = [
   { id: "900123456", name: "Samsung Colombia S.A.", category: "Electrodomésticos", email: "aprobaciones@samsung.com.co", phone: "+57 601 5953000", active: true },
   { id: "900654321", name: "LG Electronics", category: "Tecnología", email: "descuentos@lg.com.co", phone: "+57 601 4327100", active: true },
   { id: "900789012", name: "Whirlpool Andina", category: "Línea Blanca", email: "comercial@whirlpool.com.co", phone: "+57 601 6512200", active: true },
@@ -1222,6 +1233,9 @@ function ApprovalsPage() {
   const [list, setList] = useState<Approver[]>(approvers);
   const [editing, setEditing] = useState<Approver | null>(null);
   const [deleting, setDeleting] = useState<Approver | null>(null);
+  const [providerList, setProviderList] = useState<Provider[]>(providers);
+  const [newProviderOpen, setNewProviderOpen] = useState(false);
+  const [previewProvider, setPreviewProvider] = useState<Provider | null>(null);
   if (useFakeLoading()) return <ApprovalsSkeleton />;
 
   const confirmDelete = () => {
@@ -1374,7 +1388,7 @@ function ApprovalsPage() {
           title="Proveedores"
           subtitle="Registro de proveedores por categoría — acuerdo SLS (HU_002)"
           action={
-            <PrimaryButton>
+            <PrimaryButton onClick={() => setNewProviderOpen(true)}>
               <Plus className="h-4 w-4" /> Agregar
             </PrimaryButton>
           }
@@ -1387,20 +1401,30 @@ function ApprovalsPage() {
                   <th className="font-medium px-3 py-3">Nombre</th>
                   <th className="font-medium px-3 py-3">Categoría</th>
                   <th className="font-medium px-3 py-3">Email</th>
+                  <th className="font-medium px-3 py-3">Teléfono</th>
                   <th className="font-medium px-3 py-3">Estado</th>
                   <th className="font-medium px-5 py-3 text-right">Acciones</th>
                 </tr>
               </thead>
               <tbody>
-                {providers.map((p) => (
+                {providerList.map((p) => (
                   <tr key={p.id} className="border-t border-border hover:bg-muted/40">
                     <td className="px-5 py-3.5 font-medium tabular-nums">{p.id}</td>
                     <td className="px-3 py-3.5">{p.name}</td>
                     <td className="px-3 py-3.5">{p.category}</td>
                     <td className="px-3 py-3.5 text-muted-foreground">{p.email}</td>
+                    <td className="px-3 py-3.5 text-muted-foreground tabular-nums">{p.phone}</td>
                     <td className="px-3 py-3.5"><StatusBadge active={p.active} /></td>
                     <td className="px-5 py-3.5">
                       <div className="flex justify-end gap-1">
+                        <button
+                          onClick={() => setPreviewProvider(p)}
+                          className="rounded-md p-1.5 hover:bg-accent"
+                          aria-label={`Previsualizar ${p.name}`}
+                          title="Previsualizar / habilitar"
+                        >
+                          <Eye className="h-4 w-4" />
+                        </button>
                         <a
                           href={`mailto:${p.email}`}
                           className="rounded-md p-1.5 hover:bg-accent text-primary"
@@ -1490,6 +1514,27 @@ function ApprovalsPage() {
       <NewApproverDialog open={newApproverOpen} onClose={() => setNewApproverOpen(false)} />
       <EditApproverDialog approver={editing} onClose={() => setEditing(null)} onSave={saveEdit} />
       <DeleteApproverDialog approver={deleting} onClose={() => setDeleting(null)} onConfirm={confirmDelete} />
+      <NewProviderDialog
+        open={newProviderOpen}
+        onClose={() => setNewProviderOpen(false)}
+        onSave={(p) => {
+          setProviderList((prev) => [...prev, p]);
+          toast.success(`Proveedor "${p.name}" agregado`);
+          setNewProviderOpen(false);
+        }}
+      />
+      <ProviderPreviewDialog
+        provider={previewProvider}
+        onClose={() => setPreviewProvider(null)}
+        onToggle={(active) => {
+          if (!previewProvider) return;
+          setProviderList((prev) =>
+            prev.map((p) => (p.id === previewProvider.id ? { ...p, active } : p))
+          );
+          setPreviewProvider((prev) => (prev ? { ...prev, active } : prev));
+          toast.success(`Proveedor ${active ? "habilitado" : "deshabilitado"}`);
+        }}
+      />
     </div>
   );
 }
@@ -1553,5 +1598,206 @@ function FileDropzone({ onFiles }: { onFiles: (files: File[]) => void }) {
         onChange={(e) => e.target.files && handle(e.target.files)}
       />
     </label>
+  );
+}
+
+function NewProviderDialog({
+  open,
+  onClose,
+  onSave,
+}: {
+  open: boolean;
+  onClose: () => void;
+  onSave: (p: Provider) => void;
+}) {
+  const empty: Provider = { id: "", name: "", category: "", email: "", phone: "", active: true };
+  const [form, setForm] = useState<Provider>(empty);
+  const [errors, setErrors] = useState<Partial<Record<keyof Provider, string>>>({});
+
+  useEffect(() => {
+    if (open) {
+      setForm(empty);
+      setErrors({});
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open]);
+
+  const set = <K extends keyof Provider>(k: K, v: Provider[K]) =>
+    setForm((prev) => ({ ...prev, [k]: v }));
+
+  const submit = () => {
+    const next: Partial<Record<keyof Provider, string>> = {};
+    if (!form.id.trim()) next.id = "Requerido";
+    if (!form.name.trim()) next.name = "Requerido";
+    if (!form.category) next.category = "Requerido";
+    if (!form.email.trim()) next.email = "Requerido";
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) next.email = "Email inválido";
+    if (!form.phone.trim()) next.phone = "Requerido";
+    setErrors(next);
+    if (Object.keys(next).length > 0) return;
+    onSave(form);
+  };
+
+  return (
+    <Dialog open={open} onOpenChange={(o) => !o && onClose()}>
+      <DialogContent className="sm:max-w-lg">
+        <DialogHeader>
+          <DialogTitle>Agregar proveedor</DialogTitle>
+          <DialogDescription>Complete los datos del nuevo proveedor.</DialogDescription>
+        </DialogHeader>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+          <div>
+            <label className="block text-sm font-medium mb-1.5">Identificación <span className="text-destructive">*</span></label>
+            <input
+              value={form.id}
+              onChange={(e) => set("id", e.target.value)}
+              className={`w-full rounded-md border px-3 py-2 text-sm bg-background ${errors.id ? "border-destructive" : "border-border"}`}
+              placeholder="900123456"
+            />
+            {errors.id && <p className="mt-1 text-xs text-destructive">{errors.id}</p>}
+          </div>
+          <div>
+            <label className="block text-sm font-medium mb-1.5">Nombre <span className="text-destructive">*</span></label>
+            <input
+              value={form.name}
+              onChange={(e) => set("name", e.target.value)}
+              className={`w-full rounded-md border px-3 py-2 text-sm bg-background ${errors.name ? "border-destructive" : "border-border"}`}
+              placeholder="Razón social"
+            />
+            {errors.name && <p className="mt-1 text-xs text-destructive">{errors.name}</p>}
+          </div>
+          <SelectField
+            label="Categoría"
+            value={form.category}
+            onChange={(v) => set("category", v)}
+            options={PROVIDER_CATEGORIES}
+            error={errors.category}
+          />
+          <div>
+            <label className="block text-sm font-medium mb-1.5">Email <span className="text-destructive">*</span></label>
+            <input
+              type="email"
+              value={form.email}
+              onChange={(e) => set("email", e.target.value)}
+              className={`w-full rounded-md border px-3 py-2 text-sm bg-background ${errors.email ? "border-destructive" : "border-border"}`}
+              placeholder="contacto@proveedor.com"
+            />
+            {errors.email && <p className="mt-1 text-xs text-destructive">{errors.email}</p>}
+          </div>
+          <div>
+            <label className="block text-sm font-medium mb-1.5">Teléfono <span className="text-destructive">*</span></label>
+            <input
+              value={form.phone}
+              onChange={(e) => set("phone", e.target.value)}
+              className={`w-full rounded-md border px-3 py-2 text-sm bg-background ${errors.phone ? "border-destructive" : "border-border"}`}
+              placeholder="+57 601 0000000"
+            />
+            {errors.phone && <p className="mt-1 text-xs text-destructive">{errors.phone}</p>}
+          </div>
+          <div>
+            <label className="block text-sm font-medium mb-1.5">Estado</label>
+            <button
+              type="button"
+              onClick={() => set("active", !form.active)}
+              className="flex items-center gap-3 rounded-md border border-border bg-background px-3 py-2 text-sm w-full"
+            >
+              <span
+                className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors ${form.active ? "bg-primary" : "bg-muted"}`}
+              >
+                <span
+                  className={`inline-block h-4 w-4 transform rounded-full bg-background transition-transform ${form.active ? "translate-x-4" : "translate-x-0.5"}`}
+                />
+              </span>
+              <span>{form.active ? "Activo" : "Inactivo"}</span>
+            </button>
+          </div>
+        </div>
+        <div className="flex justify-end gap-2 pt-4">
+          <button
+            onClick={onClose}
+            className="rounded-md border border-border bg-background px-3.5 py-2 text-sm hover:bg-accent"
+          >
+            Cancelar
+          </button>
+          <button
+            onClick={submit}
+            className="rounded-md bg-primary px-3.5 py-2 text-sm font-medium text-primary-foreground hover:opacity-90"
+          >
+            Guardar
+          </button>
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+function ProviderPreviewDialog({
+  provider,
+  onClose,
+  onToggle,
+}: {
+  provider: Provider | null;
+  onClose: () => void;
+  onToggle: (active: boolean) => void;
+}) {
+  return (
+    <Dialog open={!!provider} onOpenChange={(o) => !o && onClose()}>
+      <DialogContent className="sm:max-w-md">
+        <DialogHeader>
+          <DialogTitle>Previsualización de proveedor</DialogTitle>
+          <DialogDescription>Revise los datos y habilite o deshabilite el proveedor.</DialogDescription>
+        </DialogHeader>
+        {provider && (
+          <div className="space-y-3 pt-2 text-sm">
+            <div className="grid grid-cols-3 gap-2">
+              <span className="text-muted-foreground">Identificación</span>
+              <span className="col-span-2 font-medium tabular-nums">{provider.id}</span>
+            </div>
+            <div className="grid grid-cols-3 gap-2">
+              <span className="text-muted-foreground">Nombre</span>
+              <span className="col-span-2 font-medium">{provider.name}</span>
+            </div>
+            <div className="grid grid-cols-3 gap-2">
+              <span className="text-muted-foreground">Categoría</span>
+              <span className="col-span-2">{provider.category}</span>
+            </div>
+            <div className="grid grid-cols-3 gap-2">
+              <span className="text-muted-foreground">Email</span>
+              <span className="col-span-2">{provider.email}</span>
+            </div>
+            <div className="grid grid-cols-3 gap-2">
+              <span className="text-muted-foreground">Teléfono</span>
+              <span className="col-span-2 tabular-nums">{provider.phone}</span>
+            </div>
+            <div className="flex items-center justify-between rounded-md border border-border bg-muted/30 px-3 py-2.5 mt-4">
+              <div>
+                <div className="text-sm font-medium">Estado del proveedor</div>
+                <div className="text-xs text-muted-foreground">
+                  {provider.active ? "Habilitado en el catálogo" : "Deshabilitado del catálogo"}
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => onToggle(!provider.active)}
+                aria-label={provider.active ? "Deshabilitar" : "Habilitar"}
+                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${provider.active ? "bg-primary" : "bg-muted"}`}
+              >
+                <span
+                  className={`inline-block h-5 w-5 transform rounded-full bg-background shadow transition-transform ${provider.active ? "translate-x-5" : "translate-x-0.5"}`}
+                />
+              </button>
+            </div>
+          </div>
+        )}
+        <div className="flex justify-end pt-4">
+          <button
+            onClick={onClose}
+            className="rounded-md border border-border bg-background px-3.5 py-2 text-sm hover:bg-accent"
+          >
+            Cerrar
+          </button>
+        </div>
+      </DialogContent>
+    </Dialog>
   );
 }
