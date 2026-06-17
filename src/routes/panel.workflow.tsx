@@ -1330,7 +1330,7 @@ function ApprovalsPage() {
             </table>
           </div>
         </SectionCard>
-        <CategoryApproversCard />
+        {/* <CategoryApproversCard /> — oculto temporalmente, guardado para después */}
         </>
       )}
 
