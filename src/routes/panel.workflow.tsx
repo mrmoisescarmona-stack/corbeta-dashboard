@@ -1584,7 +1584,20 @@ function ApprovalsPage() {
       )}
 
       <ApproverDetailDialog approver={selected} onClose={() => setSelected(null)} />
-      <NewApproverDialog open={newApproverOpen} onClose={() => setNewApproverOpen(false)} />
+      <NewApproverDialog
+        open={newApproverOpen}
+        onClose={() => setNewApproverOpen(false)}
+        onSave={(a) => {
+          if (list.some((x) => x.id === a.id)) {
+            toast.error(`Ya existe un aprobador con identificación ${a.id}`);
+            return;
+          }
+          setList((prev) => [...prev, a]);
+          toast.success(`Aprobador "${a.name}" agregado`);
+          setNewApproverOpen(false);
+        }}
+      />
+
       <EditApproverDialog approver={editing} onClose={() => setEditing(null)} onSave={saveEdit} />
       <DeleteApproverDialog approver={deleting} onClose={() => setDeleting(null)} onConfirm={confirmDelete} />
       <NewProviderDialog
