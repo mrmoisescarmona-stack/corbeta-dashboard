@@ -260,7 +260,7 @@ function GestionModal({
   };
 
 
-  const canConfirm = decision !== null && justif.trim().length > 0;
+  const canConfirm = decision !== null;
 
   const actions: { key: Decision; label: string; icon: any; cls: string }[] = [
     { key: "approve", label: "Aprobar", icon: Check, cls: "hover:border-success hover:bg-success/5" },
