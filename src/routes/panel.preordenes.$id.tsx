@@ -82,7 +82,19 @@ function RequestDetailPage() {
   const nonEditableStatuses = ["Aprobada", "Rechazada", "Enviada a PeopleSoft", "Cancelada"];
   const readOnly = from === "reportes" || (!!status && nonEditableStatuses.includes(status));
   const navigate = useNavigate();
-  const [lines, setLines] = useState<Line[]>(initialLines);
+  const [lines, setLines] = useState<Line[]>(() => {
+    if (status === "Rechazada") {
+      return initialLines.map((l) => ({
+        ...l,
+        pctCorbeta: 0,
+        pctProveedor: 0,
+        requiresMyAction: false,
+        status: "Rechazada" as LineStatus,
+        reason: "Preorden rechazada",
+      }));
+    }
+    return initialLines;
+  });
   const [trace, setTrace] = useState<TraceEntry[]>([
     { at: "28/05/2026 09:12", who: "CorbeMóvil", action: "Preorden recibida" },
     { at: "28/05/2026 09:12", who: "Sistema", action: "Asignada a Moises Carmona" },
