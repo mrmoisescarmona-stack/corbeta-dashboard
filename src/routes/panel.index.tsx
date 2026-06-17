@@ -238,8 +238,7 @@ function GestionModal({
 }) {
   const [decision, setDecision] = useState<Decision | null>(null);
   const [justif, setJustif] = useState("");
-  const [tipoDesc, setTipoDesc] = useState("Visible");
-  const [tipoExcl, setTipoExcl] = useState("No mutuamente excluyente");
+  const [nuevoPct, setNuevoPct] = useState("");
   const [files, setFiles] = useState<EvidenceFile[]>([]);
 
   const handleAddFiles = (fl: File[]) => {
