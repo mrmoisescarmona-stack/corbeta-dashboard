@@ -1570,7 +1570,7 @@ function ApprovalsPage() {
       {tab === "reasignacion" && (
         <SectionCard
           title="Reasignación de solicitudes"
-          subtitle="Reasignación masiva o individual por rol superior (HU_002)"
+          subtitle="Reasignación masiva o individual por rol superior"
           action={
             <PrimaryButton>
               <ArrowLeftRight className="h-4 w-4" /> Reasignar
