@@ -257,7 +257,7 @@ function PrimaryButton({ children, onClick }: { children: React.ReactNode; onCli
   );
 }
 
-function NewApproverDialog({ open, onClose }: { open: boolean; onClose: () => void }) {
+function NewApproverDialog({ open, onClose, onSave }: { open: boolean; onClose: () => void; onSave: (a: Approver) => void }) {
   const [form, setForm] = useState({ name: "", id: "", email: "", direction: "", division: "" });
   const [errors, setErrors] = useState<Record<string, string>>({});
 
@@ -273,10 +273,24 @@ function NewApproverDialog({ open, onClose }: { open: boolean; onClose: () => vo
     if (!form.division.trim()) e.division = "Requerido";
     setErrors(e);
     if (Object.keys(e).length) return;
-    toast.success("Aprobador guardado");
+    onSave({
+      name: form.name.trim(),
+      id: form.id.trim(),
+      email: form.email.trim(),
+      direction: form.direction.trim(),
+      division: form.division.trim(),
+      active: true,
+      status: "Activo",
+      phone: "",
+      manager: "",
+      zone: "",
+      unit: "",
+      startDate: new Date().toISOString().slice(0, 10),
+      scopes: [],
+    });
     setForm({ name: "", id: "", email: "", direction: "", division: "" });
-    onClose();
   };
+
 
   const field = (key: keyof typeof form, label: string, type = "text") => (
     <div>
