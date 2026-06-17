@@ -1432,6 +1432,7 @@ function ApprovalsPage() {
         <SectionCard
           title="Catálogo y desempeño"
           subtitle="Indicadores operativos por proveedor"
+          action={null}
         >
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
