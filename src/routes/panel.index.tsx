@@ -242,7 +242,7 @@ function DashboardOverview() {
     [processed]
   );
 
-  const handleConfirm = (id: string) => {
+  const handleConfirm = (id: string, _decision: "approve" | "reject" | "modify" | "cancel") => {
     setProcessed((prev) => {
       const next = new Set(prev);
       next.add(id);
