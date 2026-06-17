@@ -1228,19 +1228,48 @@ function CategoryApproversCard() {
 }
 
 
+const STORAGE_KEY = "workflow.data.v1";
+
+function loadStored<T>(key: "approvers" | "providers" | "substitutes", fallback: T): T {
+  if (typeof window === "undefined") return fallback;
+  try {
+    const raw = window.localStorage.getItem(STORAGE_KEY);
+    if (!raw) return fallback;
+    const parsed = JSON.parse(raw);
+    return (parsed?.[key] as T) ?? fallback;
+  } catch {
+    return fallback;
+  }
+}
+
 function ApprovalsPage() {
   const [tab, setTab] = useState<TabKey>("aprobadores");
   const [selected, setSelected] = useState<Approver | null>(null);
   const [newApproverOpen, setNewApproverOpen] = useState(false);
-  const [list, setList] = useState<Approver[]>(approvers);
+  const [list, setList] = useState<Approver[]>(() => loadStored("approvers", approvers));
   const [editing, setEditing] = useState<Approver | null>(null);
   const [deleting, setDeleting] = useState<Approver | null>(null);
-  const [providerList, setProviderList] = useState<Provider[]>(providers);
+  const [providerList, setProviderList] = useState<Provider[]>(() => loadStored("providers", providers));
   const [newProviderOpen, setNewProviderOpen] = useState(false);
+  const [editingProvider, setEditingProvider] = useState<Provider | null>(null);
+  const [deletingProvider, setDeletingProvider] = useState<Provider | null>(null);
   const [previewProvider, setPreviewProvider] = useState<Provider | null>(null);
-  const [substituteList, setSubstituteList] = useState<Substitute[]>(substitutes);
+  const [substituteList, setSubstituteList] = useState<Substitute[]>(() => loadStored("substitutes", substitutes));
   const [substituteDialog, setSubstituteDialog] = useState<{ open: boolean; editIndex: number | null }>({ open: false, editIndex: null });
   const [deletingSubstitute, setDeletingSubstitute] = useState<{ index: number; item: Substitute } | null>(null);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    try {
+      window.localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify({ approvers: list, providers: providerList, substitutes: substituteList })
+      );
+    } catch {
+      /* ignore quota */
+    }
+  }, [list, providerList, substituteList]);
+
   if (useFakeLoading()) return <ApprovalsSkeleton />;
 
   const confirmDelete = () => {
@@ -1255,6 +1284,8 @@ function ApprovalsPage() {
     toast.success("Aprobador actualizado");
     setEditing(null);
   };
+
+
 
 
   return (
