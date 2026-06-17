@@ -131,7 +131,11 @@ export function getUserInitials(user: User | null): string {
 export function useAuth(): AuthState & {
   hasRole: (r: AppRole) => boolean;
   hasAnyRole: (rs: AppRole[]) => boolean;
+  impersonating: boolean;
+  realPrimaryRole: AppRole | null;
+  realUserEmail: string | null;
 } {
+
   const [state, setState] = useState<AuthState>({
     loading: true,
     user: null,
