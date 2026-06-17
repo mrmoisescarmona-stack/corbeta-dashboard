@@ -1561,6 +1561,53 @@ function ApprovalsPage() {
           toast.success(`Proveedor ${active ? "habilitado" : "deshabilitado"}`);
         }}
       />
+      <SubstituteDialog
+        open={substituteDialog.open}
+        approvers={list.map((a) => a.name)}
+        initial={substituteDialog.editIndex !== null ? substituteList[substituteDialog.editIndex] : null}
+        onClose={() => setSubstituteDialog({ open: false, editIndex: null })}
+        onSave={(s) => {
+          if (substituteDialog.editIndex !== null) {
+            const idx = substituteDialog.editIndex;
+            setSubstituteList((prev) => prev.map((it, i) => (i === idx ? s : it)));
+            toast.success("Sustituto actualizado");
+          } else {
+            setSubstituteList((prev) => [...prev, s]);
+            toast.success("Sustituto asignado");
+          }
+          setSubstituteDialog({ open: false, editIndex: null });
+        }}
+      />
+      <Dialog open={!!deletingSubstitute} onOpenChange={(o) => !o && setDeletingSubstitute(null)}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Eliminar sustituto</DialogTitle>
+            <DialogDescription>
+              {deletingSubstitute && `¿Eliminar la asignación de ${deletingSubstitute.item.substitute} como sustituto de ${deletingSubstitute.item.approver}?`}
+            </DialogDescription>
+          </DialogHeader>
+          <div className="flex justify-end gap-2 pt-4">
+            <button
+              onClick={() => setDeletingSubstitute(null)}
+              className="rounded-md border border-border bg-background px-3.5 py-2 text-sm hover:bg-accent"
+            >
+              Cancelar
+            </button>
+            <button
+              onClick={() => {
+                if (!deletingSubstitute) return;
+                const idx = deletingSubstitute.index;
+                setSubstituteList((prev) => prev.filter((_, i) => i !== idx));
+                toast.success("Sustituto eliminado");
+                setDeletingSubstitute(null);
+              }}
+              className="rounded-md bg-destructive px-3.5 py-2 text-sm font-medium text-destructive-foreground hover:opacity-90"
+            >
+              Eliminar
+            </button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
