@@ -24,7 +24,16 @@ import {
 import logoAsset from "@/assets/logo_corbeta.png.asset.json";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { useAuth, getRoleLabel, getUserDisplayName, getUserEmail, getUserInitials, type AppRole } from "@/hooks/use-auth";
+import { useAuth, getRoleLabel, getUserDisplayName, getUserEmail, getUserInitials, getAllDemoProfiles, setImpersonatedLogin, type AppRole } from "@/hooks/use-auth";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuItem,
+} from "@/components/ui/dropdown-menu";
+import { Check, UserCircle2 } from "lucide-react";
 import { canAccessRoute } from "@/lib/rbac";
 import { ThemeToggle } from "@/components/theme-toggle";
 
@@ -183,20 +192,98 @@ function DashboardLayout() {
                   3
                 </span>
               </button>
-              <div className="flex items-center gap-3 rounded-lg border border-border bg-card pl-1 pr-3 py-1">
-                <div className="flex h-8 w-8 items-center justify-center rounded-md bg-primary text-primary-foreground text-xs font-semibold">
-                  {getUserInitials(auth.user)}
-                </div>
-                <div className="hidden sm:block leading-tight">
-                  <div className="text-xs font-semibold">{getUserDisplayName(auth.user)}</div>
-                  <div className="text-[11px] text-muted-foreground">
-                    {getRoleLabel(auth.primaryRole)}
-                    {` · ${getUserEmail(auth.user)}`}
-                  </div>
-
-                </div>
-                <ChevronDown className="h-4 w-4 text-muted-foreground" />
-              </div>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <button className="flex items-center gap-3 rounded-lg border border-border bg-card pl-1 pr-3 py-1 hover:bg-accent transition-colors">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-md bg-primary text-primary-foreground text-xs font-semibold">
+                      {getUserInitials(auth.user)}
+                    </div>
+                    <div className="hidden sm:block leading-tight text-left">
+                      <div className="text-xs font-semibold">{getUserDisplayName(auth.user)}</div>
+                      <div className="text-[11px] text-muted-foreground">
+                        {getRoleLabel(auth.primaryRole)}
+                        {` · ${getUserEmail(auth.user)}`}
+                      </div>
+                    </div>
+                    <ChevronDown className="h-4 w-4 text-muted-foreground" />
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-72">
+                  <DropdownMenuLabel className="flex items-center gap-2">
+                    <UserCircle2 className="h-4 w-4 text-muted-foreground" />
+                    <div className="leading-tight">
+                      <div className="text-sm font-semibold">{getUserDisplayName(auth.user)}</div>
+                      <div className="text-[11px] font-normal text-muted-foreground">
+                        {getRoleLabel(auth.primaryRole)}
+                      </div>
+                    </div>
+                  </DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  {(() => {
+                    const isAdmin = auth.realPrimaryRole === "administrador";
+                    const currentLogin = auth.user?.email?.toLowerCase() ?? "";
+                    const profiles = isAdmin
+                      ? getAllDemoProfiles()
+                      : getAllDemoProfiles().filter(
+                          (p) => p.loginEmail.toLowerCase() === (auth.realUserEmail ?? "").toLowerCase()
+                        );
+                    return (
+                      <>
+                        <DropdownMenuLabel className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+                          {isAdmin ? "Cambiar de cuenta" : "Cuenta"}
+                        </DropdownMenuLabel>
+                        {profiles.map((p) => {
+                          const active = p.loginEmail.toLowerCase() === currentLogin;
+                          return (
+                            <DropdownMenuItem
+                              key={p.loginEmail}
+                              onClick={() => {
+                                if (active) return;
+                                const realLogin = (auth.realUserEmail ?? "").toLowerCase();
+                                setImpersonatedLogin(
+                                  p.loginEmail.toLowerCase() === realLogin ? null : p.loginEmail
+                                );
+                                toast.success(`Visualizando como ${p.name}`);
+                              }}
+                              className="flex items-start gap-3 py-2"
+                            >
+                              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary text-[11px] font-semibold">
+                                {p.name.split(" ").slice(0, 2).map((w) => w[0]).join("")}
+                              </div>
+                              <div className="flex-1 min-w-0 leading-tight">
+                                <div className="text-xs font-semibold truncate">{p.name}</div>
+                                <div className="text-[11px] text-muted-foreground truncate">
+                                  {getRoleLabel(p.role)} · {p.email}
+                                </div>
+                              </div>
+                              {active && <Check className="h-4 w-4 text-primary shrink-0 mt-1" />}
+                            </DropdownMenuItem>
+                          );
+                        })}
+                        {auth.impersonating && (
+                          <>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem
+                              onClick={() => {
+                                setImpersonatedLogin(null);
+                                toast.success("Volviendo a tu cuenta");
+                              }}
+                              className="text-xs"
+                            >
+                              Volver a mi cuenta
+                            </DropdownMenuItem>
+                          </>
+                        )}
+                      </>
+                    );
+                  })()}
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={handleLogout} className="text-xs">
+                    <LogOut className="h-4 w-4 mr-2" />
+                    Cerrar sesión
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
               <button
                 onClick={handleLogout}
                 title="Cerrar sesión"
