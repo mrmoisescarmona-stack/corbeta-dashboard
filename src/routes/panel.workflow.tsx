@@ -1238,6 +1238,9 @@ function ApprovalsPage() {
   const [providerList, setProviderList] = useState<Provider[]>(providers);
   const [newProviderOpen, setNewProviderOpen] = useState(false);
   const [previewProvider, setPreviewProvider] = useState<Provider | null>(null);
+  const [substituteList, setSubstituteList] = useState<Substitute[]>(substitutes);
+  const [substituteDialog, setSubstituteDialog] = useState<{ open: boolean; editIndex: number | null }>({ open: false, editIndex: null });
+  const [deletingSubstitute, setDeletingSubstitute] = useState<{ index: number; item: Substitute } | null>(null);
   if (useFakeLoading()) return <ApprovalsSkeleton />;
 
   const confirmDelete = () => {
