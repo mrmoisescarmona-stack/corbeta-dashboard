@@ -28,9 +28,9 @@ const TABS: { key: TabKey; label: string }[] = [
 ];
 
 const DIRECTION_DIVISIONS: Record<string, string[]> = {
-  "Electrodomésticos": ["Línea Blanca", "Línea Marrón", "Pequeños Electrodomésticos"],
-  "Tecnología": ["Computación", "Audio y Video", "Cómputo móvil", "Telefonía"],
-  "Hogar": ["Muebles", "Decoración", "Cocina"],
+  "Electrodomésticos": ["Línea Blanca", "Cocción"],
+  "Tecnología": ["Computación", "Móvil"],
+  "Hogar": ["Cocina"],
 };
 const DIRECTIONS = Object.keys(DIRECTION_DIVISIONS);
 
