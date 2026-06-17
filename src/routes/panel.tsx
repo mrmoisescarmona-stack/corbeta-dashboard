@@ -24,7 +24,16 @@ import {
 import logoAsset from "@/assets/logo_corbeta.png.asset.json";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { useAuth, getRoleLabel, getUserDisplayName, getUserEmail, getUserInitials, type AppRole } from "@/hooks/use-auth";
+import { useAuth, getRoleLabel, getUserDisplayName, getUserEmail, getUserInitials, getAllDemoProfiles, setImpersonatedLogin, type AppRole } from "@/hooks/use-auth";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuItem,
+} from "@/components/ui/dropdown-menu";
+import { Check, UserCircle2 } from "lucide-react";
 import { canAccessRoute } from "@/lib/rbac";
 import { ThemeToggle } from "@/components/theme-toggle";
 
