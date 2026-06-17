@@ -1428,6 +1428,47 @@ function ApprovalsPage() {
         </SectionCard>
       )}
 
+      {tab === "proveedores" && (
+        <SectionCard
+          title="Catálogo y desempeño"
+          subtitle="Indicadores operativos por proveedor"
+        >
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="text-left text-[11px] uppercase tracking-wider text-muted-foreground">
+                  <th className="font-medium px-5 py-3">Proveedor</th>
+                  <th className="font-medium px-3 py-3">Categoría</th>
+                  <th className="font-medium px-3 py-3">Estado</th>
+                  <th className="font-medium px-3 py-3 text-right">Solicitudes</th>
+                  <th className="font-medium px-3 py-3 text-right">Aprob. %</th>
+                  <th className="font-medium px-5 py-3 text-right">Tiempo prom.</th>
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  { name: "Castrol", category: "Lubricantes", status: "Activo", requests: 124, approved: 68, avg: "18.7h" },
+                  { name: "Shell", category: "Lubricantes", status: "Activo", requests: 86, approved: 72, avg: "14.2h" },
+                  { name: "Mobil", category: "Lubricantes", status: "Activo", requests: 54, approved: 65, avg: "21.1h" },
+                  { name: "Total", category: "Lubricantes", status: "Pausado", requests: 32, approved: 58, avg: "26.4h" },
+                  { name: "Valvoline", category: "Lubricantes", status: "Activo", requests: 48, approved: 70, avg: "16.9h" },
+                  { name: "Repsol", category: "Lubricantes", status: "Activo", requests: 39, approved: 62, avg: "19.5h" },
+                ].map((p) => (
+                  <tr key={p.name} className="border-t border-border hover:bg-muted/40">
+                    <td className="px-5 py-3.5 font-medium">{p.name}</td>
+                    <td className="px-3 py-3.5 text-muted-foreground">{p.category}</td>
+                    <td className="px-3 py-3.5"><StatusBadge active={p.status === "Activo"} /></td>
+                    <td className="px-3 py-3.5 text-right tabular-nums">{p.requests}</td>
+                    <td className="px-3 py-3.5 text-right tabular-nums">{p.approved}%</td>
+                    <td className="px-5 py-3.5 text-right tabular-nums text-muted-foreground">{p.avg}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </SectionCard>
+      )}
+
       {tab === "reasignacion" && (
         <SectionCard
           title="Reasignación de solicitudes"
