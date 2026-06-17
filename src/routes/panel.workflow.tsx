@@ -1358,7 +1358,7 @@ function ApprovalsPage() {
           title="Usuarios sustitutos"
           subtitle="Parametrización manual de sustitutos por aprobador (HU_002)"
           action={
-            <PrimaryButton>
+            <PrimaryButton onClick={() => setSubstituteDialog({ open: true, editIndex: null })}>
               <Plus className="h-4 w-4" /> Asignar sustituto
             </PrimaryButton>
           }
@@ -1370,16 +1370,37 @@ function ApprovalsPage() {
                   <th className="font-medium px-5 py-3">Aprobador</th>
                   <th className="font-medium px-3 py-3">Sustituto</th>
                   <th className="font-medium px-3 py-3">Fecha inicio</th>
-                  <th className="font-medium px-5 py-3">Fecha fin</th>
+                  <th className="font-medium px-3 py-3">Fecha fin</th>
+                  <th className="font-medium px-5 py-3 text-right">Acciones</th>
                 </tr>
               </thead>
               <tbody>
-                {substitutes.map((s, i) => (
+                {substituteList.map((s, i) => (
                   <tr key={i} className="border-t border-border hover:bg-muted/40">
                     <td className="px-5 py-3.5 font-medium">{s.approver}</td>
                     <td className="px-3 py-3.5">{s.substitute}</td>
                     <td className="px-3 py-3.5 text-muted-foreground tabular-nums">{s.start}</td>
-                    <td className="px-5 py-3.5 text-muted-foreground tabular-nums">{s.end}</td>
+                    <td className="px-3 py-3.5 text-muted-foreground tabular-nums">{s.end}</td>
+                    <td className="px-5 py-3.5">
+                      <div className="flex justify-end gap-1">
+                        <button
+                          onClick={() => setSubstituteDialog({ open: true, editIndex: i })}
+                          className="rounded-md p-1.5 hover:bg-accent"
+                          aria-label="Editar"
+                          title="Editar"
+                        >
+                          <Pencil className="h-4 w-4" />
+                        </button>
+                        <button
+                          onClick={() => setDeletingSubstitute({ index: i, item: s })}
+                          className="rounded-md p-1.5 text-destructive hover:bg-destructive/10"
+                          aria-label="Eliminar"
+                          title="Eliminar"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </button>
+                      </div>
+                    </td>
                   </tr>
                 ))}
               </tbody>
