@@ -401,8 +401,22 @@ function EditApproverDialog({
           {field("name", "Nombre")}
           {field("id", "Identificación")}
           {field("email", "Email", "email")}
-          {field("direction", "Dirección")}
-          {field("division", "División")}
+          <SelectField
+            label="Dirección"
+            value={form.direction}
+            onChange={(v) => setForm({ ...form, direction: v, division: "" })}
+            options={DIRECTIONS}
+            error={errors.direction}
+          />
+          <SelectField
+            label="División"
+            value={form.division}
+            onChange={(v) => setForm({ ...form, division: v })}
+            options={form.direction ? DIRECTION_DIVISIONS[form.direction] ?? [] : []}
+            error={errors.division}
+            disabled={!form.direction}
+            placeholder={form.direction ? "Seleccionar…" : "Seleccione una dirección primero"}
+          />
           <label className="flex items-center gap-2 text-sm">
             <input
               type="checkbox"
