@@ -23,6 +23,7 @@ import {
   Trash2,
   Check,
 } from "lucide-react";
+import { GestionModal } from "@/components/gestion-modal";
 
 export const Route = createFileRoute("/panel/preordenes/$id")({
   head: ({ params }) => ({
@@ -112,6 +113,7 @@ function RequestDetailPage() {
     return base;
   });
   const [modal, setModal] = useState<{ kind: "modify" | "reject" | "cancel"; idx: number } | null>(null);
+  const [gestionIdx, setGestionIdx] = useState<number | null>(null);
   const [fileError, setFileError] = useState<string | null>(null);
   const [dragOver, setDragOver] = useState(false);
   const fileInput = useRef<HTMLInputElement>(null);
@@ -325,11 +327,14 @@ function RequestDetailPage() {
                       </span>
                     </td>
                     <td className="px-5 py-3.5">
-                      <div className="flex justify-end gap-1.5">
-                        <ActionBtn label="Aprobar" icon={CheckCircle2} tone="success" disabled={done || readOnly} onClick={() => approve(idx)} />
-                        <ActionBtn label="Modificar" icon={Pencil} disabled={done || readOnly} onClick={() => setModal({ kind: "modify", idx })} />
-                        <ActionBtn label="Rechazar" icon={XCircle} tone="destructive" disabled={done || readOnly} onClick={() => setModal({ kind: "reject", idx })} />
-                        <ActionBtn label="Cancelar" icon={Ban} disabled={done || readOnly} onClick={() => setModal({ kind: "cancel", idx })} />
+                      <div className="flex justify-end">
+                        <button
+                          disabled={done || readOnly}
+                          onClick={() => setGestionIdx(idx)}
+                          className="inline-flex items-center gap-1.5 rounded-lg bg-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                          <Pencil className="h-3.5 w-3.5" /> Gestionar
+                        </button>
                       </div>
                     </td>
                   </tr>
@@ -545,6 +550,32 @@ function RequestDetailPage() {
           onCancel={(reason) => {
             applyCancel(modal.idx, reason);
             setModal(null);
+          }}
+        />
+      )}
+
+      {gestionIdx != null && lines[gestionIdx] && (
+        <GestionModal
+          item={{
+            id,
+            sku: lines[gestionIdx].ean,
+            item: lines[gestionIdx].description,
+            desc: "DTO-001",
+            providerName: "Castrol",
+            qty: lines[gestionIdx].qty,
+            listPrice: fmtCOP(lines[gestionIdx].listPrice),
+            corbetaPct: lines[gestionIdx].pctCorbeta != null ? `${lines[gestionIdx].pctCorbeta}%` : "—",
+            supplierPct: lines[gestionIdx].pctProveedor != null ? `${lines[gestionIdx].pctProveedor}%` : "—",
+            totalPct: `${(lines[gestionIdx].pctCorbeta ?? 0) + (lines[gestionIdx].pctProveedor ?? 0)}%`,
+          }}
+          onClose={() => setGestionIdx(null)}
+          onConfirm={(_id, decision) => {
+            const idx = gestionIdx;
+            if (decision === "approve") approve(idx);
+            else if (decision === "reject") applyReject(idx, "Rechazado por aprobador");
+            else if (decision === "modify") applyModify(idx, lines[idx].pctCorbeta ?? 0);
+            else if (decision === "cancel") applyCancel(idx, "Cancelado por aprobador");
+            setGestionIdx(null);
           }}
         />
       )}
