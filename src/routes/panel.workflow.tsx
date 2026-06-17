@@ -1676,24 +1676,27 @@ function FileDropzone({ onFiles }: { onFiles: (files: File[]) => void }) {
 
 function NewProviderDialog({
   open,
+  initial,
   onClose,
   onSave,
 }: {
   open: boolean;
+  initial?: Provider | null;
   onClose: () => void;
   onSave: (p: Provider) => void;
 }) {
   const empty: Provider = { id: "", name: "", category: "", email: "", phone: "", active: true };
   const [form, setForm] = useState<Provider>(empty);
   const [errors, setErrors] = useState<Partial<Record<keyof Provider, string>>>({});
+  const isEdit = !!initial;
 
   useEffect(() => {
     if (open) {
-      setForm(empty);
+      setForm(initial ?? empty);
       setErrors({});
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [open]);
+  }, [open, initial]);
 
   const set = <K extends keyof Provider>(k: K, v: Provider[K]) =>
     setForm((prev) => ({ ...prev, [k]: v }));
@@ -1715,9 +1718,12 @@ function NewProviderDialog({
     <Dialog open={open} onOpenChange={(o) => !o && onClose()}>
       <DialogContent className="sm:max-w-lg">
         <DialogHeader>
-          <DialogTitle>Agregar proveedor</DialogTitle>
-          <DialogDescription>Complete los datos del nuevo proveedor.</DialogDescription>
+          <DialogTitle>{isEdit ? "Editar proveedor" : "Agregar proveedor"}</DialogTitle>
+          <DialogDescription>
+            {isEdit ? "Actualice los datos del proveedor." : "Complete los datos del nuevo proveedor."}
+          </DialogDescription>
         </DialogHeader>
+
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
           <div>
             <label className="block text-sm font-medium mb-1.5">Identificación <span className="text-destructive">*</span></label>
