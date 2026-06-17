@@ -291,8 +291,22 @@ function NewApproverDialog({ open, onClose }: { open: boolean; onClose: () => vo
           {field("name", "Nombre")}
           {field("id", "Identificación")}
           {field("email", "Email", "email")}
-          {field("direction", "Dirección")}
-          {field("division", "División")}
+          <SelectField
+            label="Dirección"
+            value={form.direction}
+            onChange={(v) => setForm({ ...form, direction: v, division: "" })}
+            options={DIRECTIONS}
+            error={errors.direction}
+          />
+          <SelectField
+            label="División"
+            value={form.division}
+            onChange={(v) => setForm({ ...form, division: v })}
+            options={form.direction ? DIRECTION_DIVISIONS[form.direction] ?? [] : []}
+            error={errors.division}
+            disabled={!form.direction}
+            placeholder={form.direction ? "Seleccionar…" : "Seleccione una dirección primero"}
+          />
         </div>
         <div className="flex justify-end gap-2 pt-2">
           <button onClick={onClose} className="rounded-md border border-border px-4 py-2 text-sm hover:bg-accent">Cancelar</button>
