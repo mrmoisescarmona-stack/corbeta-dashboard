@@ -1730,9 +1730,13 @@ function ApprovalsPage() {
             toast.error(`Ya existe un aprobador con identificación ${a.id}`);
             return;
           }
-          setList((prev) => [...prev, a]);
-          toast.success(`Aprobador "${a.name}" agregado`);
-          setNewApproverOpen(false);
+          addApprover.mutate(a, {
+            onSuccess: () => {
+              toast.success(`Aprobador "${a.name}" agregado`);
+              setNewApproverOpen(false);
+            },
+            onError: (e: unknown) => toast.error(e instanceof Error ? e.message : "No se pudo agregar"),
+          });
         }}
       />
 
