@@ -14,6 +14,63 @@ export type Database = {
   }
   public: {
     Tables: {
+      approvers: {
+        Row: {
+          active: boolean
+          created_at: string
+          direction: string
+          division: string
+          email: string
+          id: string
+          identification: string
+          manager: string
+          name: string
+          phone: string
+          scopes: Json
+          start_date: string | null
+          status: string
+          unit: string
+          updated_at: string
+          zone: string
+        }
+        Insert: {
+          active?: boolean
+          created_at?: string
+          direction: string
+          division: string
+          email: string
+          id?: string
+          identification: string
+          manager?: string
+          name: string
+          phone?: string
+          scopes?: Json
+          start_date?: string | null
+          status?: string
+          unit?: string
+          updated_at?: string
+          zone?: string
+        }
+        Update: {
+          active?: boolean
+          created_at?: string
+          direction?: string
+          division?: string
+          email?: string
+          id?: string
+          identification?: string
+          manager?: string
+          name?: string
+          phone?: string
+          scopes?: Json
+          start_date?: string | null
+          status?: string
+          unit?: string
+          updated_at?: string
+          zone?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string
