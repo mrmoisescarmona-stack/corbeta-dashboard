@@ -4,6 +4,7 @@ import { toast } from "sonner";
 import { Plus, Pencil, Trash2, ArrowLeftRight, Check, X, Ban, UploadCloud, Mail, Phone, Eye, Download, Search } from "lucide-react";
 import { ApprovalsSkeleton } from "@/components/dashboard/skeleton";
 import { useFakeLoading } from "@/hooks/use-fake-loading";
+import { useApprovers, useAddApprover, useUpdateApprover, useDeleteApprover } from "@/hooks/use-approvers";
 import {
   Dialog,
   DialogContent,
