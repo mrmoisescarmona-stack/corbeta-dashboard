@@ -259,6 +259,53 @@ function SolicitudesPage() {
           </table>
         </div>
       </div>
+
+      {openDetail && (
+        <DetailOverlay onClose={() => setOpenDetail(null)}>
+          <PreordenDetail
+            id={openDetail.id}
+            from="solicitudes"
+            status={openDetail.status}
+            showBackLink={false}
+            onClose={() => setOpenDetail(null)}
+          />
+        </DetailOverlay>
+      )}
+    </div>
+  );
+}
+
+function DetailOverlay({ children, onClose }: { children: React.ReactNode; onClose: () => void }) {
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
+    document.addEventListener("keydown", onKey);
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.body.style.overflow = prev;
+    };
+  }, [onClose]);
+
+  return (
+    <div
+      className="fixed inset-0 z-50 flex items-start justify-center bg-black/50 backdrop-blur-sm p-4 sm:p-8 overflow-y-auto animate-fade-in"
+      onClick={onClose}
+    >
+      <div
+        className="relative w-full max-w-6xl rounded-2xl border border-border bg-background shadow-2xl my-4"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <button
+          type="button"
+          onClick={onClose}
+          aria-label="Cerrar"
+          className="absolute right-4 top-4 z-10 rounded-md p-1.5 text-muted-foreground hover:bg-accent hover:text-foreground"
+        >
+          <X className="h-4 w-4" />
+        </button>
+        <div className="p-6 sm:p-8">{children}</div>
+      </div>
     </div>
   );
 }
