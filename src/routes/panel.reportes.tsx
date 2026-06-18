@@ -306,9 +306,12 @@ const traceResults = [
     ean: "8806074567894",
     product: "Nevera Whirlpool WRE57 450L",
     qty: 4,
-    prov: "3.5%",
-    corb: "2.5%",
-    total: "6.0%",
+    provOriginal: "4.0%",
+    corbOriginal: "3.0%",
+    totalOriginal: "7.0%",
+    provActual: "3.5%",
+    corbActual: "2.5%",
+    totalActual: "6.0%",
     status: "Aprobada" as const,
     approver: "María González",
     supplier: "Whirlpool Andina",
@@ -322,9 +325,12 @@ const traceResults = [
     ean: "8806094567891",
     product: "Refrigerador Samsung RT38 380L",
     qty: 2,
-    prov: "0.0%",
-    corb: "0.0%",
-    total: "0.0%",
+    provOriginal: "5.0%",
+    corbOriginal: "2.0%",
+    totalOriginal: "7.0%",
+    provActual: "0.0%",
+    corbActual: "0.0%",
+    totalActual: "0.0%",
     status: "Rechazada" as const,
     approver: "Pedro Martínez",
     supplier: "Samsung Colombia S.A.",
@@ -332,6 +338,28 @@ const traceResults = [
     management: "6/06/2026, 4:10 p. m.",
   },
 ];
+
+function parsePct(s: string) {
+  const n = parseFloat(s.replace("%", "").replace(",", "."));
+  return Number.isFinite(n) ? n : 0;
+}
+
+function PctCell({ original, current, bold = false }: { original: string; current: string; bold?: boolean }) {
+  const o = parsePct(original);
+  const c = parsePct(current);
+  const changed = Math.abs(o - c) > 0.0001;
+  if (!changed) {
+    return <span className="text-muted-foreground/60 tabular-nums">—</span>;
+  }
+  const up = c > o;
+  return (
+    <span className={cn("inline-flex items-center gap-1 tabular-nums", bold && "font-semibold", up ? "text-success" : "text-destructive")}>
+      {current}
+      <span className="text-[10px]">{up ? "▲" : "▼"}</span>
+    </span>
+  );
+}
+
 
 function TraceabilitySection() {
   return (

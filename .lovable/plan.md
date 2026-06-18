@@ -1,82 +1,34 @@
-# Apply SGA Dashboard Suggestions
+## Cambio en la tabla de Resultados (Reportes y Trazabilidad)
 
-Frontend-only changes (mock data, no backend). All updates apply the recommendations from the attached review.
+Reemplazar las 3 columnas actuales (`% Prov.`, `% Corb.`, `% Total`) por **6 columnas** agrupadas visualmente en dos bloques: el porcentaje **Original** (como llegó la preorden) y el **Actualizado** (después de la gestión del proveedor / aprobador).
 
-## 1. Dashboard home (`dashboard.index.tsx`)
+### Nuevas columnas
 
-**KPI cards — rework**
-- "Pendientes": add `⚠ N vencen hoy · M líneas` sub-line.
-- "Espera proveedor": add `⚠ N sin respuesta >24h`.
-- "Aprobadas hoy": append `· $XXX M` managed-value sub-line.
-- New 4th KPI: `Tiempo prom. resolución` (e.g. `2.3 días`).
+```text
+| % Prov. Original | % Corb. Original | % Total Original | % Prov. Actualizado | % Corb. Actualizado | % Total Actualizado |
+```
 
-**New: Overdue queue banner** (above the table)
-- Amber card "⏰ N solicitudes vencen hoy" listing top 3 with `Vence 5pm` / `Vence mañana` badges.
+- Las "Originales" siempre muestran el valor con el que llegó la preorden.
+- Las "Actualizadas" muestran el valor final tras la gestión. Si la línea no fue alterada (valores iguales al original), las celdas actualizadas se renderizan con un guion `—` y color atenuado para diferenciarlas visualmente. Si fueron alteradas, se muestran en color con un pequeño indicador `▲`/`▼` opcional según suban o bajen vs el original.
+- Para distinguir los dos bloques en la cabecera, agrego un sub-encabezado: una fila superior con dos celdas que abarcan 3 columnas cada una ("Original" y "Actualizado") y la fila inferior con `% Prov. / % Corb. / % Total`. Esto se aplica también al CSV exportado.
 
-**Donut chart toggle**
-- `# Solicitudes` / `$ Valor` segmented toggle; switches values + legend totals.
+### Datos mock (`traceResults`)
 
-**Supplier wait time mini-card**
-- Small table (Proveedor / Espera / Estado) with color-coded hours and `Vencida / En riesgo / A tiempo` badges.
+Extender cada fila con los seis campos:
 
-## 2. Preorders list (`dashboard.preorders.tsx`)
+- `provOriginal`, `corbOriginal`, `totalOriginal`
+- `provActual`, `corbActual`, `totalActual`
 
-**Columns**
-- Add `Líneas` column (e.g. `3/5 aprobadas` with mini progress bar).
-- Add `Fecha límite` with green/orange/red urgency dot.
-- Change `Valor` → show `$12.4M · 8% dto`.
-- Add `Aprobador` (avatar + name).
+Datos sugeridos para los dos registros existentes:
 
-**Filters**
-- Add `Vencimiento` filter (Vencidas / Vencen hoy / Esta semana / Todos).
-- Add `Aprobador` filter.
-- Convert `Estado` to multi-select.
-- Add `Guardar vista` button (mocked: saves filter combo to local state, lists under a "Mis vistas" dropdown).
+- `PO-2026-004510`: original `4.0% / 3.0% / 7.0%` → actualizado `3.5% / 2.5% / 6.0%` (modificado por aprobador).
+- `PO-2026-004505`: original `5.0% / 2.0% / 7.0%` → actualizado `0.0% / 0.0% / 0.0%` (rechazada).
 
-**Row actions menu (···)**
-- Explicit items: Aprobar, Rechazar, Modificar %, Cancelar, Ver detalle, Ver soporte, Recordar proveedor.
-- Inline quick-approve button on low-value rows.
+### Archivos a tocar
 
-**Status badges — add missing**
-- `Modificada` (purple), `Enviada a PeopleSoft` (sky), `Error integración` (fuchsia).
+- `src/routes/panel.reportes.tsx`
+  - Cabecera de tabla con dos filas (grouped headers) y divisor sutil entre bloques.
+  - Cuerpo: render de las 6 celdas con estilos diferenciados (atenuado si igual al original).
+  - Tipo y dataset `traceResults` actualizados.
 
-## 3. Preorder detail (`dashboard.preorders.$id.tsx`)
-
-Expand to the "core action screen":
-- Header: preorder id, supplier, total value, discount %, deadline countdown.
-- **Lines table**: every line with status, approver, support doc indicator (📎 required / uploaded), per-line approve/reject/modify actions.
-- **Mandatory support doc enforcement**: disable submit until doc is attached; show inline warning.
-- **Timeline panel** (right side): chronological events — Recibida → Notificada proveedor → Respuesta proveedor → Asignada aprobador → Decisión → Enviada PeopleSoft (with success/error states).
-
-## 4. Supplier wait tracker (extend `dashboard.supplier-portal.tsx` admin view)
-
-Add an admin-facing "Seguimiento de respuestas" table at the top: proveedor, preorden, horas en espera (color), último recordatorio, botón `Recordar`.
-
-## 5. PeopleSoft integration status (`dashboard.peoplesoft.tsx`)
-
-Add 3 KPI tiles (Enviadas OK / Fallidas / En cola) and a "Cola de reintentos" table with `Reintentar` action and error message column.
-
-## 6. Audit / trazabilidad (`dashboard.audit.tsx`)
-
-Add a per-preorden timeline view (same component used in preorder detail) reachable via a search box "Buscar preorden".
-
-## 7. Sales rep view (`dashboard.sales-rep.tsx`)
-
-Reframe as read-only status tracker: list of submitted preorders with current phase indicator (5-step progress bar) and result notification badge.
-
-## 8. Sidebar nav (`dashboard.tsx`)
-
-- Confirm Portal Proveedor and Vista Vendedor are present (already added previously) — relabel to match review: `Portal del Proveedor`, `Vista del Vendedor`.
-- Add small `⚠` indicator next to "Mis aprobaciones" when overdue mock count > 0.
-
-## Technical notes
-
-- All changes are presentation-only; mock data stays inline in each route file.
-- Reuse existing shadcn primitives (`Card`, `Badge`, `Table`, `Select`, `DropdownMenu`, `Progress`, `Tabs`).
-- New shared component: `src/components/dashboard/PreorderTimeline.tsx` (used by detail + audit).
-- New shared component: `src/components/dashboard/DeadlineBadge.tsx` for consistent urgency coloring.
-- No route additions; no backend, auth, or schema changes.
-
-## Out of scope (deferred)
-
-- Reportes export, workflow config screen, approver-load panel, role impersonation — explicitly listed as low priority in the review.
+No se modifican filtros, KPIs ni gráficos.
