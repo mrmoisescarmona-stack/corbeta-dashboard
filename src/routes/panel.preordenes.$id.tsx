@@ -489,6 +489,50 @@ function StatCard({ label, value, tone }: { label: string; value: string | numbe
   );
 }
 
+function ProductStatusBadge({ status }: { status: ProductStatus }) {
+  const map: Record<ProductStatus, string> = {
+    Pendiente: "bg-primary/10 text-primary",
+    "En Proceso": "bg-warning/10 text-warning",
+    Finalizado: "bg-success/20 text-foreground",
+  };
+  return (
+    <span className={`inline-flex items-center rounded-full px-2.5 py-1 text-[11px] font-medium ${map[status]}`}>
+      {status}
+    </span>
+  );
+}
+
+function ProviderBadge({ status, pct }: { status: ProviderStatus; pct?: number }) {
+  const map: Record<ProviderStatus, string> = {
+    Pendiente: "bg-muted text-muted-foreground",
+    Aprobado: "bg-success/20 text-foreground",
+    Rechazado: "bg-destructive/10 text-destructive",
+    Modificado: "bg-warning/10 text-warning",
+  };
+  const showPct = pct != null && (status === "Aprobado" || status === "Modificado");
+  return (
+    <span className={`inline-flex items-center rounded-full px-2.5 py-1 text-[11px] font-medium ${map[status]}`}>
+      {status}{showPct ? ` · ${pct}%` : ""}
+    </span>
+  );
+}
+
+function ApproverBadge({ status, pct }: { status: ApproverStatus; pct?: number }) {
+  const map: Record<ApproverStatus, string> = {
+    Pendiente: "bg-muted text-muted-foreground",
+    Aprobado: "bg-success/20 text-foreground",
+    Rechazado: "bg-destructive/10 text-destructive",
+    Modificado: "bg-warning/10 text-warning",
+    Cancelada: "bg-muted text-muted-foreground line-through",
+  };
+  const showPct = pct != null && (status === "Aprobado" || status === "Modificado");
+  return (
+    <span className={`inline-flex items-center rounded-full px-2.5 py-1 text-[11px] font-medium ${map[status]}`}>
+      {status === "Cancelada" ? "Línea cancelada" : `${status}${showPct ? ` · ${pct}%` : ""}`}
+    </span>
+  );
+}
+
 function StatusBadge({ status }: { status: LineStatus }) {
   const map: Record<LineStatus, string> = {
     Pendiente: "bg-primary/10 text-primary",
