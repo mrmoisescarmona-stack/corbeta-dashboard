@@ -302,8 +302,8 @@ function RequestDetailPage() {
                     </td>
                     <td className="px-3 py-3.5 text-right tabular-nums">{l.qty}</td>
                     <td className="px-3 py-3.5 text-right tabular-nums">{fmtCOP(l.listPrice)}</td>
-                    <td className="px-3 py-3.5 text-right tabular-nums">{l.pctCorbeta ?? "—"}</td>
-                    <td className="px-3 py-3.5 text-right tabular-nums">{l.pctProveedor ?? "—"}</td>
+                    <td className="px-3 py-3.5 text-right tabular-nums">{l.pctCorbeta ?? 0}</td>
+                    <td className="px-3 py-3.5 text-right tabular-nums">{l.pctProveedor ?? 0}</td>
                     <td className="px-3 py-3.5">
                       <StatusBadge status={l.status} />
                       {l.authorizedPct != null && (
@@ -312,12 +312,6 @@ function RequestDetailPage() {
                       {l.reason && (
                         <div className="mt-1 text-[11px] text-muted-foreground line-clamp-2">{l.reason}</div>
                       )}
-                    </td>
-                    <td className="px-3 py-3.5">
-                      <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-500/10 px-2 py-0.5 text-[11px] font-medium text-emerald-600 dark:text-emerald-400">
-                        <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-                        Enviado
-                      </span>
                     </td>
                     <td className="px-5 py-3.5">
                       <div className="flex justify-end">
