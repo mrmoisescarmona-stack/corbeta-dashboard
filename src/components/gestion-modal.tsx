@@ -110,10 +110,6 @@ export function GestionModal({
               <div className="text-xs text-muted-foreground">% Proveedor solicitado</div>
               <div className="font-medium tabular-nums">{item.supplierPct}</div>
             </div>
-            <div>
-              <div className="text-xs text-muted-foreground">% Total</div>
-              <div className="font-medium tabular-nums">{item.totalPct}</div>
-            </div>
           </div>
 
           <div className="space-y-4">
