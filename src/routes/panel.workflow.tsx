@@ -146,6 +146,10 @@ const substitutes: Substitute[] = [
   { approver: "Laura Sánchez", substitute: "María González", start: "2026-06-01", end: "2026-06-30" },
 ];
 
+type Reassignment = { approver: string; replacement: string; start: string; end: string; reason: string };
+
+const reassignments: Reassignment[] = [];
+
 export type Provider = {
   id: string;
   name: string;
