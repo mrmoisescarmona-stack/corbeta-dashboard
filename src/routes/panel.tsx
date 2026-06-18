@@ -15,6 +15,7 @@ import {
   Building2,
   Headphones,
   Users,
+  Tags,
   
   FileText,
   
