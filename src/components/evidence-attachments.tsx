@@ -105,7 +105,7 @@ export function EvidenceAttachments({
                   <th className="text-left font-medium px-3 py-2">Archivo</th>
                   <th className="text-left font-medium px-3 py-2">Subido por</th>
                   <th className="text-left font-medium px-3 py-2">Fecha y hora</th>
-                  <th className="text-left font-medium px-3 py-2">Estado</th>
+                  
                   <th className="text-right font-medium px-3 py-2">Acciones</th>
                 </tr>
               </thead>
@@ -132,11 +132,6 @@ export function EvidenceAttachments({
                       </td>
                       <td className="px-3 py-2 text-foreground">{f.by}</td>
                       <td className="px-3 py-2 text-foreground">{f.date}</td>
-                      <td className="px-3 py-2">
-                        <span className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-medium ${badgeCls}`}>
-                          ✓ {f.status}
-                        </span>
-                      </td>
                       <td className="px-3 py-2">
                         <div className="flex items-center justify-end gap-1">
                           <button className="rounded-md p-1.5 text-muted-foreground hover:bg-accent hover:text-foreground" title="Ver">
