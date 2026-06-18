@@ -126,7 +126,7 @@ function RequestDetailPage() {
     return base;
   });
   const [modal, setModal] = useState<{ kind: "modify" | "reject" | "cancel"; idx: number } | null>(null);
-  const [gestionIdx, setGestionIdx] = useState<number | null>(null);
+  const [gestionIdx, setGestionIdx] = useState<{ idx: number; role: "provider" | "approver" } | null>(null);
   const [fileError, setFileError] = useState<string | null>(null);
   const [dragOver, setDragOver] = useState(false);
   const fileInput = useRef<HTMLInputElement>(null);
@@ -336,13 +336,22 @@ function RequestDetailPage() {
                       )}
                     </td>
                     <td className="px-6 py-5">
-                      <div className="flex justify-end">
+                      <div className="flex justify-end gap-2">
                         <button
                           disabled={done || readOnly}
-                          onClick={() => setGestionIdx(idx)}
-                          className="inline-flex items-center gap-1.5 rounded-lg bg-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed"
+                          onClick={() => setGestionIdx({ idx, role: "provider" })}
+                          className="inline-flex items-center gap-1.5 rounded-lg bg-sky-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-sky-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                          title="Respuesta del proveedor"
                         >
                           <Pencil className="h-3.5 w-3.5" /> Gestionar
+                        </button>
+                        <button
+                          disabled={done || readOnly}
+                          onClick={() => setGestionIdx({ idx, role: "approver" })}
+                          className="inline-flex items-center gap-1.5 rounded-lg bg-violet-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-violet-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                          title="Respuesta del aprobador"
+                        >
+                          <Check className="h-3.5 w-3.5" /> Analizar
                         </button>
                       </div>
                     </td>
@@ -436,23 +445,24 @@ function RequestDetailPage() {
         />
       )}
 
-      {gestionIdx != null && lines[gestionIdx] && (
+      {gestionIdx != null && lines[gestionIdx.idx] && (
         <GestionModal
+          role={gestionIdx.role}
           item={{
             id,
-            sku: lines[gestionIdx].ean,
-            item: lines[gestionIdx].description,
+            sku: lines[gestionIdx.idx].ean,
+            item: lines[gestionIdx.idx].description,
             desc: "DTO-001",
             providerName: "Castrol",
-            qty: lines[gestionIdx].qty,
-            listPrice: fmtCOP(lines[gestionIdx].listPrice),
-            corbetaPct: lines[gestionIdx].pctCorbeta != null ? `${lines[gestionIdx].pctCorbeta}%` : "—",
-            supplierPct: lines[gestionIdx].pctProveedor != null ? `${lines[gestionIdx].pctProveedor}%` : "—",
-            totalPct: `${(lines[gestionIdx].pctCorbeta ?? 0) + (lines[gestionIdx].pctProveedor ?? 0)}%`,
+            qty: lines[gestionIdx.idx].qty,
+            listPrice: fmtCOP(lines[gestionIdx.idx].listPrice),
+            corbetaPct: lines[gestionIdx.idx].pctCorbeta != null ? `${lines[gestionIdx.idx].pctCorbeta}%` : "—",
+            supplierPct: lines[gestionIdx.idx].pctProveedor != null ? `${lines[gestionIdx.idx].pctProveedor}%` : "—",
+            totalPct: `${(lines[gestionIdx.idx].pctCorbeta ?? 0) + (lines[gestionIdx.idx].pctProveedor ?? 0)}%`,
           }}
           onClose={() => setGestionIdx(null)}
           onConfirm={(_id, decision) => {
-            const idx = gestionIdx;
+            const idx = gestionIdx.idx;
             if (decision === "approve") approve(idx);
             else if (decision === "reject") applyReject(idx, "Rechazado por aprobador");
             else if (decision === "modify") applyModify(idx, lines[idx].pctCorbeta ?? 0);
