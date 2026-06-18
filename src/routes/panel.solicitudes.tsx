@@ -1,5 +1,5 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { createFileRoute } from "@tanstack/react-router";
+import { useMemo, useState, useEffect } from "react";
 import {
   ClipboardList,
   Search,
@@ -7,7 +7,9 @@ import {
   Filter,
   Eye,
   MoreHorizontal,
+  X,
 } from "lucide-react";
+import { PreordenDetail } from "@/components/preorden-detail";
 
 export const Route = createFileRoute("/panel/solicitudes")({
   head: () => ({
@@ -94,6 +96,7 @@ function SolicitudesPage() {
   const [query, setQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState<"Todos" | Status>("Todos");
   const [statusOpen, setStatusOpen] = useState(false);
+  const [openDetail, setOpenDetail] = useState<{ id: string; status: Status } | null>(null);
 
   const filtered = useMemo(() => {
     return requests.filter((r) => {
@@ -199,21 +202,20 @@ function SolicitudesPage() {
                   className="border-t border-border hover:bg-muted/40 transition-colors cursor-pointer"
                   onClick={(e) => {
                     const tgt = e.target as HTMLElement;
-                    if (tgt.closest("a,button")) return;
-                    window.location.href = `/panel/preordenes/${r.id}?from=solicitudes&status=${encodeURIComponent(r.status)}`;
+                    if (tgt.closest("button")) return;
+                    setOpenDetail({ id: r.id, status: r.status });
                   }}
                 >
                   <td className="px-5 py-3.5">
                     <div className="flex items-center gap-3">
                       <span className={`h-8 w-1 rounded-full ${statusBar(r.status)}`} />
-                      <Link
-                        to="/panel/preordenes/$id"
-                        params={{ id: r.id }}
-                        search={{ from: "solicitudes", status: r.status }}
+                      <button
+                        type="button"
+                        onClick={() => setOpenDetail({ id: r.id, status: r.status })}
                         className="font-medium text-foreground hover:underline"
                       >
                         {r.id}
-                      </Link>
+                      </button>
                     </div>
                   </td>
                   <td className="px-3 py-3.5 text-foreground/90">{r.client}</td>
@@ -232,14 +234,13 @@ function SolicitudesPage() {
                   <td className="px-3 py-3.5 text-right font-medium tabular-nums">{r.value}</td>
                   <td className="px-5 py-3.5">
                     <div className="flex items-center justify-end gap-1">
-                      <Link
-                        to="/panel/preordenes/$id"
-                        params={{ id: r.id }}
-                        search={{ from: "solicitudes", status: r.status }}
+                      <button
+                        type="button"
+                        onClick={() => setOpenDetail({ id: r.id, status: r.status })}
                         className="rounded-md p-1.5 text-muted-foreground hover:bg-accent hover:text-foreground"
                       >
                         <Eye className="h-4 w-4" />
-                      </Link>
+                      </button>
                       <button className="rounded-md p-1.5 text-muted-foreground hover:bg-accent hover:text-foreground">
                         <MoreHorizontal className="h-4 w-4" />
                       </button>
@@ -257,6 +258,53 @@ function SolicitudesPage() {
             </tbody>
           </table>
         </div>
+      </div>
+
+      {openDetail && (
+        <DetailOverlay onClose={() => setOpenDetail(null)}>
+          <PreordenDetail
+            id={openDetail.id}
+            from="solicitudes"
+            status={openDetail.status}
+            showBackLink={false}
+            onClose={() => setOpenDetail(null)}
+          />
+        </DetailOverlay>
+      )}
+    </div>
+  );
+}
+
+function DetailOverlay({ children, onClose }: { children: React.ReactNode; onClose: () => void }) {
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
+    document.addEventListener("keydown", onKey);
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.body.style.overflow = prev;
+    };
+  }, [onClose]);
+
+  return (
+    <div
+      className="fixed inset-0 z-50 flex items-start justify-center bg-black/50 backdrop-blur-sm p-4 sm:p-8 overflow-y-auto animate-fade-in"
+      onClick={onClose}
+    >
+      <div
+        className="relative w-full max-w-6xl rounded-2xl border border-border bg-background shadow-2xl my-4"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <button
+          type="button"
+          onClick={onClose}
+          aria-label="Cerrar"
+          className="absolute right-4 top-4 z-10 rounded-md p-1.5 text-muted-foreground hover:bg-accent hover:text-foreground"
+        >
+          <X className="h-4 w-4" />
+        </button>
+        <div className="p-6 sm:p-8">{children}</div>
       </div>
     </div>
   );
