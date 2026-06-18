@@ -1400,7 +1400,7 @@ function ApprovalsPage() {
       {tab === "sustitutos" && (
         <SectionCard
           title="Usuarios sustitutos"
-          subtitle="Parametrización manual de sustitutos por aprobador (HU_002)"
+          subtitle="Parametrización manual de sustitutos por aprobador"
           action={
             <PrimaryButton onClick={() => setSubstituteDialog({ open: true, editIndex: null })}>
               <Plus className="h-4 w-4" /> Asignar sustituto
