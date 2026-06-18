@@ -146,7 +146,7 @@ const substitutes: Substitute[] = [
   { approver: "Laura Sánchez", substitute: "María González", start: "2026-06-01", end: "2026-06-30" },
 ];
 
-type Provider = {
+export type Provider = {
   id: string;
   name: string;
   category: string;
@@ -155,9 +155,9 @@ type Provider = {
   active: boolean;
 };
 
-const PROVIDER_CATEGORIES = ["Electrodomésticos", "Tecnología", "Hogar", "Línea Blanca", "Lubricantes"];
+export const PROVIDER_CATEGORIES = ["Electrodomésticos", "Tecnología", "Hogar", "Línea Blanca", "Lubricantes"];
 
-const providers: Provider[] = [
+export const providers: Provider[] = [
   { id: "900123456", name: "Samsung Colombia S.A.", category: "Electrodomésticos", email: "aprobaciones@samsung.com.co", phone: "+57 601 5953000", active: true },
   { id: "900654321", name: "LG Electronics", category: "Tecnología", email: "descuentos@lg.com.co", phone: "+57 601 4327100", active: true },
   { id: "900789012", name: "Whirlpool Andina", category: "Línea Blanca", email: "comercial@whirlpool.com.co", phone: "+57 601 6512200", active: true },
