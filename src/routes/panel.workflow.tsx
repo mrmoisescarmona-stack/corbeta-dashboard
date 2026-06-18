@@ -192,7 +192,7 @@ const initialCategoryApprovers: CategoryApprover[] = [
 ];
 
 
-function StatusBadge({ active, status }: { active: boolean; status?: "Activo" | "Inactivo" | "Pendiente" }) {
+export function StatusBadge({ active, status }: { active: boolean; status?: "Activo" | "Inactivo" | "Pendiente" }) {
   const resolved = status ?? (active ? "Activo" : "Inactivo");
   const styles =
     resolved === "Activo"
@@ -223,7 +223,7 @@ function PillBadge({ label, tone = "warning" }: { label: string; tone?: "warning
   );
 }
 
-function SectionCard({
+export function SectionCard({
   title,
   subtitle,
   action,
@@ -248,7 +248,7 @@ function SectionCard({
   );
 }
 
-function PrimaryButton({ children, onClick }: { children: React.ReactNode; onClick?: () => void }) {
+export function PrimaryButton({ children, onClick }: { children: React.ReactNode; onClick?: () => void }) {
   return (
     <button onClick={onClick} className="inline-flex items-center gap-2 rounded-lg bg-primary px-3.5 py-2 text-sm font-medium text-primary-foreground hover:opacity-90">
       {children}
@@ -1241,9 +1241,9 @@ function CategoryApproversCard() {
 }
 
 
-const STORAGE_KEY = "workflow.data.v1";
+export const STORAGE_KEY = "workflow.data.v1";
 
-function loadStored<T>(key: "approvers" | "providers" | "substitutes", fallback: T): T {
+export function loadStored<T>(key: "approvers" | "providers" | "substitutes", fallback: T): T {
   if (typeof window === "undefined") return fallback;
   try {
     const raw = window.localStorage.getItem(STORAGE_KEY);
@@ -1668,7 +1668,7 @@ function FileDropzone({ onFiles }: { onFiles: (files: File[]) => void }) {
   );
 }
 
-function NewProviderDialog({
+export function NewProviderDialog({
   open,
   initial,
   onClose,
@@ -1804,7 +1804,7 @@ function NewProviderDialog({
   );
 }
 
-function ProviderPreviewDialog({
+export function ProviderPreviewDialog({
   provider,
   onClose,
   onToggle,
