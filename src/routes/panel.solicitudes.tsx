@@ -96,6 +96,7 @@ function SolicitudesPage() {
   const [query, setQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState<"Todos" | Status>("Todos");
   const [statusOpen, setStatusOpen] = useState(false);
+  const [openDetail, setOpenDetail] = useState<{ id: string; status: Status } | null>(null);
 
   const filtered = useMemo(() => {
     return requests.filter((r) => {
