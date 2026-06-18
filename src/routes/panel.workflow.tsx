@@ -1442,7 +1442,11 @@ function ApprovalsPage() {
   const [tab, setTab] = useState<TabKey>("aprobadores");
   const [selected, setSelected] = useState<Approver | null>(null);
   const [newApproverOpen, setNewApproverOpen] = useState(false);
-  const [list, setList] = useState<Approver[]>(() => loadStored("approvers", approvers));
+  const approversQuery = useApprovers();
+  const list: Approver[] = approversQuery.data ?? [];
+  const addApprover = useAddApprover();
+  const updateApprover = useUpdateApprover();
+  const deleteApprover = useDeleteApprover();
   const [editing, setEditing] = useState<Approver | null>(null);
   const [deleting, setDeleting] = useState<Approver | null>(null);
   const [providerList, setProviderList] = useState<Provider[]>(() => loadStored("providers", providers));
@@ -1462,25 +1466,35 @@ function ApprovalsPage() {
     try {
       window.localStorage.setItem(
         STORAGE_KEY,
-        JSON.stringify({ approvers: list, providers: providerList, substitutes: substituteList, reassignments: reassignList })
+        JSON.stringify({ providers: providerList, substitutes: substituteList, reassignments: reassignList })
       );
     } catch {
       /* ignore quota */
     }
-  }, [list, providerList, substituteList, reassignList]);
+  }, [providerList, substituteList, reassignList]);
 
-  if (useFakeLoading()) return <ApprovalsSkeleton />;
+  if (useFakeLoading() || approversQuery.isLoading) return <ApprovalsSkeleton />;
 
   const confirmDelete = () => {
     if (!deleting) return;
-    setList((prev) => prev.filter((a) => a.id !== deleting.id));
-    toast.success(`Aprobador "${deleting.name}" eliminado`);
+    const target = deleting;
+    deleteApprover.mutate(target.id, {
+      onSuccess: () => toast.success(`Aprobador "${target.name}" eliminado`),
+      onError: (e: unknown) => toast.error(e instanceof Error ? e.message : "No se pudo eliminar"),
+    });
     setDeleting(null);
   };
 
   const saveEdit = (updated: Approver) => {
-    setList((prev) => prev.map((a) => (a.id === editing?.id ? updated : a)));
-    toast.success("Aprobador actualizado");
+    if (!editing) return;
+    const originalId = editing.id;
+    updateApprover.mutate(
+      { originalId, approver: updated },
+      {
+        onSuccess: () => toast.success("Aprobador actualizado"),
+        onError: (e: unknown) => toast.error(e instanceof Error ? e.message : "No se pudo actualizar"),
+      }
+    );
     setEditing(null);
   };
 
