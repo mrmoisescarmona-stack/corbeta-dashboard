@@ -43,6 +43,9 @@ export const Route = createFileRoute("/panel/preordenes/$id")({
 });
 
 type LineStatus = "Pendiente" | "Aprobada" | "Rechazada" | "Modificada" | "Cancelada" | "No aplica";
+type ProductStatus = "Pendiente" | "En Proceso" | "Finalizado";
+type ProviderStatus = "Pendiente" | "Aprobado" | "Rechazado" | "Modificado";
+type ApproverStatus = "Pendiente" | "Aprobado" | "Rechazado" | "Modificado" | "Cancelada";
 
 type Line = {
   ean: string;
@@ -55,6 +58,10 @@ type Line = {
   status: LineStatus;
   authorizedPct?: number;
   reason?: string;
+  providerStatus: ProviderStatus;
+  providerPct?: number;
+  approverStatus: ApproverStatus;
+  approverPct?: number;
 };
 
 type TraceEntry = {
@@ -65,11 +72,17 @@ type TraceEntry = {
 };
 
 const initialLines: Line[] = [
-  { ean: "7702011001234", description: "Aceite Castrol GTX 20W50 x 1 Gal", qty: 24, listPrice: 78500, pctCorbeta: 8, pctProveedor: 4, requiresMyAction: true, status: "Pendiente" },
-  { ean: "7702011002345", description: "Filtro de aceite Mann W 712/75", qty: 60, listPrice: 22300, pctCorbeta: null, pctProveedor: 12, requiresMyAction: true, status: "Pendiente" },
-  { ean: "7702011003456", description: "Bujía NGK BPR6ES", qty: 120, listPrice: 9800, pctCorbeta: 5, pctProveedor: null, requiresMyAction: true, status: "Pendiente" },
-  { ean: "7702011004567", description: "Refrigerante Prestone 50/50 x 1 Gal", qty: 36, listPrice: 41200, pctCorbeta: 6, pctProveedor: 6, requiresMyAction: true, status: "Pendiente" },
+  { ean: "7702011001234", description: "Aceite Castrol GTX 20W50 x 1 Gal", qty: 24, listPrice: 78500, pctCorbeta: 8, pctProveedor: 4, requiresMyAction: true, status: "Pendiente", providerStatus: "Aprobado", providerPct: 4, approverStatus: "Pendiente" },
+  { ean: "7702011002345", description: "Filtro de aceite Mann W 712/75", qty: 60, listPrice: 22300, pctCorbeta: null, pctProveedor: 12, requiresMyAction: true, status: "Pendiente", providerStatus: "Modificado", providerPct: 10, approverStatus: "Pendiente" },
+  { ean: "7702011003456", description: "Bujía NGK BPR6ES", qty: 120, listPrice: 9800, pctCorbeta: 5, pctProveedor: null, requiresMyAction: true, status: "Pendiente", providerStatus: "Rechazado", approverStatus: "Pendiente" },
+  { ean: "7702011004567", description: "Refrigerante Prestone 50/50 x 1 Gal", qty: 36, listPrice: 41200, pctCorbeta: 6, pctProveedor: 6, requiresMyAction: true, status: "Pendiente", providerStatus: "Aprobado", providerPct: 6, approverStatus: "Pendiente" },
 ];
+
+function deriveProductStatus(l: Line): ProductStatus {
+  if (l.status !== "Pendiente") return "Finalizado";
+  if (l.approverStatus === "Pendiente" && l.providerStatus !== "Pendiente") return "En Proceso";
+  return "Pendiente";
+}
 
 const fmtCOP = (n: number) =>
   new Intl.NumberFormat("es-CO", { style: "currency", currency: "COP", maximumFractionDigits: 0 }).format(n);
@@ -282,30 +295,39 @@ function RequestDetailPage() {
           <table className="w-full text-sm">
             <thead>
               <tr className="text-left text-[11px] uppercase tracking-wider text-muted-foreground">
-                <th className="font-medium px-5 py-3">EAN / Producto</th>
-                <th className="font-medium px-3 py-3 text-right">Cant.</th>
-                <th className="font-medium px-3 py-3 text-right">Precio lista</th>
-                <th className="font-medium px-3 py-3 text-right">% Corbeta</th>
-                <th className="font-medium px-3 py-3 text-right">% Proveedor</th>
-                <th className="font-medium px-3 py-3">Estado</th>
-                <th className="font-medium px-5 py-3 text-right">Acciones</th>
+                <th className="font-medium px-6 py-4">EAN / Producto</th>
+                <th className="font-medium px-4 py-4 text-right">Cant.</th>
+                <th className="font-medium px-4 py-4 text-right">Precio lista</th>
+                <th className="font-medium px-4 py-4 text-right">% Corbeta</th>
+                <th className="font-medium px-4 py-4 text-right">% Proveedor</th>
+                <th className="font-medium px-4 py-4">Estado del producto</th>
+                <th className="font-medium px-4 py-4">Estado proveedor</th>
+                <th className="font-medium px-4 py-4">Estado aprobador</th>
+                <th className="font-medium px-6 py-4 text-right">Acciones</th>
               </tr>
             </thead>
             <tbody>
               {visibleLines.map((l, idx) => {
                 const done = l.status !== "Pendiente";
+                const productStatus = deriveProductStatus(l);
                 return (
                   <tr key={l.ean} className="border-t border-border align-top hover:bg-muted/30">
-                    <td className="px-5 py-3.5">
+                    <td className="px-6 py-5">
                       <div className="font-medium">{l.description}</div>
-                      <div className="text-[11px] text-muted-foreground tabular-nums">EAN {l.ean}</div>
+                      <div className="text-[11px] text-muted-foreground tabular-nums mt-1">EAN {l.ean}</div>
                     </td>
-                    <td className="px-3 py-3.5 text-right tabular-nums">{l.qty}</td>
-                    <td className="px-3 py-3.5 text-right tabular-nums">{fmtCOP(l.listPrice)}</td>
-                    <td className="px-3 py-3.5 text-right tabular-nums">{l.pctCorbeta ?? 0}</td>
-                    <td className="px-3 py-3.5 text-right tabular-nums">{l.pctProveedor ?? 0}</td>
-                    <td className="px-3 py-3.5">
-                      <StatusBadge status={l.status} />
+                    <td className="px-4 py-5 text-right tabular-nums">{l.qty}</td>
+                    <td className="px-4 py-5 text-right tabular-nums">{fmtCOP(l.listPrice)}</td>
+                    <td className="px-4 py-5 text-right tabular-nums">{l.pctCorbeta ?? 0}</td>
+                    <td className="px-4 py-5 text-right tabular-nums">{l.pctProveedor ?? 0}</td>
+                    <td className="px-4 py-5">
+                      <ProductStatusBadge status={productStatus} />
+                    </td>
+                    <td className="px-4 py-5">
+                      <ProviderBadge status={l.providerStatus} pct={l.providerPct} />
+                    </td>
+                    <td className="px-4 py-5">
+                      <ApproverBadge status={l.approverStatus} pct={l.approverPct} />
                       {l.authorizedPct != null && (
                         <div className="mt-1 text-[11px] text-muted-foreground">% autorizado: {l.authorizedPct}</div>
                       )}
@@ -313,7 +335,7 @@ function RequestDetailPage() {
                         <div className="mt-1 text-[11px] text-muted-foreground line-clamp-2">{l.reason}</div>
                       )}
                     </td>
-                    <td className="px-5 py-3.5">
+                    <td className="px-6 py-5">
                       <div className="flex justify-end">
                         <button
                           disabled={done || readOnly}
@@ -329,6 +351,7 @@ function RequestDetailPage() {
               })}
             </tbody>
           </table>
+
         </div>
       </div>
 
@@ -463,6 +486,50 @@ function StatCard({ label, value, tone }: { label: string; value: string | numbe
       <div className="text-xs text-muted-foreground">{label}</div>
       <div className={`mt-2 text-2xl font-semibold tabular-nums ${tone === "warning" ? "text-warning" : ""}`}>{value}</div>
     </div>
+  );
+}
+
+function ProductStatusBadge({ status }: { status: ProductStatus }) {
+  const map: Record<ProductStatus, string> = {
+    Pendiente: "bg-primary/10 text-primary",
+    "En Proceso": "bg-warning/10 text-warning",
+    Finalizado: "bg-success/20 text-foreground",
+  };
+  return (
+    <span className={`inline-flex items-center rounded-full px-2.5 py-1 text-[11px] font-medium ${map[status]}`}>
+      {status}
+    </span>
+  );
+}
+
+function ProviderBadge({ status, pct }: { status: ProviderStatus; pct?: number }) {
+  const map: Record<ProviderStatus, string> = {
+    Pendiente: "bg-muted text-muted-foreground",
+    Aprobado: "bg-success/20 text-foreground",
+    Rechazado: "bg-destructive/10 text-destructive",
+    Modificado: "bg-warning/10 text-warning",
+  };
+  const showPct = pct != null && (status === "Aprobado" || status === "Modificado");
+  return (
+    <span className={`inline-flex items-center rounded-full px-2.5 py-1 text-[11px] font-medium ${map[status]}`}>
+      {status}{showPct ? ` · ${pct}%` : ""}
+    </span>
+  );
+}
+
+function ApproverBadge({ status, pct }: { status: ApproverStatus; pct?: number }) {
+  const map: Record<ApproverStatus, string> = {
+    Pendiente: "bg-muted text-muted-foreground",
+    Aprobado: "bg-success/20 text-foreground",
+    Rechazado: "bg-destructive/10 text-destructive",
+    Modificado: "bg-warning/10 text-warning",
+    Cancelada: "bg-muted text-muted-foreground line-through",
+  };
+  const showPct = pct != null && (status === "Aprobado" || status === "Modificado");
+  return (
+    <span className={`inline-flex items-center rounded-full px-2.5 py-1 text-[11px] font-medium ${map[status]}`}>
+      {status === "Cancelada" ? "Línea cancelada" : `${status}${showPct ? ` · ${pct}%` : ""}`}
+    </span>
   );
 }
 
