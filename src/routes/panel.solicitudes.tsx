@@ -1,5 +1,5 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { createFileRoute } from "@tanstack/react-router";
+import { useMemo, useState, useEffect } from "react";
 import {
   ClipboardList,
   Search,
@@ -7,7 +7,9 @@ import {
   Filter,
   Eye,
   MoreHorizontal,
+  X,
 } from "lucide-react";
+import { PreordenDetail } from "@/components/preorden-detail";
 
 export const Route = createFileRoute("/panel/solicitudes")({
   head: () => ({
