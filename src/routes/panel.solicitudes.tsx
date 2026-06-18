@@ -202,21 +202,20 @@ function SolicitudesPage() {
                   className="border-t border-border hover:bg-muted/40 transition-colors cursor-pointer"
                   onClick={(e) => {
                     const tgt = e.target as HTMLElement;
-                    if (tgt.closest("a,button")) return;
-                    window.location.href = `/panel/preordenes/${r.id}?from=solicitudes&status=${encodeURIComponent(r.status)}`;
+                    if (tgt.closest("button")) return;
+                    setOpenDetail({ id: r.id, status: r.status });
                   }}
                 >
                   <td className="px-5 py-3.5">
                     <div className="flex items-center gap-3">
                       <span className={`h-8 w-1 rounded-full ${statusBar(r.status)}`} />
-                      <Link
-                        to="/panel/preordenes/$id"
-                        params={{ id: r.id }}
-                        search={{ from: "solicitudes", status: r.status }}
+                      <button
+                        type="button"
+                        onClick={() => setOpenDetail({ id: r.id, status: r.status })}
                         className="font-medium text-foreground hover:underline"
                       >
                         {r.id}
-                      </Link>
+                      </button>
                     </div>
                   </td>
                   <td className="px-3 py-3.5 text-foreground/90">{r.client}</td>
@@ -235,14 +234,13 @@ function SolicitudesPage() {
                   <td className="px-3 py-3.5 text-right font-medium tabular-nums">{r.value}</td>
                   <td className="px-5 py-3.5">
                     <div className="flex items-center justify-end gap-1">
-                      <Link
-                        to="/panel/preordenes/$id"
-                        params={{ id: r.id }}
-                        search={{ from: "solicitudes", status: r.status }}
+                      <button
+                        type="button"
+                        onClick={() => setOpenDetail({ id: r.id, status: r.status })}
                         className="rounded-md p-1.5 text-muted-foreground hover:bg-accent hover:text-foreground"
                       >
                         <Eye className="h-4 w-4" />
-                      </Link>
+                      </button>
                       <button className="rounded-md p-1.5 text-muted-foreground hover:bg-accent hover:text-foreground">
                         <MoreHorizontal className="h-4 w-4" />
                       </button>
