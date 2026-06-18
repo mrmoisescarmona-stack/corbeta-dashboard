@@ -229,12 +229,6 @@ function RequestDetailPage() {
           <MetaItem icon={Building2} label="Proveedor" value="Castrol" sub="Categoría Lubricantes" />
           <MetaItem icon={Phone} label="Vendedor" value="Luis Quintero" sub="+57 318 555 1024" />
         </div>
-        <div className="mt-5 grid grid-cols-2 md:grid-cols-4 gap-5 text-xs text-muted-foreground">
-          <div><span className="text-foreground/70 font-medium">Digitada:</span> 28/05/2026 09:08</div>
-          <div><span className="text-foreground/70 font-medium">Recibida:</span> 28/05/2026 09:12</div>
-          <div><span className="text-foreground/70 font-medium">Origen:</span> CorbeMóvil (100)</div>
-          <div><span className="text-foreground/70 font-medium">Catálogo:</span> Lubricantes 2026</div>
-        </div>
       </section>
 
       {status === "Rechazada" && (
