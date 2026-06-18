@@ -18,12 +18,11 @@ export const Route = createFileRoute("/panel/workflow")({
   pendingComponent: ApprovalsSkeleton,
 });
 
-type TabKey = "aprobadores" | "sustitutos" | "proveedores" | "reasignacion";
+type TabKey = "aprobadores" | "sustitutos" | "reasignacion";
 
 const TABS: { key: TabKey; label: string }[] = [
   { key: "aprobadores", label: "Aprobadores" },
   { key: "sustitutos", label: "Sustitutos" },
-  { key: "proveedores", label: "Proveedores" },
   { key: "reasignacion", label: "Reasignación" },
 ];
 
