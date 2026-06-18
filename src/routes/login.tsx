@@ -6,7 +6,7 @@ import logoWhite from "@/assets/corbeta_white.png.asset.json";
 import slideCartagena from "@/assets/slide-cartagena.jpg.asset.json";
 import slideFlag from "@/assets/slide-flag.jpg.asset.json";
 import slidePanoramic from "@/assets/slide-panoramic.jpg.asset.json";
-const logo = logoAsset.url;
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
