@@ -1658,6 +1658,54 @@ function ApprovalsPage() {
           </div>
         </DialogContent>
       </Dialog>
+
+      <ReassignDialog
+        open={reassignDialog.open}
+        approvers={list.map((a) => a.name)}
+        initial={reassignDialog.editIndex !== null ? reassignList[reassignDialog.editIndex] : null}
+        onClose={() => setReassignDialog({ open: false, editIndex: null })}
+        onSave={(r) => {
+          if (reassignDialog.editIndex !== null) {
+            const idx = reassignDialog.editIndex;
+            setReassignList((prev) => prev.map((it, i) => (i === idx ? r : it)));
+            toast.success("Reasignación actualizada");
+          } else {
+            setReassignList((prev) => [...prev, r]);
+            toast.success("Reasignación creada");
+          }
+          setReassignDialog({ open: false, editIndex: null });
+        }}
+      />
+      <Dialog open={!!deletingReassign} onOpenChange={(o) => !o && setDeletingReassign(null)}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Eliminar reasignación</DialogTitle>
+            <DialogDescription>
+              {deletingReassign && `¿Eliminar la reasignación de ${deletingReassign.item.approver} a ${deletingReassign.item.replacement}?`}
+            </DialogDescription>
+          </DialogHeader>
+          <div className="flex justify-end gap-2 pt-4">
+            <button
+              onClick={() => setDeletingReassign(null)}
+              className="rounded-md border border-border bg-background px-3.5 py-2 text-sm hover:bg-accent"
+            >
+              Cancelar
+            </button>
+            <button
+              onClick={() => {
+                if (!deletingReassign) return;
+                const idx = deletingReassign.index;
+                setReassignList((prev) => prev.filter((_, i) => i !== idx));
+                toast.success("Reasignación eliminada");
+                setDeletingReassign(null);
+              }}
+              className="rounded-md bg-destructive px-3.5 py-2 text-sm font-medium text-destructive-foreground hover:opacity-90"
+            >
+              Eliminar
+            </button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
