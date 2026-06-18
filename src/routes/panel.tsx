@@ -22,7 +22,8 @@ import {
   ShieldAlert,
   Workflow as WorkflowIcon,
 } from "lucide-react";
-import logoAsset from "@/assets/logo_corbeta.png.asset.json";
+import logoColor from "@/assets/corbeta_color.png.asset.json";
+import logoWhite from "@/assets/corbeta_white.png.asset.json";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { useAuth, getRoleLabel, getUserDisplayName, getUserEmail, getUserInitials, getAllDemoProfiles, setImpersonatedLogin, type AppRole } from "@/hooks/use-auth";
