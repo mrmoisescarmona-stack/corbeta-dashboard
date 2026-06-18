@@ -1,7 +1,8 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Eye, EyeOff, Lock, Mail, ShieldCheck } from "lucide-react";
-import logoAsset from "@/assets/logo_corbeta.png.asset.json";
+import logoColor from "@/assets/corbeta_color.png.asset.json";
+import logoWhite from "@/assets/corbeta_white.png.asset.json";
 import slideCartagena from "@/assets/slide-cartagena.jpg.asset.json";
 import slideFlag from "@/assets/slide-flag.jpg.asset.json";
 import slidePanoramic from "@/assets/slide-panoramic.jpg.asset.json";
