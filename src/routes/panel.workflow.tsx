@@ -1247,7 +1247,7 @@ function CategoryApproversCard() {
 
 export const STORAGE_KEY = "workflow.data.v1";
 
-export function loadStored<T>(key: "approvers" | "providers" | "substitutes", fallback: T): T {
+export function loadStored<T>(key: "approvers" | "providers" | "substitutes" | "reassignments", fallback: T): T {
   if (typeof window === "undefined") return fallback;
   try {
     const raw = window.localStorage.getItem(STORAGE_KEY);
