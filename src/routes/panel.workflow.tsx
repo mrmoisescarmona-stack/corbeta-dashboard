@@ -18,12 +18,11 @@ export const Route = createFileRoute("/panel/workflow")({
   pendingComponent: ApprovalsSkeleton,
 });
 
-type TabKey = "aprobadores" | "sustitutos" | "proveedores" | "reasignacion";
+type TabKey = "aprobadores" | "sustitutos" | "reasignacion";
 
 const TABS: { key: TabKey; label: string }[] = [
   { key: "aprobadores", label: "Aprobadores" },
   { key: "sustitutos", label: "Sustitutos" },
-  { key: "proveedores", label: "Proveedores" },
   { key: "reasignacion", label: "Reasignación" },
 ];
 
@@ -147,7 +146,7 @@ const substitutes: Substitute[] = [
   { approver: "Laura Sánchez", substitute: "María González", start: "2026-06-01", end: "2026-06-30" },
 ];
 
-type Provider = {
+export type Provider = {
   id: string;
   name: string;
   category: string;
@@ -156,9 +155,9 @@ type Provider = {
   active: boolean;
 };
 
-const PROVIDER_CATEGORIES = ["Electrodomésticos", "Tecnología", "Hogar", "Línea Blanca", "Lubricantes"];
+export const PROVIDER_CATEGORIES = ["Electrodomésticos", "Tecnología", "Hogar", "Línea Blanca", "Lubricantes"];
 
-const providers: Provider[] = [
+export const providers: Provider[] = [
   { id: "900123456", name: "Samsung Colombia S.A.", category: "Electrodomésticos", email: "aprobaciones@samsung.com.co", phone: "+57 601 5953000", active: true },
   { id: "900654321", name: "LG Electronics", category: "Tecnología", email: "descuentos@lg.com.co", phone: "+57 601 4327100", active: true },
   { id: "900789012", name: "Whirlpool Andina", category: "Línea Blanca", email: "comercial@whirlpool.com.co", phone: "+57 601 6512200", active: true },
@@ -193,7 +192,7 @@ const initialCategoryApprovers: CategoryApprover[] = [
 ];
 
 
-function StatusBadge({ active, status }: { active: boolean; status?: "Activo" | "Inactivo" | "Pendiente" }) {
+export function StatusBadge({ active, status }: { active: boolean; status?: "Activo" | "Inactivo" | "Pendiente" }) {
   const resolved = status ?? (active ? "Activo" : "Inactivo");
   const styles =
     resolved === "Activo"
@@ -224,7 +223,7 @@ function PillBadge({ label, tone = "warning" }: { label: string; tone?: "warning
   );
 }
 
-function SectionCard({
+export function SectionCard({
   title,
   subtitle,
   action,
@@ -249,7 +248,7 @@ function SectionCard({
   );
 }
 
-function PrimaryButton({ children, onClick }: { children: React.ReactNode; onClick?: () => void }) {
+export function PrimaryButton({ children, onClick }: { children: React.ReactNode; onClick?: () => void }) {
   return (
     <button onClick={onClick} className="inline-flex items-center gap-2 rounded-lg bg-primary px-3.5 py-2 text-sm font-medium text-primary-foreground hover:opacity-90">
       {children}
@@ -1242,9 +1241,9 @@ function CategoryApproversCard() {
 }
 
 
-const STORAGE_KEY = "workflow.data.v1";
+export const STORAGE_KEY = "workflow.data.v1";
 
-function loadStored<T>(key: "approvers" | "providers" | "substitutes", fallback: T): T {
+export function loadStored<T>(key: "approvers" | "providers" | "substitutes", fallback: T): T {
   if (typeof window === "undefined") return fallback;
   try {
     const raw = window.localStorage.getItem(STORAGE_KEY);
@@ -1454,118 +1453,8 @@ function ApprovalsPage() {
         </SectionCard>
       )}
 
-      {tab === "proveedores" && (
-        <SectionCard
-          title="Proveedores"
-          subtitle="Registro de proveedores por categoría — acuerdo SLS (HU_002)"
-          action={
-            <PrimaryButton onClick={() => setNewProviderOpen(true)}>
-              <Plus className="h-4 w-4" /> Agregar
-            </PrimaryButton>
-          }
-        >
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="text-left text-[11px] uppercase tracking-wider text-muted-foreground">
-                  <th className="font-medium px-5 py-3">Identificación</th>
-                  <th className="font-medium px-3 py-3">Nombre</th>
-                  <th className="font-medium px-3 py-3">Categoría</th>
-                  <th className="font-medium px-3 py-3">Email</th>
-                  <th className="font-medium px-3 py-3">Teléfono</th>
-                  <th className="font-medium px-3 py-3">Estado</th>
-                  <th className="font-medium px-5 py-3 text-right">Acciones</th>
-                </tr>
-              </thead>
-              <tbody>
-                {providerList.map((p) => (
-                  <tr key={p.id} className="border-t border-border hover:bg-muted/40">
-                    <td className="px-5 py-3.5 font-medium tabular-nums">{p.id}</td>
-                    <td className="px-3 py-3.5">{p.name}</td>
-                    <td className="px-3 py-3.5">{p.category}</td>
-                    <td className="px-3 py-3.5 text-muted-foreground">{p.email}</td>
-                    <td className="px-3 py-3.5 text-muted-foreground tabular-nums">{p.phone}</td>
-                    <td className="px-3 py-3.5"><StatusBadge active={p.active} /></td>
-                    <td className="px-5 py-3.5">
-                      <div className="flex justify-end gap-1">
-                        <button
-                          onClick={() => setPreviewProvider(p)}
-                          className="rounded-md p-1.5 hover:bg-accent"
-                          aria-label={`Previsualizar ${p.name}`}
-                          title="Previsualizar / habilitar"
-                        >
-                          <Eye className="h-4 w-4" />
-                        </button>
-                        <a
-                          href={`mailto:${p.email}`}
-                          className="rounded-md p-1.5 hover:bg-accent text-primary"
-                          aria-label={`Enviar correo a ${p.name}`}
-                          title={`Enviar correo a ${p.email}`}
-                        >
-                          <Mail className="h-4 w-4" />
-                        </a>
-                        <a
-                          href={`tel:${p.phone.replace(/\s+/g, "")}`}
-                          className="rounded-md p-1.5 hover:bg-accent text-primary"
-                          aria-label={`Llamar a ${p.name}`}
-                          title={`Llamar al ${p.phone}`}
-                        >
-                          <Phone className="h-4 w-4" />
-                        </a>
-                        <button onClick={() => setEditingProvider(p)} className="rounded-md p-1.5 hover:bg-accent" aria-label="Editar" title="Editar"><Pencil className="h-4 w-4" /></button>
-                        <button onClick={() => setDeletingProvider(p)} className="rounded-md p-1.5 text-destructive hover:bg-destructive/10" aria-label="Eliminar" title="Eliminar"><Trash2 className="h-4 w-4" /></button>
-                      </div>
-                    </td>
-                  </tr>
 
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </SectionCard>
-      )}
 
-      {tab === "proveedores" && (
-        <SectionCard
-          title="Catálogo y desempeño"
-          subtitle="Indicadores operativos por proveedor"
-          action={null}
-        >
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="text-left text-[11px] uppercase tracking-wider text-muted-foreground">
-                  <th className="font-medium px-5 py-3">Proveedor</th>
-                  <th className="font-medium px-3 py-3">Categoría</th>
-                  <th className="font-medium px-3 py-3">Estado</th>
-                  <th className="font-medium px-3 py-3 text-right">Solicitudes</th>
-                  <th className="font-medium px-3 py-3 text-right">Aprob. %</th>
-                  <th className="font-medium px-5 py-3 text-right">Tiempo prom.</th>
-                </tr>
-              </thead>
-              <tbody>
-                {[
-                  { name: "Castrol", category: "Lubricantes", status: "Activo", requests: 124, approved: 68, avg: "18.7h" },
-                  { name: "Shell", category: "Lubricantes", status: "Activo", requests: 86, approved: 72, avg: "14.2h" },
-                  { name: "Mobil", category: "Lubricantes", status: "Activo", requests: 54, approved: 65, avg: "21.1h" },
-                  { name: "Total", category: "Lubricantes", status: "Pausado", requests: 32, approved: 58, avg: "26.4h" },
-                  { name: "Valvoline", category: "Lubricantes", status: "Activo", requests: 48, approved: 70, avg: "16.9h" },
-                  { name: "Repsol", category: "Lubricantes", status: "Activo", requests: 39, approved: 62, avg: "19.5h" },
-                ].map((p) => (
-                  <tr key={p.name} className="border-t border-border hover:bg-muted/40">
-                    <td className="px-5 py-3.5 font-medium">{p.name}</td>
-                    <td className="px-3 py-3.5 text-muted-foreground">{p.category}</td>
-                    <td className="px-3 py-3.5"><StatusBadge active={p.status === "Activo"} /></td>
-                    <td className="px-3 py-3.5 text-right tabular-nums">{p.requests}</td>
-                    <td className="px-3 py-3.5 text-right tabular-nums">{p.approved}%</td>
-                    <td className="px-5 py-3.5 text-right tabular-nums text-muted-foreground">{p.avg}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </SectionCard>
-      )}
 
       {tab === "reasignacion" && (
         <SectionCard
@@ -1779,7 +1668,7 @@ function FileDropzone({ onFiles }: { onFiles: (files: File[]) => void }) {
   );
 }
 
-function NewProviderDialog({
+export function NewProviderDialog({
   open,
   initial,
   onClose,
@@ -1915,7 +1804,7 @@ function NewProviderDialog({
   );
 }
 
-function ProviderPreviewDialog({
+export function ProviderPreviewDialog({
   provider,
   onClose,
   onToggle,
