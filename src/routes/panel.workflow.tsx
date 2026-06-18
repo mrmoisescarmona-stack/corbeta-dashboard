@@ -1466,15 +1466,64 @@ function ApprovalsPage() {
       {tab === "reasignacion" && (
         <SectionCard
           title="Reasignación de solicitudes"
-          subtitle="Reasignación masiva o individual por rol superior"
+          subtitle="Reasignación manual por rol superior"
           action={
-            <PrimaryButton>
+            <PrimaryButton onClick={() => setReassignDialog({ open: true, editIndex: null })}>
               <ArrowLeftRight className="h-4 w-4" /> Reasignar
             </PrimaryButton>
           }
         >
-          <div className="p-8 text-sm text-muted-foreground">
-            No hay reasignaciones registradas. Use el botón para reasignar solicitudes pendientes.
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="text-left text-[11px] uppercase tracking-wider text-muted-foreground">
+                  <th className="font-medium px-5 py-3">De (Aprobador)</th>
+                  <th className="font-medium px-3 py-3">A (Reemplazo)</th>
+                  <th className="font-medium px-3 py-3">Fecha inicio</th>
+                  <th className="font-medium px-3 py-3">Fecha fin</th>
+                  <th className="font-medium px-3 py-3">Motivo</th>
+                  <th className="font-medium px-5 py-3 text-right">Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                {reassignList.length === 0 && (
+                  <tr>
+                    <td colSpan={6} className="px-5 py-8 text-sm text-muted-foreground text-center">
+                      No hay reasignaciones registradas. Use el botón para reasignar aprobaciones pendientes.
+                    </td>
+                  </tr>
+                )}
+                {reassignList.map((r, i) => (
+                  <tr key={i} className="border-t border-border hover:bg-muted/40">
+                    <td className="px-5 py-3.5 font-medium">{r.approver}</td>
+                    <td className="px-3 py-3.5">{r.replacement}</td>
+                    <td className="px-3 py-3.5 text-muted-foreground tabular-nums">{r.start}</td>
+                    <td className="px-3 py-3.5 text-muted-foreground tabular-nums">{r.end}</td>
+                    <td className="px-3 py-3.5 text-muted-foreground max-w-xs truncate" title={r.reason}>{r.reason}</td>
+                    <td className="px-5 py-3.5">
+                      <div className="flex justify-end gap-1">
+                        <button
+                          onClick={() => setReassignDialog({ open: true, editIndex: i })}
+                          className="rounded-md p-1.5 hover:bg-accent"
+                          aria-label="Editar"
+                          title="Editar"
+                        >
+                          <Pencil className="h-4 w-4" />
+                        </button>
+                        <button
+                          onClick={() => setDeletingReassign({ index: i, item: r })}
+                          className="rounded-md p-1.5 text-destructive hover:bg-destructive/10"
+                          aria-label="Eliminar"
+                          title="Eliminar"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         </SectionCard>
       )}
