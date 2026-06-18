@@ -404,17 +404,20 @@ function TraceabilitySection() {
           <button className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:opacity-90">
             <Search className="h-4 w-4" /> Consultar
           </button>
-          <button className="inline-flex items-center gap-2 rounded-lg border border-border bg-background px-4 py-2 text-sm font-medium hover:bg-accent">
-            <Download className="h-4 w-4" /> Exportar Excel (CSV)
-          </button>
         </div>
       </div>
 
       <div className="rounded-xl border border-border bg-card">
-        <div className="p-5 border-b border-border">
-          <h3 className="text-base font-semibold">Resultados ({traceResults.length})</h3>
-          <p className="mt-1 text-xs text-muted-foreground">Información actualizada a la fecha de gestión de cada solicitud</p>
+        <div className="p-5 border-b border-border flex items-start justify-between gap-4">
+          <div>
+            <h3 className="text-base font-semibold">Resultados ({traceResults.length})</h3>
+            <p className="mt-1 text-xs text-muted-foreground">Información actualizada a la fecha de gestión de cada solicitud</p>
+          </div>
+          <button className="inline-flex shrink-0 items-center gap-2 rounded-lg border border-border bg-background px-4 py-2 text-sm font-medium hover:bg-accent">
+            <Download className="h-4 w-4" /> Exportar Excel (CSV)
+          </button>
         </div>
+
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
