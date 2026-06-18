@@ -288,7 +288,6 @@ function RequestDetailPage() {
                 <th className="font-medium px-3 py-3 text-right">% Corbeta</th>
                 <th className="font-medium px-3 py-3 text-right">% Proveedor</th>
                 <th className="font-medium px-3 py-3">Estado</th>
-                <th className="font-medium px-3 py-3">Estatus de correo</th>
                 <th className="font-medium px-5 py-3 text-right">Acciones</th>
               </tr>
             </thead>
