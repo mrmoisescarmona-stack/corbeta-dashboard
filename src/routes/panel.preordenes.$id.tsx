@@ -295,30 +295,39 @@ function RequestDetailPage() {
           <table className="w-full text-sm">
             <thead>
               <tr className="text-left text-[11px] uppercase tracking-wider text-muted-foreground">
-                <th className="font-medium px-5 py-3">EAN / Producto</th>
-                <th className="font-medium px-3 py-3 text-right">Cant.</th>
-                <th className="font-medium px-3 py-3 text-right">Precio lista</th>
-                <th className="font-medium px-3 py-3 text-right">% Corbeta</th>
-                <th className="font-medium px-3 py-3 text-right">% Proveedor</th>
-                <th className="font-medium px-3 py-3">Estado</th>
-                <th className="font-medium px-5 py-3 text-right">Acciones</th>
+                <th className="font-medium px-6 py-4">EAN / Producto</th>
+                <th className="font-medium px-4 py-4 text-right">Cant.</th>
+                <th className="font-medium px-4 py-4 text-right">Precio lista</th>
+                <th className="font-medium px-4 py-4 text-right">% Corbeta</th>
+                <th className="font-medium px-4 py-4 text-right">% Proveedor</th>
+                <th className="font-medium px-4 py-4">Estado del producto</th>
+                <th className="font-medium px-4 py-4">Estado proveedor</th>
+                <th className="font-medium px-4 py-4">Estado aprobador</th>
+                <th className="font-medium px-6 py-4 text-right">Acciones</th>
               </tr>
             </thead>
             <tbody>
               {visibleLines.map((l, idx) => {
                 const done = l.status !== "Pendiente";
+                const productStatus = deriveProductStatus(l);
                 return (
                   <tr key={l.ean} className="border-t border-border align-top hover:bg-muted/30">
-                    <td className="px-5 py-3.5">
+                    <td className="px-6 py-5">
                       <div className="font-medium">{l.description}</div>
-                      <div className="text-[11px] text-muted-foreground tabular-nums">EAN {l.ean}</div>
+                      <div className="text-[11px] text-muted-foreground tabular-nums mt-1">EAN {l.ean}</div>
                     </td>
-                    <td className="px-3 py-3.5 text-right tabular-nums">{l.qty}</td>
-                    <td className="px-3 py-3.5 text-right tabular-nums">{fmtCOP(l.listPrice)}</td>
-                    <td className="px-3 py-3.5 text-right tabular-nums">{l.pctCorbeta ?? 0}</td>
-                    <td className="px-3 py-3.5 text-right tabular-nums">{l.pctProveedor ?? 0}</td>
-                    <td className="px-3 py-3.5">
-                      <StatusBadge status={l.status} />
+                    <td className="px-4 py-5 text-right tabular-nums">{l.qty}</td>
+                    <td className="px-4 py-5 text-right tabular-nums">{fmtCOP(l.listPrice)}</td>
+                    <td className="px-4 py-5 text-right tabular-nums">{l.pctCorbeta ?? 0}</td>
+                    <td className="px-4 py-5 text-right tabular-nums">{l.pctProveedor ?? 0}</td>
+                    <td className="px-4 py-5">
+                      <ProductStatusBadge status={productStatus} />
+                    </td>
+                    <td className="px-4 py-5">
+                      <ProviderBadge status={l.providerStatus} pct={l.providerPct} />
+                    </td>
+                    <td className="px-4 py-5">
+                      <ApproverBadge status={l.approverStatus} pct={l.approverPct} />
                       {l.authorizedPct != null && (
                         <div className="mt-1 text-[11px] text-muted-foreground">% autorizado: {l.authorizedPct}</div>
                       )}
@@ -326,7 +335,7 @@ function RequestDetailPage() {
                         <div className="mt-1 text-[11px] text-muted-foreground line-clamp-2">{l.reason}</div>
                       )}
                     </td>
-                    <td className="px-5 py-3.5">
+                    <td className="px-6 py-5">
                       <div className="flex justify-end">
                         <button
                           disabled={done || readOnly}
@@ -342,6 +351,7 @@ function RequestDetailPage() {
               })}
             </tbody>
           </table>
+
         </div>
       </div>
 
