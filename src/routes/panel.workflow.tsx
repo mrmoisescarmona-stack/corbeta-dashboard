@@ -1274,18 +1274,21 @@ function ApprovalsPage() {
   const [substituteList, setSubstituteList] = useState<Substitute[]>(() => loadStored("substitutes", substitutes));
   const [substituteDialog, setSubstituteDialog] = useState<{ open: boolean; editIndex: number | null }>({ open: false, editIndex: null });
   const [deletingSubstitute, setDeletingSubstitute] = useState<{ index: number; item: Substitute } | null>(null);
+  const [reassignList, setReassignList] = useState<Reassignment[]>(() => loadStored("reassignments", reassignments));
+  const [reassignDialog, setReassignDialog] = useState<{ open: boolean; editIndex: number | null }>({ open: false, editIndex: null });
+  const [deletingReassign, setDeletingReassign] = useState<{ index: number; item: Reassignment } | null>(null);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
     try {
       window.localStorage.setItem(
         STORAGE_KEY,
-        JSON.stringify({ approvers: list, providers: providerList, substitutes: substituteList })
+        JSON.stringify({ approvers: list, providers: providerList, substitutes: substituteList, reassignments: reassignList })
       );
     } catch {
       /* ignore quota */
     }
-  }, [list, providerList, substituteList]);
+  }, [list, providerList, substituteList, reassignList]);
 
   if (useFakeLoading()) return <ApprovalsSkeleton />;
 
