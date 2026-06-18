@@ -43,6 +43,9 @@ export const Route = createFileRoute("/panel/preordenes/$id")({
 });
 
 type LineStatus = "Pendiente" | "Aprobada" | "Rechazada" | "Modificada" | "Cancelada" | "No aplica";
+type ProductStatus = "Pendiente" | "En Proceso" | "Finalizado";
+type ProviderStatus = "Pendiente" | "Aprobado" | "Rechazado" | "Modificado";
+type ApproverStatus = "Pendiente" | "Aprobado" | "Rechazado" | "Modificado" | "Cancelada";
 
 type Line = {
   ean: string;
@@ -55,6 +58,10 @@ type Line = {
   status: LineStatus;
   authorizedPct?: number;
   reason?: string;
+  providerStatus: ProviderStatus;
+  providerPct?: number;
+  approverStatus: ApproverStatus;
+  approverPct?: number;
 };
 
 type TraceEntry = {
@@ -65,11 +72,17 @@ type TraceEntry = {
 };
 
 const initialLines: Line[] = [
-  { ean: "7702011001234", description: "Aceite Castrol GTX 20W50 x 1 Gal", qty: 24, listPrice: 78500, pctCorbeta: 8, pctProveedor: 4, requiresMyAction: true, status: "Pendiente" },
-  { ean: "7702011002345", description: "Filtro de aceite Mann W 712/75", qty: 60, listPrice: 22300, pctCorbeta: null, pctProveedor: 12, requiresMyAction: true, status: "Pendiente" },
-  { ean: "7702011003456", description: "Bujía NGK BPR6ES", qty: 120, listPrice: 9800, pctCorbeta: 5, pctProveedor: null, requiresMyAction: true, status: "Pendiente" },
-  { ean: "7702011004567", description: "Refrigerante Prestone 50/50 x 1 Gal", qty: 36, listPrice: 41200, pctCorbeta: 6, pctProveedor: 6, requiresMyAction: true, status: "Pendiente" },
+  { ean: "7702011001234", description: "Aceite Castrol GTX 20W50 x 1 Gal", qty: 24, listPrice: 78500, pctCorbeta: 8, pctProveedor: 4, requiresMyAction: true, status: "Pendiente", providerStatus: "Aprobado", providerPct: 4, approverStatus: "Pendiente" },
+  { ean: "7702011002345", description: "Filtro de aceite Mann W 712/75", qty: 60, listPrice: 22300, pctCorbeta: null, pctProveedor: 12, requiresMyAction: true, status: "Pendiente", providerStatus: "Modificado", providerPct: 10, approverStatus: "Pendiente" },
+  { ean: "7702011003456", description: "Bujía NGK BPR6ES", qty: 120, listPrice: 9800, pctCorbeta: 5, pctProveedor: null, requiresMyAction: true, status: "Pendiente", providerStatus: "Rechazado", approverStatus: "Pendiente" },
+  { ean: "7702011004567", description: "Refrigerante Prestone 50/50 x 1 Gal", qty: 36, listPrice: 41200, pctCorbeta: 6, pctProveedor: 6, requiresMyAction: true, status: "Pendiente", providerStatus: "Aprobado", providerPct: 6, approverStatus: "Pendiente" },
 ];
+
+function deriveProductStatus(l: Line): ProductStatus {
+  if (l.status !== "Pendiente") return "Finalizado";
+  if (l.approverStatus === "Pendiente" && l.providerStatus !== "Pendiente") return "En Proceso";
+  return "Pendiente";
+}
 
 const fmtCOP = (n: number) =>
   new Intl.NumberFormat("es-CO", { style: "currency", currency: "COP", maximumFractionDigits: 0 }).format(n);
