@@ -146,6 +146,10 @@ const substitutes: Substitute[] = [
   { approver: "Laura Sánchez", substitute: "María González", start: "2026-06-01", end: "2026-06-30" },
 ];
 
+type Reassignment = { approver: string; replacement: string; start: string; end: string; reason: string };
+
+const reassignments: Reassignment[] = [];
+
 export type Provider = {
   id: string;
   name: string;
@@ -1243,7 +1247,7 @@ function CategoryApproversCard() {
 
 export const STORAGE_KEY = "workflow.data.v1";
 
-export function loadStored<T>(key: "approvers" | "providers" | "substitutes", fallback: T): T {
+export function loadStored<T>(key: "approvers" | "providers" | "substitutes" | "reassignments", fallback: T): T {
   if (typeof window === "undefined") return fallback;
   try {
     const raw = window.localStorage.getItem(STORAGE_KEY);
@@ -1270,18 +1274,21 @@ function ApprovalsPage() {
   const [substituteList, setSubstituteList] = useState<Substitute[]>(() => loadStored("substitutes", substitutes));
   const [substituteDialog, setSubstituteDialog] = useState<{ open: boolean; editIndex: number | null }>({ open: false, editIndex: null });
   const [deletingSubstitute, setDeletingSubstitute] = useState<{ index: number; item: Substitute } | null>(null);
+  const [reassignList, setReassignList] = useState<Reassignment[]>(() => loadStored("reassignments", reassignments));
+  const [reassignDialog, setReassignDialog] = useState<{ open: boolean; editIndex: number | null }>({ open: false, editIndex: null });
+  const [deletingReassign, setDeletingReassign] = useState<{ index: number; item: Reassignment } | null>(null);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
     try {
       window.localStorage.setItem(
         STORAGE_KEY,
-        JSON.stringify({ approvers: list, providers: providerList, substitutes: substituteList })
+        JSON.stringify({ approvers: list, providers: providerList, substitutes: substituteList, reassignments: reassignList })
       );
     } catch {
       /* ignore quota */
     }
-  }, [list, providerList, substituteList]);
+  }, [list, providerList, substituteList, reassignList]);
 
   if (useFakeLoading()) return <ApprovalsSkeleton />;
 
@@ -1459,15 +1466,64 @@ function ApprovalsPage() {
       {tab === "reasignacion" && (
         <SectionCard
           title="Reasignación de solicitudes"
-          subtitle="Reasignación masiva o individual por rol superior"
+          subtitle="Reasignación manual por rol superior"
           action={
-            <PrimaryButton>
+            <PrimaryButton onClick={() => setReassignDialog({ open: true, editIndex: null })}>
               <ArrowLeftRight className="h-4 w-4" /> Reasignar
             </PrimaryButton>
           }
         >
-          <div className="p-8 text-sm text-muted-foreground">
-            No hay reasignaciones registradas. Use el botón para reasignar solicitudes pendientes.
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="text-left text-[11px] uppercase tracking-wider text-muted-foreground">
+                  <th className="font-medium px-5 py-3">De (Aprobador)</th>
+                  <th className="font-medium px-3 py-3">A (Reemplazo)</th>
+                  <th className="font-medium px-3 py-3">Fecha inicio</th>
+                  <th className="font-medium px-3 py-3">Fecha fin</th>
+                  <th className="font-medium px-3 py-3">Motivo</th>
+                  <th className="font-medium px-5 py-3 text-right">Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                {reassignList.length === 0 && (
+                  <tr>
+                    <td colSpan={6} className="px-5 py-8 text-sm text-muted-foreground text-center">
+                      No hay reasignaciones registradas. Use el botón para reasignar aprobaciones pendientes.
+                    </td>
+                  </tr>
+                )}
+                {reassignList.map((r, i) => (
+                  <tr key={i} className="border-t border-border hover:bg-muted/40">
+                    <td className="px-5 py-3.5 font-medium">{r.approver}</td>
+                    <td className="px-3 py-3.5">{r.replacement}</td>
+                    <td className="px-3 py-3.5 text-muted-foreground tabular-nums">{r.start}</td>
+                    <td className="px-3 py-3.5 text-muted-foreground tabular-nums">{r.end}</td>
+                    <td className="px-3 py-3.5 text-muted-foreground max-w-xs truncate" title={r.reason}>{r.reason}</td>
+                    <td className="px-5 py-3.5">
+                      <div className="flex justify-end gap-1">
+                        <button
+                          onClick={() => setReassignDialog({ open: true, editIndex: i })}
+                          className="rounded-md p-1.5 hover:bg-accent"
+                          aria-label="Editar"
+                          title="Editar"
+                        >
+                          <Pencil className="h-4 w-4" />
+                        </button>
+                        <button
+                          onClick={() => setDeletingReassign({ index: i, item: r })}
+                          className="rounded-md p-1.5 text-destructive hover:bg-destructive/10"
+                          aria-label="Eliminar"
+                          title="Eliminar"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         </SectionCard>
       )}
@@ -1594,6 +1650,54 @@ function ApprovalsPage() {
                 setSubstituteList((prev) => prev.filter((_, i) => i !== idx));
                 toast.success("Sustituto eliminado");
                 setDeletingSubstitute(null);
+              }}
+              className="rounded-md bg-destructive px-3.5 py-2 text-sm font-medium text-destructive-foreground hover:opacity-90"
+            >
+              Eliminar
+            </button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      <ReassignDialog
+        open={reassignDialog.open}
+        approvers={list.map((a) => a.name)}
+        initial={reassignDialog.editIndex !== null ? reassignList[reassignDialog.editIndex] : null}
+        onClose={() => setReassignDialog({ open: false, editIndex: null })}
+        onSave={(r) => {
+          if (reassignDialog.editIndex !== null) {
+            const idx = reassignDialog.editIndex;
+            setReassignList((prev) => prev.map((it, i) => (i === idx ? r : it)));
+            toast.success("Reasignación actualizada");
+          } else {
+            setReassignList((prev) => [...prev, r]);
+            toast.success("Reasignación creada");
+          }
+          setReassignDialog({ open: false, editIndex: null });
+        }}
+      />
+      <Dialog open={!!deletingReassign} onOpenChange={(o) => !o && setDeletingReassign(null)}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Eliminar reasignación</DialogTitle>
+            <DialogDescription>
+              {deletingReassign && `¿Eliminar la reasignación de ${deletingReassign.item.approver} a ${deletingReassign.item.replacement}?`}
+            </DialogDescription>
+          </DialogHeader>
+          <div className="flex justify-end gap-2 pt-4">
+            <button
+              onClick={() => setDeletingReassign(null)}
+              className="rounded-md border border-border bg-background px-3.5 py-2 text-sm hover:bg-accent"
+            >
+              Cancelar
+            </button>
+            <button
+              onClick={() => {
+                if (!deletingReassign) return;
+                const idx = deletingReassign.index;
+                setReassignList((prev) => prev.filter((_, i) => i !== idx));
+                toast.success("Reasignación eliminada");
+                setDeletingReassign(null);
               }}
               className="rounded-md bg-destructive px-3.5 py-2 text-sm font-medium text-destructive-foreground hover:opacity-90"
             >
@@ -1982,6 +2086,134 @@ function SubstituteDialog({
             className="rounded-md bg-primary px-3.5 py-2 text-sm font-medium text-primary-foreground hover:opacity-90"
           >
             {initial ? "Guardar" : "Asignar"}
+          </button>
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+function ReassignDialog({
+  open,
+  approvers,
+  initial,
+  onClose,
+  onSave,
+}: {
+  open: boolean;
+  approvers: string[];
+  initial: Reassignment | null;
+  onClose: () => void;
+  onSave: (r: Reassignment) => void;
+}) {
+  const empty: Reassignment = { approver: "", replacement: "", start: "", end: "", reason: "" };
+  const [form, setForm] = useState<Reassignment>(empty);
+  const [errors, setErrors] = useState<Partial<Record<keyof Reassignment, string>>>({});
+
+  useEffect(() => {
+    if (open) {
+      setForm(initial ?? empty);
+      setErrors({});
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open, initial]);
+
+  const set = <K extends keyof Reassignment>(k: K, v: Reassignment[K]) =>
+    setForm((prev) => ({ ...prev, [k]: v }));
+
+  const submit = () => {
+    const next: Partial<Record<keyof Reassignment, string>> = {};
+    if (!form.approver) next.approver = "Requerido";
+    if (!form.replacement) next.replacement = "Requerido";
+    else if (form.replacement === form.approver) next.replacement = "Debe ser distinto al aprobador";
+    if (!form.start) next.start = "Requerido";
+    if (!form.end) next.end = "Requerido";
+    else if (form.start && form.end < form.start) next.end = "Debe ser posterior a inicio";
+    if (!form.reason.trim()) next.reason = "Requerido";
+    setErrors(next);
+    if (Object.keys(next).length > 0) return;
+    onSave(form);
+  };
+
+  const replacementOptions = approvers.filter((a) => a !== form.approver);
+
+  return (
+    <Dialog open={open} onOpenChange={(o) => !o && onClose()}>
+      <DialogContent className="sm:max-w-lg">
+        <DialogHeader>
+          <DialogTitle>{initial ? "Editar reasignación" : "Reasignar aprobaciones"}</DialogTitle>
+          <DialogDescription>
+            Seleccione el aprobador a reemplazar y quién recibirá sus aprobaciones durante el período indicado.
+          </DialogDescription>
+        </DialogHeader>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+          <SelectField
+            label="Aprobador a reemplazar"
+            value={form.approver}
+            onChange={(v) => set("approver", v)}
+            options={approvers}
+            error={errors.approver}
+          />
+          <SelectField
+            label="Nuevo aprobador"
+            value={form.replacement}
+            onChange={(v) => set("replacement", v)}
+            options={replacementOptions}
+            error={errors.replacement}
+            disabled={!form.approver}
+            placeholder={form.approver ? "Seleccionar…" : "Seleccione aprobador primero"}
+          />
+          <div>
+            <label className="block text-sm font-medium mb-1.5">
+              Fecha inicio <span className="text-destructive">*</span>
+            </label>
+            <input
+              type="date"
+              value={form.start}
+              onChange={(e) => set("start", e.target.value)}
+              className={`w-full rounded-md border px-3 py-2 text-sm bg-background ${errors.start ? "border-destructive" : "border-border"}`}
+            />
+            {errors.start && <p className="mt-1 text-xs text-destructive">{errors.start}</p>}
+          </div>
+          <div>
+            <label className="block text-sm font-medium mb-1.5">
+              Fecha fin <span className="text-destructive">*</span>
+            </label>
+            <input
+              type="date"
+              value={form.end}
+              min={form.start || undefined}
+              onChange={(e) => set("end", e.target.value)}
+              className={`w-full rounded-md border px-3 py-2 text-sm bg-background ${errors.end ? "border-destructive" : "border-border"}`}
+            />
+            {errors.end && <p className="mt-1 text-xs text-destructive">{errors.end}</p>}
+          </div>
+          <div className="sm:col-span-2">
+            <label className="block text-sm font-medium mb-1.5">
+              Motivo de reasignación <span className="text-destructive">*</span>
+            </label>
+            <textarea
+              value={form.reason}
+              onChange={(e) => set("reason", e.target.value)}
+              placeholder="Vacaciones, incapacidad, etc."
+              rows={3}
+              className={`w-full rounded-md border px-3 py-2 text-sm bg-background ${errors.reason ? "border-destructive" : "border-border"}`}
+            />
+            {errors.reason && <p className="mt-1 text-xs text-destructive">{errors.reason}</p>}
+          </div>
+        </div>
+        <div className="flex justify-end gap-2 pt-4">
+          <button
+            onClick={onClose}
+            className="rounded-md border border-border bg-background px-3.5 py-2 text-sm hover:bg-accent"
+          >
+            Cancelar
+          </button>
+          <button
+            onClick={submit}
+            className="rounded-md bg-primary px-3.5 py-2 text-sm font-medium text-primary-foreground hover:opacity-90"
+          >
+            {initial ? "Guardar" : "Confirmar reasignación"}
           </button>
         </div>
       </DialogContent>
