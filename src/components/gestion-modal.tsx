@@ -18,19 +18,24 @@ export type GestionItem = {
 };
 
 export type Decision = "approve" | "reject" | "modify" | "cancel";
+export type GestionRole = "provider" | "approver";
 
 export function GestionModal({
   item,
+  role = "approver",
   onClose,
   onConfirm,
 }: {
   item: GestionItem;
+  role?: GestionRole;
   onClose: () => void;
   onConfirm: (id: string, decision: Decision) => void;
 }) {
   const [decision, setDecision] = useState<Decision | null>(null);
   const [justif, setJustif] = useState("");
   const [nuevoPct, setNuevoPct] = useState("");
+  const [tipoDescuento, setTipoDescuento] = useState("");
+  const [tipoExclusion, setTipoExclusion] = useState("no-mutuamente");
   const [files, setFiles] = useState<EvidenceFile[]>([]);
 
   const handleAddFiles = (fl: File[]) => {
@@ -51,14 +56,23 @@ export function GestionModal({
     );
   };
 
-  const canConfirm = decision !== null;
+  const isApprover = role === "approver";
+  const title = isApprover ? "Respuesta del Aprobador" : "Respuesta del Proveedor";
+  const ctaCls = isApprover
+    ? "bg-violet-600 text-white hover:bg-violet-700"
+    : "bg-primary text-primary-foreground hover:opacity-90";
 
-  const actions: { key: Decision; label: string; icon: any; cls: string }[] = [
+  const needsTipoDescuento = isApprover && !tipoDescuento;
+  const canConfirm = decision !== null && !needsTipoDescuento;
+
+  const baseActions: { key: Decision; label: string; icon: any; cls: string }[] = [
     { key: "approve", label: "Aprobar", icon: Check, cls: "hover:border-success hover:bg-success/5" },
     { key: "reject", label: "Rechazar", icon: X, cls: "hover:border-destructive hover:bg-destructive/5" },
     { key: "modify", label: "Modificar y aprobar", icon: Pencil, cls: "hover:border-primary hover:bg-primary/5" },
-    { key: "cancel", label: "Cancelar línea", icon: Ban, cls: "hover:border-muted-foreground hover:bg-muted/40" },
   ];
+  const actions = isApprover
+    ? [...baseActions, { key: "cancel" as Decision, label: "Cancelar línea", icon: Ban, cls: "hover:border-muted-foreground hover:bg-muted/40" }]
+    : baseActions;
 
   return (
     <div
@@ -72,9 +86,7 @@ export function GestionModal({
         <div className="flex items-start justify-between gap-4 border-b border-border p-5">
           <div className="min-w-0">
             <div className="flex items-center gap-3">
-              <h3 className="text-2xl font-semibold text-foreground truncate">
-                Respuesta del Proveedor
-              </h3>
+              <h3 className="text-2xl font-semibold text-foreground truncate">{title}</h3>
               <span className="inline-flex items-center rounded-full bg-warning/15 px-2.5 py-0.5 text-[11px] font-medium text-warning ring-1 ring-inset ring-warning/30">
                 Pendiente
               </span>
@@ -114,7 +126,9 @@ export function GestionModal({
 
           <div className="space-y-4">
             <div>
-              <div className="text-sm font-medium text-foreground">Acción del aprobador (HU_004)</div>
+              <div className="text-sm font-medium text-foreground">
+                {isApprover ? "Acción del aprobador" : "Acción del proveedor"}
+              </div>
               <div className="mt-2 grid grid-cols-2 gap-2">
                 {actions.map((a) => {
                   const Icon = a.icon;
@@ -135,6 +149,38 @@ export function GestionModal({
                 })}
               </div>
             </div>
+
+            {isApprover && (
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label className="text-sm font-medium text-foreground">
+                    Tipo de descuento <span className="text-destructive">*</span>
+                  </label>
+                  <select
+                    value={tipoDescuento}
+                    onChange={(e) => setTipoDescuento(e.target.value)}
+                    className="mt-1.5 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring/30"
+                  >
+                    <option value="">Seleccionar…</option>
+                    <option value="visible">Visible</option>
+                    <option value="oculto">Oculto</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-foreground">
+                    Tipo de exclusión <span className="text-destructive">*</span>
+                  </label>
+                  <select
+                    value={tipoExclusion}
+                    onChange={(e) => setTipoExclusion(e.target.value)}
+                    className="mt-1.5 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring/30"
+                  >
+                    <option value="no-mutuamente">No mutuamente excluyente</option>
+                    <option value="mutuamente">Mutuamente excluyente</option>
+                  </select>
+                </div>
+              </div>
+            )}
 
             <div>
               <label className="text-sm font-medium text-foreground">
@@ -196,15 +242,11 @@ export function GestionModal({
             <button
               disabled={!canConfirm}
               onClick={() => decision && onConfirm(item.id, decision)}
-              className="inline-flex flex-1 items-center justify-center rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed"
+              className={`inline-flex flex-1 items-center justify-center rounded-lg px-4 py-2.5 text-sm font-semibold transition-opacity disabled:opacity-50 disabled:cursor-not-allowed ${ctaCls}`}
             >
-              Confirmar gestión
+              {isApprover ? "Confirmar análisis" : "Confirmar gestión"}
             </button>
           </div>
-          <p className="text-center text-[11px] text-muted-foreground">
-            Al confirmar, la solicitud pasa a <span className="font-medium text-foreground">Espera del proveedor</span>.
-            ¿Necesitas más contexto? Abre el detalle completo para ver cliente, vendedor, líneas y trazabilidad.
-          </p>
         </div>
       </div>
     </div>
