@@ -418,20 +418,31 @@ function TraceabilitySection() {
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="text-left text-xs text-muted-foreground border-b border-border bg-muted/30">
-                <th className="px-5 py-3 font-medium">Preorden</th>
-                <th className="px-5 py-3 font-medium">Cliente</th>
-                <th className="px-5 py-3 font-medium">EAN</th>
-                <th className="px-5 py-3 font-medium">Producto</th>
-                <th className="px-5 py-3 font-medium">Cant.</th>
-                <th className="px-5 py-3 font-medium">% Prov.</th>
-                <th className="px-5 py-3 font-medium">% Corb.</th>
-                <th className="px-5 py-3 font-medium">% Total</th>
-                <th className="px-5 py-3 font-medium">Estado</th>
-                <th className="px-5 py-3 font-medium">Aprobador</th>
-                <th className="px-5 py-3 font-medium">Proveedor</th>
-                <th className="px-5 py-3 font-medium">Recepción</th>
-                <th className="px-5 py-3 font-medium">Gestión</th>
+              <tr className="text-left text-[11px] uppercase tracking-wider text-muted-foreground border-b border-border bg-muted/30">
+                <th rowSpan={2} className="px-5 py-3 font-medium align-bottom">Preorden</th>
+                <th rowSpan={2} className="px-5 py-3 font-medium align-bottom">Cliente</th>
+                <th rowSpan={2} className="px-5 py-3 font-medium align-bottom">EAN</th>
+                <th rowSpan={2} className="px-5 py-3 font-medium align-bottom">Producto</th>
+                <th rowSpan={2} className="px-5 py-3 font-medium align-bottom">Cant.</th>
+                <th colSpan={3} className="px-5 pt-3 pb-1 font-semibold text-center border-l border-border/60 text-foreground/80">
+                  Original
+                </th>
+                <th colSpan={3} className="px-5 pt-3 pb-1 font-semibold text-center border-l border-border/60 text-foreground/80">
+                  Actualizado
+                </th>
+                <th rowSpan={2} className="px-5 py-3 font-medium align-bottom border-l border-border/60">Estado</th>
+                <th rowSpan={2} className="px-5 py-3 font-medium align-bottom">Aprobador</th>
+                <th rowSpan={2} className="px-5 py-3 font-medium align-bottom">Proveedor</th>
+                <th rowSpan={2} className="px-5 py-3 font-medium align-bottom">Recepción</th>
+                <th rowSpan={2} className="px-5 py-3 font-medium align-bottom">Gestión</th>
+              </tr>
+              <tr className="text-left text-[11px] uppercase tracking-wider text-muted-foreground border-b border-border bg-muted/30">
+                <th className="px-5 pb-3 font-medium border-l border-border/60">% Prov.</th>
+                <th className="px-5 pb-3 font-medium">% Corb.</th>
+                <th className="px-5 pb-3 font-medium">% Total</th>
+                <th className="px-5 pb-3 font-medium border-l border-border/60">% Prov.</th>
+                <th className="px-5 pb-3 font-medium">% Corb.</th>
+                <th className="px-5 pb-3 font-medium">% Total</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-border">
@@ -449,10 +460,13 @@ function TraceabilitySection() {
                   <td className="px-5 py-4 text-muted-foreground tabular-nums">{r.ean}</td>
                   <td className="px-5 py-4">{r.product}</td>
                   <td className="px-5 py-4 tabular-nums">{r.qty}</td>
-                  <td className="px-5 py-4 tabular-nums">{r.prov}</td>
-                  <td className="px-5 py-4 tabular-nums">{r.corb}</td>
-                  <td className="px-5 py-4 tabular-nums font-medium">{r.total}</td>
-                  <td className="px-5 py-4">
+                  <td className="px-5 py-4 tabular-nums text-muted-foreground border-l border-border/60">{r.provOriginal}</td>
+                  <td className="px-5 py-4 tabular-nums text-muted-foreground">{r.corbOriginal}</td>
+                  <td className="px-5 py-4 tabular-nums text-muted-foreground font-medium">{r.totalOriginal}</td>
+                  <td className="px-5 py-4 border-l border-border/60"><PctCell original={r.provOriginal} current={r.provActual} /></td>
+                  <td className="px-5 py-4"><PctCell original={r.corbOriginal} current={r.corbActual} /></td>
+                  <td className="px-5 py-4"><PctCell original={r.totalOriginal} current={r.totalActual} bold /></td>
+                  <td className="px-5 py-4 border-l border-border/60">
                     {r.status === "Aprobada" ? (
                       <span className="inline-flex items-center rounded-full bg-success/15 px-2.5 py-1 text-[11px] font-medium text-success ring-1 ring-success/30">Aprobada</span>
                     ) : (
