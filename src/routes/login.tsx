@@ -1,11 +1,12 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Eye, EyeOff, Lock, Mail, ShieldCheck } from "lucide-react";
-import logoAsset from "@/assets/logo_corbeta.png.asset.json";
+import logoColor from "@/assets/corbeta_color.png.asset.json";
+import logoWhite from "@/assets/corbeta_white.png.asset.json";
 import slideCartagena from "@/assets/slide-cartagena.jpg.asset.json";
 import slideFlag from "@/assets/slide-flag.jpg.asset.json";
 import slidePanoramic from "@/assets/slide-panoramic.jpg.asset.json";
-const logo = logoAsset.url;
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -103,7 +104,8 @@ function LoginPage() {
       <section className="flex-1 flex items-center justify-center px-6 py-12">
         <div className="w-full max-w-md">
           <div className="flex items-center gap-3 mb-10">
-            <img src={logo} alt="Corbeta" className="h-10 w-auto" />
+            <img src={logoColor.url} alt="Corbeta" className="h-10 w-auto block dark:hidden" />
+            <img src={logoWhite.url} alt="Corbeta" className="h-10 w-auto hidden dark:block" />
             <div className="leading-tight">
               <p className="text-sm font-semibold text-foreground">Corbeta</p>
               <p className="text-xs text-muted-foreground">Portal de Aprobaciones</p>

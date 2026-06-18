@@ -22,7 +22,8 @@ import {
   ShieldAlert,
   Workflow as WorkflowIcon,
 } from "lucide-react";
-import logoAsset from "@/assets/logo_corbeta.png.asset.json";
+import logoColor from "@/assets/corbeta_color.png.asset.json";
+import logoWhite from "@/assets/corbeta_white.png.asset.json";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { useAuth, getRoleLabel, getUserDisplayName, getUserEmail, getUserInitials, getAllDemoProfiles, setImpersonatedLogin, type AppRole } from "@/hooks/use-auth";
@@ -130,7 +131,8 @@ function DashboardLayout() {
       <div className="flex">
         <aside className="hidden md:flex sticky top-0 h-screen w-64 shrink-0 flex-col border-r border-sidebar-border bg-sidebar">
           <div className="flex h-16 items-center px-6 border-b border-sidebar-border">
-            <img src={logoAsset.url} alt="Corbeta" className="h-6 w-auto" />
+            <img src={logoColor.url} alt="Corbeta" className="h-7 w-auto block dark:hidden" />
+            <img src={logoWhite.url} alt="Corbeta" className="h-7 w-auto hidden dark:block" />
           </div>
           <nav className="flex-1 overflow-y-auto px-3 py-4 space-y-4">
             {visibleGroups.map((group) => (
