@@ -1018,6 +1018,9 @@ function ApproverDetailDialog({ approver, onClose }: { approver: Approver | null
               </div>
             </div>
 
+            <ApproverPreordenesList approverId={approver.id} />
+
+
             <div className="flex justify-end gap-2 pt-2 border-t border-border">
               <button
                 onClick={onClose}
