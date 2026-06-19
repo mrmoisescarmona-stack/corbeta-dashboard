@@ -53,7 +53,7 @@ export const Route = createFileRoute("/panel")({
   component: DashboardLayout,
 });
 
-type NavItem = { icon: any; label: string; to: string; exact?: boolean; roles: AppRole[] };
+type NavItem = { icon: any; label: string; to: string; exact?: boolean; roles: AppRole[]; children?: NavItem[] };
 type NavGroup = { title: string; items: NavItem[] };
 
 const ALL: AppRole[] = ["supervisor", "aprobador", "proveedor", "administrador"];
@@ -76,17 +76,22 @@ const navGroups: NavGroup[] = [
     items: [
       { icon: Tags, label: "Categorias de Productos", to: "/panel/aprobadores", roles: ["supervisor", "administrador"] },
       { icon: Users, label: "Proveedores", to: "/panel/proveedores", roles: ["supervisor", "administrador"] },
-      
-      
-      { icon: Flag, label: "Seguimiento", to: "/panel/seguimiento", roles: ["administrador"] },
-
-      { icon: Bell, label: "Notificaciones", to: "/panel/notificaciones", roles: ["supervisor", "administrador"] },
-      { icon: ShieldCheck, label: "Auditoría", to: "/panel/auditoria", roles: ["supervisor", "administrador"] },
-      { icon: Headphones, label: "Soporte", to: "/panel/soporte", roles: ["administrador"] },
+      {
+        icon: Headphones,
+        label: "Soporte",
+        to: "/panel/soporte",
+        roles: ["supervisor", "administrador"],
+        children: [
+          { icon: Flag, label: "Seguimiento", to: "/panel/seguimiento", roles: ["administrador"] },
+          { icon: Bell, label: "Notificaciones", to: "/panel/notificaciones", roles: ["supervisor", "administrador"] },
+          { icon: ShieldCheck, label: "Auditoría", to: "/panel/auditoria", roles: ["supervisor", "administrador"] },
+        ],
+      },
       { icon: Settings, label: "Configuración", to: "/panel/configuracion", roles: ["supervisor", "administrador"] },
     ],
   },
 ];
+
 
 function DashboardLayout() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
