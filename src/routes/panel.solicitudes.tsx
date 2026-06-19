@@ -21,14 +21,7 @@ export const Route = createFileRoute("/panel/solicitudes")({
   component: SolicitudesPage,
 });
 
-type Status =
-  | "Pendiente"
-  | "Espera proveedor"
-  | "Aprobada"
-  | "Rechazada"
-  | "Modificada"
-  | "Enviada a PeopleSoft"
-  | "Error integración";
+type Status = "Pendiente" | "Finalizada" | "Rechazada";
 
 type Request = {
   id: string;
@@ -41,40 +34,34 @@ type Request = {
 
 const requests: Request[] = [
   { id: "PR-2026-000245", client: "Distribuidora del Valle S.A.S.", date: "28/05/2026 09:15 a. m.", provider: "Castrol", status: "Pendiente", value: "$ 12.450.000" },
-  { id: "PR-2026-000244", client: "Moto Repuestos del Norte", date: "28/05/2026 08:47 a. m.", provider: "Castrol", status: "Espera proveedor", value: "$ 8.230.000" },
-  { id: "PR-2026-000243", client: "Comercializadora Andina", date: "28/05/2026 07:38 a. m.", provider: "Castrol", status: "Enviada a PeopleSoft", value: "$ 5.980.000" },
-  { id: "PR-2026-000242", client: "Lubricantes del Sur Ltda.", date: "27/05/2026 04:22 p. m.", provider: "Shell", status: "Modificada", value: "$ 3.120.000" },
-  { id: "PR-2026-000241", client: "Autopartes del Caribe", date: "27/05/2026 02:11 p. m.", provider: "Castrol", status: "Error integración", value: "$ 9.760.000" },
-  { id: "PR-2026-000240", client: "Importadora Pacífico", date: "27/05/2026 11:05 a. m.", provider: "Mobil", status: "Aprobada", value: "$ 6.540.000" },
+  { id: "PR-2026-000244", client: "Moto Repuestos del Norte", date: "28/05/2026 08:47 a. m.", provider: "Castrol", status: "Pendiente", value: "$ 8.230.000" },
+  { id: "PR-2026-000243", client: "Comercializadora Andina", date: "28/05/2026 07:38 a. m.", provider: "Castrol", status: "Finalizada", value: "$ 5.980.000" },
+  { id: "PR-2026-000242", client: "Lubricantes del Sur Ltda.", date: "27/05/2026 04:22 p. m.", provider: "Shell", status: "Finalizada", value: "$ 3.120.000" },
+  { id: "PR-2026-000241", client: "Autopartes del Caribe", date: "27/05/2026 02:11 p. m.", provider: "Castrol", status: "Rechazada", value: "$ 9.760.000" },
+  { id: "PR-2026-000240", client: "Importadora Pacífico", date: "27/05/2026 11:05 a. m.", provider: "Mobil", status: "Finalizada", value: "$ 6.540.000" },
   { id: "PR-2026-000239", client: "Repuestos Bogotá Ltda.", date: "27/05/2026 09:48 a. m.", provider: "Shell", status: "Pendiente", value: "$ 4.310.000" },
   { id: "PR-2026-000238", client: "Lubricantes Sur", date: "26/05/2026 05:32 p. m.", provider: "Castrol", status: "Rechazada", value: "$ 2.880.000" },
-  { id: "PR-2026-000237", client: "Distribuciones Caribe S.A.", date: "26/05/2026 03:20 p. m.", provider: "Mobil", status: "Aprobada", value: "$ 14.200.000" },
-  { id: "PR-2026-000236", client: "AutoMundo S.A.S.", date: "26/05/2026 01:14 p. m.", provider: "Shell", status: "Enviada a PeopleSoft", value: "$ 7.650.000" },
-  { id: "PR-2026-000235", client: "Moto Repuestos", date: "26/05/2026 10:47 a. m.", provider: "AKT", status: "Espera proveedor", value: "$ 1.925.000" },
-  { id: "PR-2026-000234", client: "Comercial Andes Ltda.", date: "26/05/2026 09:02 a. m.", provider: "Castrol", status: "Aprobada", value: "$ 5.470.000" },
-  { id: "PR-2026-000233", client: "Surtilubricantes S.A.", date: "25/05/2026 04:56 p. m.", provider: "Mobil", status: "Modificada", value: "$ 3.980.000" },
+  { id: "PR-2026-000237", client: "Distribuciones Caribe S.A.", date: "26/05/2026 03:20 p. m.", provider: "Mobil", status: "Finalizada", value: "$ 14.200.000" },
+  { id: "PR-2026-000236", client: "AutoMundo S.A.S.", date: "26/05/2026 01:14 p. m.", provider: "Shell", status: "Finalizada", value: "$ 7.650.000" },
+  { id: "PR-2026-000235", client: "Moto Repuestos", date: "26/05/2026 10:47 a. m.", provider: "AKT", status: "Pendiente", value: "$ 1.925.000" },
+  { id: "PR-2026-000234", client: "Comercial Andes Ltda.", date: "26/05/2026 09:02 a. m.", provider: "Castrol", status: "Finalizada", value: "$ 5.470.000" },
+  { id: "PR-2026-000233", client: "Surtilubricantes S.A.", date: "25/05/2026 04:56 p. m.", provider: "Mobil", status: "Finalizada", value: "$ 3.980.000" },
   { id: "PR-2026-000232", client: "Repuestos del Llano", date: "25/05/2026 02:38 p. m.", provider: "Shell", status: "Pendiente", value: "$ 2.110.000" },
-  { id: "PR-2026-000231", client: "Distribuidora Tolima", date: "25/05/2026 11:24 a. m.", provider: "Castrol", status: "Aprobada", value: "$ 8.890.000" },
-  { id: "PR-2026-000230", client: "AutoPartes Cauca", date: "25/05/2026 09:15 a. m.", provider: "Mobil", status: "Error integración", value: "$ 4.560.000" },
-  { id: "PR-2026-000229", client: "Lubricentro Eje Cafetero", date: "24/05/2026 05:48 p. m.", provider: "Shell", status: "Enviada a PeopleSoft", value: "$ 11.320.000" },
-  { id: "PR-2026-000228", client: "Repuestos La 80", date: "24/05/2026 03:11 p. m.", provider: "Castrol", status: "Aprobada", value: "$ 6.070.000" },
+  { id: "PR-2026-000231", client: "Distribuidora Tolima", date: "25/05/2026 11:24 a. m.", provider: "Castrol", status: "Finalizada", value: "$ 8.890.000" },
+  { id: "PR-2026-000230", client: "AutoPartes Cauca", date: "25/05/2026 09:15 a. m.", provider: "Mobil", status: "Rechazada", value: "$ 4.560.000" },
+  { id: "PR-2026-000229", client: "Lubricentro Eje Cafetero", date: "24/05/2026 05:48 p. m.", provider: "Shell", status: "Finalizada", value: "$ 11.320.000" },
+  { id: "PR-2026-000228", client: "Repuestos La 80", date: "24/05/2026 03:11 p. m.", provider: "Castrol", status: "Finalizada", value: "$ 6.070.000" },
   { id: "PR-2026-000227", client: "Distribuidora Santander", date: "24/05/2026 12:34 p. m.", provider: "AKT", status: "Rechazada", value: "$ 1.480.000" },
   { id: "PR-2026-000226", client: "Importaciones del Sur", date: "24/05/2026 10:05 a. m.", provider: "Mobil", status: "Pendiente", value: "$ 9.240.000" },
 ];
 
-const STATUSES: ("Todos" | Status)[] = [
-  "Todos", "Pendiente", "Espera proveedor", "Aprobada", "Rechazada", "Modificada", "Enviada a PeopleSoft", "Error integración",
-];
+const STATUSES: ("Todos" | Status)[] = ["Todos", "Pendiente", "Finalizada", "Rechazada"];
 
 function statusBadge(status: Status) {
   const map: Record<Status, string> = {
     Pendiente: "bg-primary/10 text-primary ring-1 ring-inset ring-primary/20",
-    "Espera proveedor": "bg-warning/10 text-warning ring-1 ring-inset ring-warning/20",
-    Aprobada: "bg-success/15 text-foreground ring-1 ring-inset ring-success/30",
+    Finalizada: "bg-success/15 text-foreground ring-1 ring-inset ring-success/30",
     Rechazada: "bg-destructive/10 text-destructive ring-1 ring-inset ring-destructive/20",
-    Modificada: "bg-[oklch(0.94_0.04_300)] text-[oklch(0.4_0.18_300)] ring-1 ring-inset ring-[oklch(0.4_0.18_300)]/20",
-    "Enviada a PeopleSoft": "bg-[oklch(0.95_0.04_240)] text-[oklch(0.42_0.15_240)] ring-1 ring-inset ring-[oklch(0.42_0.15_240)]/20",
-    "Error integración": "bg-[oklch(0.96_0.04_330)] text-[oklch(0.45_0.18_330)] ring-1 ring-inset ring-[oklch(0.45_0.18_330)]/20",
   };
   return map[status];
 }
@@ -82,12 +69,8 @@ function statusBadge(status: Status) {
 function statusBar(status: Status) {
   const map: Record<Status, string> = {
     Pendiente: "bg-primary",
-    "Espera proveedor": "bg-warning",
-    Aprobada: "bg-success",
+    Finalizada: "bg-success",
     Rechazada: "bg-destructive",
-    Modificada: "bg-[oklch(0.55_0.18_300)]",
-    "Enviada a PeopleSoft": "bg-[oklch(0.55_0.15_240)]",
-    "Error integración": "bg-[oklch(0.55_0.18_330)]",
   };
   return map[status];
 }
