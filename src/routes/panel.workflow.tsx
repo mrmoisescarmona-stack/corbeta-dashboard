@@ -993,7 +993,6 @@ function ApproverDetailDialog({ approver, onClose }: { approver: Approver | null
                   { label: "Dirección", value: approver.direction },
                   { label: "División", value: approver.division },
                   { label: "Gerente", value: approver.manager },
-                  { label: "Zona", value: approver.zone },
                 ]}
               />
             </div>
