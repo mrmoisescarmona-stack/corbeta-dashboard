@@ -992,7 +992,6 @@ function ApproverDetailDialog({ approver, onClose }: { approver: Approver | null
                 rows={[
                   { label: "Dirección", value: approver.direction },
                   { label: "División", value: approver.division },
-                  { label: "Gerente", value: approver.manager },
                 ]}
               />
             </div>
