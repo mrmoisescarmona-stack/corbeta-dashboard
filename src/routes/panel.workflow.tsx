@@ -977,7 +977,7 @@ function ApproverDetailDialog({ approver, onClose }: { approver: Approver | null
               </div>
             </DialogHeader>
 
-            <div className="grid gap-4 md:grid-cols-3">
+            <div className="grid gap-4 md:grid-cols-2">
               <InfoCard
                 title="Información personal"
                 rows={[
@@ -994,15 +994,6 @@ function ApproverDetailDialog({ approver, onClose }: { approver: Approver | null
                   { label: "División", value: approver.division },
                   { label: "Gerente", value: approver.manager },
                   { label: "Zona", value: approver.zone },
-                ]}
-              />
-              <InfoCard
-                title="Datos de asignación"
-                rows={[
-                  { label: "Unidad de negocio", value: approver.unit },
-                  { label: "Fecha de alta", value: approver.startDate },
-                  { label: "Estado", value: approver.active ? "Activo" : "Inactivo" },
-                  { label: "Permisos", value: `${approver.scopes.length} alcance(s)` },
                 ]}
               />
             </div>
