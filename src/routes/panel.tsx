@@ -112,16 +112,18 @@ function DashboardLayout() {
 
   // Filter nav items by current user roles (administrador sees everything).
   // While auth is loading, show all items so the menu doesn't flash empty.
+  const roleVisible = (item: NavItem) =>
+    auth.loading ||
+    userRoles.length === 0 ||
+    userRoles.includes("administrador") ||
+    item.roles.some((r) => userRoles.includes(r));
+
   const visibleGroups = navGroups
     .map((g) => {
-      const filtered = g.items.filter((item) =>
-        auth.loading ||
-        userRoles.length === 0 ||
-        userRoles.includes("administrador") ||
-        item.roles.some((r) => userRoles.includes(r))
+      const filtered = g.items.filter(roleVisible).map((item) =>
+        item.children ? { ...item, children: item.children.filter(roleVisible) } : item
       );
-      // Deduplicate by label: keep the first entry whose roles match the
-      // user (preferred), otherwise the first occurrence.
+      // Deduplicate by label
       const seen = new Map<string, typeof filtered[number]>();
       for (const item of filtered) {
         const existing = seen.get(item.label);
@@ -133,6 +135,7 @@ function DashboardLayout() {
       return { ...g, items: Array.from(seen.values()) };
     })
     .filter((g) => g.items.length > 0);
+
 
 
   return (
