@@ -251,13 +251,7 @@ export function PreordenDetail({ id, from, status, onClose, showBackLink = true 
                     <td className="px-4 py-5"><ProductStatusBadge status={productStatus} /></td>
                     <td className="px-4 py-5"><ProviderBadge status={l.providerStatus} pct={l.providerPct} /></td>
                     <td className="px-4 py-5">
-                      {approverEnabled || done ? (
-                        <ApproverBadge status={l.approverStatus} pct={l.approverPct} />
-                      ) : (
-                        <span className="inline-flex items-center rounded-full bg-muted/50 px-2.5 py-1 text-[11px] font-medium text-muted-foreground">
-                          Esperando proveedor
-                        </span>
-                      )}
+                      <ApproverBadge status={l.approverStatus} pct={l.approverPct} />
                       {l.authorizedPct != null && (
                         <div className="mt-1 text-[11px] text-muted-foreground">% autorizado: {l.authorizedPct}</div>
                       )}
