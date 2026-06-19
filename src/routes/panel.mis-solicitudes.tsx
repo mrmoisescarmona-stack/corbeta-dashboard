@@ -115,8 +115,7 @@ function deadlineMeta(h: number) {
 }
 
 function MisSolicitudesPage() {
-  if (useFakeLoading()) return <RequestsSkeleton />;
-
+  const loading = useFakeLoading();
   const { primaryRole } = useAuth();
   const isProveedor = primaryRole === "proveedor";
 
@@ -161,6 +160,10 @@ function MisSolicitudesPage() {
   const subheading = isProveedor
     ? "Solicitudes de descuento pendientes de tu respuesta como proveedor."
     : "Inbox de preordenes asignadas a tu gestión con seguimiento por línea y vencimiento.";
+
+  if (loading) return <RequestsSkeleton />;
+
+
 
   return (
     <div className="space-y-6 animate-fade-in">
