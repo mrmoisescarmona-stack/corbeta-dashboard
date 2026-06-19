@@ -11,6 +11,7 @@ import {
   Search,
   Menu,
   ChevronDown,
+  ChevronRight,
   LogOut,
   Flag,
   Database,
@@ -24,6 +25,7 @@ import {
   ShieldAlert,
   Workflow as WorkflowIcon,
 } from "lucide-react";
+
 import logoColor from "@/assets/corbeta_color.png.asset.json";
 import logoWhite from "@/assets/corbeta_white.png.asset.json";
 import { supabase } from "@/integrations/supabase/client";
