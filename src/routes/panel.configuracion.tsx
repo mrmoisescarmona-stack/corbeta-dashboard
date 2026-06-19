@@ -11,7 +11,7 @@ export const Route = createFileRoute("/panel/configuracion")({
   pendingComponent: SettingsSkeleton,
 });
 
-const navSections = ["Perfil", "Seguridad", "Equipo", "Aprobaciones", "Notificaciones", "Integraciones"];
+const navSections = ["Perfil", "Seguridad", "Equipo", "Integraciones"];
 
 const sections = [
   {
@@ -22,26 +22,6 @@ const sections = [
       ["Correo", "kpaz@corbeta.com.co"],
       ["Cargo", "Aprobador Interno"],
       ["Zona", "Centro"],
-    ],
-  },
-  {
-    title: "Reglas de aprobación",
-    description: "Umbrales y políticas que se aplican a tus solicitudes.",
-    fields: [
-      ["Monto máximo", "$ 15.000.000"],
-      ["SLA interno", "24 horas"],
-      ["Doble aprobación", "Activado"],
-      ["Auto-asignación", "Activado"],
-    ],
-  },
-  {
-    title: "Notificaciones",
-    description: "Cómo y cuándo quieres recibir alertas.",
-    fields: [
-      ["Email", "Activado"],
-      ["Slack", "Desactivado"],
-      ["Resumen diario", "08:00 a.m."],
-      ["Vencimientos SLA", "1h antes"],
     ],
   },
 ];
