@@ -20,7 +20,7 @@ export const ROUTE_PERMISSIONS: Record<string, AppRole[]> = {
   // Módulos solo para administrador (técnicos/soporte)
   "/panel/preordenes": ["administrador"],
   "/panel/seguimiento": ["administrador"],
-  "/panel/peoplesoft": ["administrador"],
+  
   "/panel/soporte": ["administrador"],
   "/panel/portal-proveedor": ["proveedor", "administrador"],
   "/panel/vendedor": ["administrador"],
