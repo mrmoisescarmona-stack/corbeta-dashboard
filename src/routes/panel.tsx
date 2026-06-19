@@ -97,6 +97,8 @@ function DashboardLayout() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const navigate = useNavigate();
   const auth = useAuth();
+  const [openMenus, setOpenMenus] = useState<Record<string, boolean>>({});
+
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
