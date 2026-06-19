@@ -17,7 +17,6 @@ import { Route as PanelWorkflowRouteImport } from './routes/panel.workflow'
 import { Route as PanelVendedorRouteImport } from './routes/panel.vendedor'
 import { Route as PanelSoporteRouteImport } from './routes/panel.soporte'
 import { Route as PanelSolicitudesRouteImport } from './routes/panel.solicitudes'
-import { Route as PanelSeguimientoRouteImport } from './routes/panel.seguimiento'
 import { Route as PanelReportesRouteImport } from './routes/panel.reportes'
 import { Route as PanelProveedoresRouteImport } from './routes/panel.proveedores'
 import { Route as PanelPortalProveedorRouteImport } from './routes/panel.portal-proveedor'
@@ -67,11 +66,6 @@ const PanelSoporteRoute = PanelSoporteRouteImport.update({
 const PanelSolicitudesRoute = PanelSolicitudesRouteImport.update({
   id: '/solicitudes',
   path: '/solicitudes',
-  getParentRoute: () => PanelRoute,
-} as any)
-const PanelSeguimientoRoute = PanelSeguimientoRouteImport.update({
-  id: '/seguimiento',
-  path: '/seguimiento',
   getParentRoute: () => PanelRoute,
 } as any)
 const PanelReportesRoute = PanelReportesRouteImport.update({
@@ -137,7 +131,6 @@ export interface FileRoutesByFullPath {
   '/panel/portal-proveedor': typeof PanelPortalProveedorRoute
   '/panel/proveedores': typeof PanelProveedoresRoute
   '/panel/reportes': typeof PanelReportesRoute
-  '/panel/seguimiento': typeof PanelSeguimientoRoute
   '/panel/solicitudes': typeof PanelSolicitudesRoute
   '/panel/soporte': typeof PanelSoporteRoute
   '/panel/vendedor': typeof PanelVendedorRoute
@@ -157,7 +150,6 @@ export interface FileRoutesByTo {
   '/panel/portal-proveedor': typeof PanelPortalProveedorRoute
   '/panel/proveedores': typeof PanelProveedoresRoute
   '/panel/reportes': typeof PanelReportesRoute
-  '/panel/seguimiento': typeof PanelSeguimientoRoute
   '/panel/solicitudes': typeof PanelSolicitudesRoute
   '/panel/soporte': typeof PanelSoporteRoute
   '/panel/vendedor': typeof PanelVendedorRoute
@@ -179,7 +171,6 @@ export interface FileRoutesById {
   '/panel/portal-proveedor': typeof PanelPortalProveedorRoute
   '/panel/proveedores': typeof PanelProveedoresRoute
   '/panel/reportes': typeof PanelReportesRoute
-  '/panel/seguimiento': typeof PanelSeguimientoRoute
   '/panel/solicitudes': typeof PanelSolicitudesRoute
   '/panel/soporte': typeof PanelSoporteRoute
   '/panel/vendedor': typeof PanelVendedorRoute
@@ -202,7 +193,6 @@ export interface FileRouteTypes {
     | '/panel/portal-proveedor'
     | '/panel/proveedores'
     | '/panel/reportes'
-    | '/panel/seguimiento'
     | '/panel/solicitudes'
     | '/panel/soporte'
     | '/panel/vendedor'
@@ -222,7 +212,6 @@ export interface FileRouteTypes {
     | '/panel/portal-proveedor'
     | '/panel/proveedores'
     | '/panel/reportes'
-    | '/panel/seguimiento'
     | '/panel/solicitudes'
     | '/panel/soporte'
     | '/panel/vendedor'
@@ -243,7 +232,6 @@ export interface FileRouteTypes {
     | '/panel/portal-proveedor'
     | '/panel/proveedores'
     | '/panel/reportes'
-    | '/panel/seguimiento'
     | '/panel/solicitudes'
     | '/panel/soporte'
     | '/panel/vendedor'
@@ -315,13 +303,6 @@ declare module '@tanstack/react-router' {
       path: '/solicitudes'
       fullPath: '/panel/solicitudes'
       preLoaderRoute: typeof PanelSolicitudesRouteImport
-      parentRoute: typeof PanelRoute
-    }
-    '/panel/seguimiento': {
-      id: '/panel/seguimiento'
-      path: '/seguimiento'
-      fullPath: '/panel/seguimiento'
-      preLoaderRoute: typeof PanelSeguimientoRouteImport
       parentRoute: typeof PanelRoute
     }
     '/panel/reportes': {
@@ -406,7 +387,6 @@ interface PanelRouteChildren {
   PanelPortalProveedorRoute: typeof PanelPortalProveedorRoute
   PanelProveedoresRoute: typeof PanelProveedoresRoute
   PanelReportesRoute: typeof PanelReportesRoute
-  PanelSeguimientoRoute: typeof PanelSeguimientoRoute
   PanelSolicitudesRoute: typeof PanelSolicitudesRoute
   PanelSoporteRoute: typeof PanelSoporteRoute
   PanelVendedorRoute: typeof PanelVendedorRoute
@@ -425,7 +405,6 @@ const PanelRouteChildren: PanelRouteChildren = {
   PanelPortalProveedorRoute: PanelPortalProveedorRoute,
   PanelProveedoresRoute: PanelProveedoresRoute,
   PanelReportesRoute: PanelReportesRoute,
-  PanelSeguimientoRoute: PanelSeguimientoRoute,
   PanelSolicitudesRoute: PanelSolicitudesRoute,
   PanelSoporteRoute: PanelSoporteRoute,
   PanelVendedorRoute: PanelVendedorRoute,
