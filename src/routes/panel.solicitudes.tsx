@@ -293,7 +293,7 @@ function DetailOverlay({ children, onClose }: { children: React.ReactNode; onClo
       onClick={onClose}
     >
       <div
-        className="relative w-full max-w-6xl rounded-2xl border border-border bg-background shadow-2xl my-4"
+        className="relative w-full max-w-[1600px] rounded-2xl border border-border bg-background shadow-2xl my-4"
         onClick={(e) => e.stopPropagation()}
       >
         <button
