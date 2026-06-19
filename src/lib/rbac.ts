@@ -19,7 +19,7 @@ export const ROUTE_PERMISSIONS: Record<string, AppRole[]> = {
   "/panel/configuracion": ["supervisor", "administrador"],
   // Módulos solo para administrador (técnicos/soporte)
   "/panel/preordenes": ["administrador"],
-  "/panel/seguimiento": ["administrador"],
+  
   
   "/panel/soporte": ["administrador"],
   "/panel/portal-proveedor": ["proveedor", "administrador"],
