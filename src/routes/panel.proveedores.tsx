@@ -122,6 +122,9 @@ function ProveedoresPage() {
                   <td className="px-5 py-3.5 font-medium tabular-nums">{p.id}</td>
                   <td className="px-3 py-3.5">{p.name}</td>
                   <td className="px-3 py-3.5">{p.category}</td>
+                  <td className="px-3 py-3.5">{metrics[i].productProvider}</td>
+                  <td className="px-3 py-3.5 tabular-nums text-muted-foreground">{metrics[i].ean}</td>
+
                   <td className="px-3 py-3.5 text-muted-foreground">{p.email}</td>
                   <td className="px-3 py-3.5 text-muted-foreground tabular-nums">{p.phone}</td>
                   <td className="px-3 py-3.5"><StatusBadge active={p.active} /></td>
