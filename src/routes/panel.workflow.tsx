@@ -1018,6 +1018,9 @@ function ApproverDetailDialog({ approver, onClose }: { approver: Approver | null
               </div>
             </div>
 
+            <ApproverPreordenesList approverId={approver.id} />
+
+
             <div className="flex justify-end gap-2 pt-2 border-t border-border">
               <button
                 onClick={onClose}
@@ -1033,6 +1036,64 @@ function ApproverDetailDialog({ approver, onClose }: { approver: Approver | null
         )}
       </DialogContent>
     </Dialog>
+  );
+}
+
+function ApproverPreordenesList({ approverId }: { approverId: string }) {
+  // Mock preordenes assigned to this approver. Real data would be queried by approverId.
+  void approverId;
+  const items = [
+    { id: "PO-2026-004510", client: "Tiendas del Pacífico", date: "07/06/2026", value: "$ 4.250.000", status: "Aprobada" },
+    { id: "PO-2026-004505", client: "Almacenes del Centro", date: "06/06/2026", value: "$ 2.180.000", status: "Rechazada" },
+    { id: "PO-2026-004498", client: "Distribuidora del Valle", date: "05/06/2026", value: "$ 8.940.000", status: "Pendiente" },
+    { id: "PO-2026-004492", client: "Moto Repuestos del Norte", date: "04/06/2026", value: "$ 1.560.000", status: "Aprobada" },
+    { id: "PO-2026-004487", client: "Lubricantes Sur", date: "04/06/2026", value: "$ 3.720.000", status: "Aprobada" },
+    { id: "PO-2026-004481", client: "Importadora Pacífico", date: "03/06/2026", value: "$ 6.890.000", status: "Pendiente" },
+    { id: "PO-2026-004476", client: "Repuestos Bogotá Ltda.", date: "03/06/2026", value: "$ 1.220.000", status: "Rechazada" },
+    { id: "PO-2026-004470", client: "AutoMundo S.A.S.", date: "02/06/2026", value: "$ 5.470.000", status: "Aprobada" },
+    { id: "PO-2026-004463", client: "Surtilubricantes S.A.", date: "01/06/2026", value: "$ 2.980.000", status: "Aprobada" },
+    { id: "PO-2026-004455", client: "Comercial Andes Ltda.", date: "01/06/2026", value: "$ 7.140.000", status: "Pendiente" },
+    { id: "PO-2026-004448", client: "Repuestos del Llano", date: "31/05/2026", value: "$ 1.890.000", status: "Aprobada" },
+    { id: "PO-2026-004441", client: "Distribuidora Tolima", date: "30/05/2026", value: "$ 4.560.000", status: "Aprobada" },
+  ];
+  const toneFor = (s: string) =>
+    s === "Aprobada" ? "bg-success/15 text-foreground ring-1 ring-inset ring-success/30"
+    : s === "Rechazada" ? "bg-destructive/10 text-destructive ring-1 ring-inset ring-destructive/20"
+    : "bg-primary/10 text-primary ring-1 ring-inset ring-primary/20";
+  return (
+    <div>
+      <h4 className="text-sm font-semibold mb-3">Preórdenes asignadas ({items.length})</h4>
+      <div className="rounded-lg border border-border overflow-hidden">
+        <div className="max-h-72 overflow-y-auto">
+          <table className="w-full text-sm">
+            <thead className="sticky top-0 bg-muted/60 backdrop-blur text-[11px] uppercase tracking-wider text-muted-foreground">
+              <tr className="text-left">
+                <th className="font-medium px-4 py-2">Preorden</th>
+                <th className="font-medium px-4 py-2">Cliente</th>
+                <th className="font-medium px-4 py-2">Fecha</th>
+                <th className="font-medium px-4 py-2 text-right">Valor</th>
+                <th className="font-medium px-4 py-2">Estado</th>
+              </tr>
+            </thead>
+            <tbody>
+              {items.map((p) => (
+                <tr key={p.id} className="border-t border-border hover:bg-muted/30">
+                  <td className="px-4 py-2.5 font-medium">{p.id}</td>
+                  <td className="px-4 py-2.5">{p.client}</td>
+                  <td className="px-4 py-2.5 text-muted-foreground">{p.date}</td>
+                  <td className="px-4 py-2.5 text-right tabular-nums">{p.value}</td>
+                  <td className="px-4 py-2.5">
+                    <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-[11px] font-medium ${toneFor(p.status)}`}>
+                      {p.status}
+                    </span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
   );
 }
 
