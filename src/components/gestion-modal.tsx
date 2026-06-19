@@ -226,6 +226,7 @@ export function GestionModal({
             files={files}
             onAdd={handleAddFiles}
             onRemove={(i) => setFiles((prev) => prev.filter((_, idx) => idx !== i))}
+            required={!isApprover}
           />
         </div>
 
