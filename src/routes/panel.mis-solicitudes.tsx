@@ -115,8 +115,7 @@ function deadlineMeta(h: number) {
 }
 
 function MisSolicitudesPage() {
-  if (useFakeLoading()) return <RequestsSkeleton />;
-
+  const loading = useFakeLoading();
   const { primaryRole } = useAuth();
   const isProveedor = primaryRole === "proveedor";
 
