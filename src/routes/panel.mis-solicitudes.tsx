@@ -161,6 +161,10 @@ function MisSolicitudesPage() {
     ? "Solicitudes de descuento pendientes de tu respuesta como proveedor."
     : "Inbox de preordenes asignadas a tu gestión con seguimiento por línea y vencimiento.";
 
+  if (loading) return <RequestsSkeleton />;
+
+
+
   return (
     <div className="space-y-6 animate-fade-in">
       <div className="flex flex-wrap items-start justify-between gap-4">
