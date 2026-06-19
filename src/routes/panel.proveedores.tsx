@@ -105,6 +105,9 @@ function ProveedoresPage() {
                 <th className="font-medium px-5 py-3">Identificación</th>
                 <th className="font-medium px-3 py-3">Nombre</th>
                 <th className="font-medium px-3 py-3">Categoría</th>
+                <th className="font-medium px-3 py-3">Proveedor del producto</th>
+                <th className="font-medium px-3 py-3">EAN del producto</th>
+
                 <th className="font-medium px-3 py-3">Email</th>
                 <th className="font-medium px-3 py-3">Teléfono</th>
                 <th className="font-medium px-3 py-3">Estado</th>
