@@ -237,7 +237,7 @@ export function PreordenDetail({ id, from, status, onClose, showBackLink = true 
               {visibleLines.map((l, idx) => {
                 const done = l.status !== "Pendiente";
                 const productStatus = deriveProductStatus(l);
-                const approverEnabled = !done && !readOnly;
+                
                 return (
                   <tr key={l.ean} className="border-t border-border align-top hover:bg-muted/30">
                     <td className="px-6 py-5">
