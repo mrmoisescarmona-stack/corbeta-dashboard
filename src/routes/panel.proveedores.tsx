@@ -64,13 +64,19 @@ function ProveedoresPage() {
       providerList.map((p) => {
         const r = seededFromId(p.id, 1);
         const t = seededFromId(p.id, 2);
+        const e1 = seededFromId(p.id, 3);
+        const e2 = seededFromId(p.id, 4);
+        const eanBody = String(Math.floor(e1 * 1e9) * 1000 + Math.floor(e2 * 1000)).padStart(12, "0").slice(0, 12);
         return {
           requests: 20 + Math.floor(r * 130), // 20-149 requests
           avgHours: (3 + t * 6).toFixed(1) + "h", // 3.0h - 9.0h
+          ean: "770" + eanBody.slice(0, 10), // 13-digit EAN-like
+          productProvider: p.name.split(" ")[0],
         };
       }),
     [providerList]
   );
+
 
   if (useFakeLoading()) return <ApprovalsSkeleton />;
 
