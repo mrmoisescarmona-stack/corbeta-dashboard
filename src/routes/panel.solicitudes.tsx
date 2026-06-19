@@ -173,7 +173,7 @@ function SolicitudesPage() {
                 <th className="font-medium px-3 py-3">Cliente</th>
                 <th className="font-medium px-3 py-3">Fecha</th>
                 <th className="font-medium px-3 py-3">Proveedor</th>
-                <th className="font-medium px-3 py-3">Estado</th>
+                <th className="font-medium px-3 py-3">Estado preorden</th>
                 <th className="font-medium px-3 py-3 text-right">Valor</th>
                 <th className="font-medium px-5 py-3 text-right">Acciones</th>
               </tr>
