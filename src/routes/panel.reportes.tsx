@@ -622,7 +622,37 @@ function TraceabilitySection() {
             <h3 className="text-base font-semibold">Resultados ({traceResults.length})</h3>
             <p className="mt-1 text-xs text-muted-foreground">Información actualizada a la fecha de gestión de cada solicitud</p>
           </div>
-          <button className="inline-flex shrink-0 items-center gap-2 rounded-lg border border-border bg-background px-4 py-2 text-sm font-medium hover:bg-accent">
+          <button
+            onClick={() => {
+              const headers = [
+                "Preorden","Cliente","NIT","EAN","Producto","Cantidad",
+                "% Prov. Original","% Corb. Original","% Total Original",
+                "% Prov. Actualizado","% Corb. Actualizado","% Total Actualizado",
+                "Estado","Aprobador","Proveedor","Recepción","Gestión",
+              ];
+              const esc = (v: unknown) => {
+                const s = String(v ?? "");
+                return /[",\n;]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
+              };
+              const rows = traceResults.map((r) => [
+                r.id, r.client, r.nit, r.ean, r.product, r.qty,
+                r.provOriginal, r.corbOriginal, r.totalOriginal,
+                r.provActual, r.corbActual, r.totalActual,
+                r.status, r.approver, r.supplier, r.reception, r.management,
+              ].map(esc).join(";"));
+              const csv = "\uFEFF" + [headers.map(esc).join(";"), ...rows].join("\n");
+              const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+              const url = URL.createObjectURL(blob);
+              const a = document.createElement("a");
+              a.href = url;
+              a.download = `reporte-preordenes-${new Date().toISOString().slice(0,10)}.csv`;
+              document.body.appendChild(a);
+              a.click();
+              document.body.removeChild(a);
+              URL.revokeObjectURL(url);
+            }}
+            className="inline-flex shrink-0 items-center gap-2 rounded-lg border border-border bg-background px-4 py-2 text-sm font-medium hover:bg-accent"
+          >
             <Download className="h-4 w-4" /> Exportar Excel (CSV)
           </button>
         </div>
