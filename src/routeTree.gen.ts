@@ -21,7 +21,6 @@ import { Route as PanelSeguimientoRouteImport } from './routes/panel.seguimiento
 import { Route as PanelReportesRouteImport } from './routes/panel.reportes'
 import { Route as PanelProveedoresRouteImport } from './routes/panel.proveedores'
 import { Route as PanelPortalProveedorRouteImport } from './routes/panel.portal-proveedor'
-import { Route as PanelPeoplesoftRouteImport } from './routes/panel.peoplesoft'
 import { Route as PanelNotificacionesRouteImport } from './routes/panel.notificaciones'
 import { Route as PanelMisSolicitudesRouteImport } from './routes/panel.mis-solicitudes'
 import { Route as PanelConfiguracionRouteImport } from './routes/panel.configuracion'
@@ -29,7 +28,6 @@ import { Route as PanelAuditoriaRouteImport } from './routes/panel.auditoria'
 import { Route as PanelAprobadoresRouteImport } from './routes/panel.aprobadores'
 import { Route as PanelPreordenesIndexRouteImport } from './routes/panel.preordenes.index'
 import { Route as PanelPreordenesIdRouteImport } from './routes/panel.preordenes.$id'
-import { Route as PanelPeoplesoftCatalogosRouteImport } from './routes/panel.peoplesoft.catalogos'
 
 const PanelRoute = PanelRouteImport.update({
   id: '/panel',
@@ -91,11 +89,6 @@ const PanelPortalProveedorRoute = PanelPortalProveedorRouteImport.update({
   path: '/portal-proveedor',
   getParentRoute: () => PanelRoute,
 } as any)
-const PanelPeoplesoftRoute = PanelPeoplesoftRouteImport.update({
-  id: '/peoplesoft',
-  path: '/peoplesoft',
-  getParentRoute: () => PanelRoute,
-} as any)
 const PanelNotificacionesRoute = PanelNotificacionesRouteImport.update({
   id: '/notificaciones',
   path: '/notificaciones',
@@ -131,12 +124,6 @@ const PanelPreordenesIdRoute = PanelPreordenesIdRouteImport.update({
   path: '/preordenes/$id',
   getParentRoute: () => PanelRoute,
 } as any)
-const PanelPeoplesoftCatalogosRoute =
-  PanelPeoplesoftCatalogosRouteImport.update({
-    id: '/catalogos',
-    path: '/catalogos',
-    getParentRoute: () => PanelPeoplesoftRoute,
-  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -147,7 +134,6 @@ export interface FileRoutesByFullPath {
   '/panel/configuracion': typeof PanelConfiguracionRoute
   '/panel/mis-solicitudes': typeof PanelMisSolicitudesRoute
   '/panel/notificaciones': typeof PanelNotificacionesRoute
-  '/panel/peoplesoft': typeof PanelPeoplesoftRouteWithChildren
   '/panel/portal-proveedor': typeof PanelPortalProveedorRoute
   '/panel/proveedores': typeof PanelProveedoresRoute
   '/panel/reportes': typeof PanelReportesRoute
@@ -157,7 +143,6 @@ export interface FileRoutesByFullPath {
   '/panel/vendedor': typeof PanelVendedorRoute
   '/panel/workflow': typeof PanelWorkflowRoute
   '/panel/': typeof PanelIndexRoute
-  '/panel/peoplesoft/catalogos': typeof PanelPeoplesoftCatalogosRoute
   '/panel/preordenes/$id': typeof PanelPreordenesIdRoute
   '/panel/preordenes/': typeof PanelPreordenesIndexRoute
 }
@@ -169,7 +154,6 @@ export interface FileRoutesByTo {
   '/panel/configuracion': typeof PanelConfiguracionRoute
   '/panel/mis-solicitudes': typeof PanelMisSolicitudesRoute
   '/panel/notificaciones': typeof PanelNotificacionesRoute
-  '/panel/peoplesoft': typeof PanelPeoplesoftRouteWithChildren
   '/panel/portal-proveedor': typeof PanelPortalProveedorRoute
   '/panel/proveedores': typeof PanelProveedoresRoute
   '/panel/reportes': typeof PanelReportesRoute
@@ -179,7 +163,6 @@ export interface FileRoutesByTo {
   '/panel/vendedor': typeof PanelVendedorRoute
   '/panel/workflow': typeof PanelWorkflowRoute
   '/panel': typeof PanelIndexRoute
-  '/panel/peoplesoft/catalogos': typeof PanelPeoplesoftCatalogosRoute
   '/panel/preordenes/$id': typeof PanelPreordenesIdRoute
   '/panel/preordenes': typeof PanelPreordenesIndexRoute
 }
@@ -193,7 +176,6 @@ export interface FileRoutesById {
   '/panel/configuracion': typeof PanelConfiguracionRoute
   '/panel/mis-solicitudes': typeof PanelMisSolicitudesRoute
   '/panel/notificaciones': typeof PanelNotificacionesRoute
-  '/panel/peoplesoft': typeof PanelPeoplesoftRouteWithChildren
   '/panel/portal-proveedor': typeof PanelPortalProveedorRoute
   '/panel/proveedores': typeof PanelProveedoresRoute
   '/panel/reportes': typeof PanelReportesRoute
@@ -203,7 +185,6 @@ export interface FileRoutesById {
   '/panel/vendedor': typeof PanelVendedorRoute
   '/panel/workflow': typeof PanelWorkflowRoute
   '/panel/': typeof PanelIndexRoute
-  '/panel/peoplesoft/catalogos': typeof PanelPeoplesoftCatalogosRoute
   '/panel/preordenes/$id': typeof PanelPreordenesIdRoute
   '/panel/preordenes/': typeof PanelPreordenesIndexRoute
 }
@@ -218,7 +199,6 @@ export interface FileRouteTypes {
     | '/panel/configuracion'
     | '/panel/mis-solicitudes'
     | '/panel/notificaciones'
-    | '/panel/peoplesoft'
     | '/panel/portal-proveedor'
     | '/panel/proveedores'
     | '/panel/reportes'
@@ -228,7 +208,6 @@ export interface FileRouteTypes {
     | '/panel/vendedor'
     | '/panel/workflow'
     | '/panel/'
-    | '/panel/peoplesoft/catalogos'
     | '/panel/preordenes/$id'
     | '/panel/preordenes/'
   fileRoutesByTo: FileRoutesByTo
@@ -240,7 +219,6 @@ export interface FileRouteTypes {
     | '/panel/configuracion'
     | '/panel/mis-solicitudes'
     | '/panel/notificaciones'
-    | '/panel/peoplesoft'
     | '/panel/portal-proveedor'
     | '/panel/proveedores'
     | '/panel/reportes'
@@ -250,7 +228,6 @@ export interface FileRouteTypes {
     | '/panel/vendedor'
     | '/panel/workflow'
     | '/panel'
-    | '/panel/peoplesoft/catalogos'
     | '/panel/preordenes/$id'
     | '/panel/preordenes'
   id:
@@ -263,7 +240,6 @@ export interface FileRouteTypes {
     | '/panel/configuracion'
     | '/panel/mis-solicitudes'
     | '/panel/notificaciones'
-    | '/panel/peoplesoft'
     | '/panel/portal-proveedor'
     | '/panel/proveedores'
     | '/panel/reportes'
@@ -273,7 +249,6 @@ export interface FileRouteTypes {
     | '/panel/vendedor'
     | '/panel/workflow'
     | '/panel/'
-    | '/panel/peoplesoft/catalogos'
     | '/panel/preordenes/$id'
     | '/panel/preordenes/'
   fileRoutesById: FileRoutesById
@@ -370,13 +345,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PanelPortalProveedorRouteImport
       parentRoute: typeof PanelRoute
     }
-    '/panel/peoplesoft': {
-      id: '/panel/peoplesoft'
-      path: '/peoplesoft'
-      fullPath: '/panel/peoplesoft'
-      preLoaderRoute: typeof PanelPeoplesoftRouteImport
-      parentRoute: typeof PanelRoute
-    }
     '/panel/notificaciones': {
       id: '/panel/notificaciones'
       path: '/notificaciones'
@@ -426,27 +394,8 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PanelPreordenesIdRouteImport
       parentRoute: typeof PanelRoute
     }
-    '/panel/peoplesoft/catalogos': {
-      id: '/panel/peoplesoft/catalogos'
-      path: '/catalogos'
-      fullPath: '/panel/peoplesoft/catalogos'
-      preLoaderRoute: typeof PanelPeoplesoftCatalogosRouteImport
-      parentRoute: typeof PanelPeoplesoftRoute
-    }
   }
 }
-
-interface PanelPeoplesoftRouteChildren {
-  PanelPeoplesoftCatalogosRoute: typeof PanelPeoplesoftCatalogosRoute
-}
-
-const PanelPeoplesoftRouteChildren: PanelPeoplesoftRouteChildren = {
-  PanelPeoplesoftCatalogosRoute: PanelPeoplesoftCatalogosRoute,
-}
-
-const PanelPeoplesoftRouteWithChildren = PanelPeoplesoftRoute._addFileChildren(
-  PanelPeoplesoftRouteChildren,
-)
 
 interface PanelRouteChildren {
   PanelAprobadoresRoute: typeof PanelAprobadoresRoute
@@ -454,7 +403,6 @@ interface PanelRouteChildren {
   PanelConfiguracionRoute: typeof PanelConfiguracionRoute
   PanelMisSolicitudesRoute: typeof PanelMisSolicitudesRoute
   PanelNotificacionesRoute: typeof PanelNotificacionesRoute
-  PanelPeoplesoftRoute: typeof PanelPeoplesoftRouteWithChildren
   PanelPortalProveedorRoute: typeof PanelPortalProveedorRoute
   PanelProveedoresRoute: typeof PanelProveedoresRoute
   PanelReportesRoute: typeof PanelReportesRoute
@@ -474,7 +422,6 @@ const PanelRouteChildren: PanelRouteChildren = {
   PanelConfiguracionRoute: PanelConfiguracionRoute,
   PanelMisSolicitudesRoute: PanelMisSolicitudesRoute,
   PanelNotificacionesRoute: PanelNotificacionesRoute,
-  PanelPeoplesoftRoute: PanelPeoplesoftRouteWithChildren,
   PanelPortalProveedorRoute: PanelPortalProveedorRoute,
   PanelProveedoresRoute: PanelProveedoresRoute,
   PanelReportesRoute: PanelReportesRoute,

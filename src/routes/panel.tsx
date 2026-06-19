@@ -75,7 +75,7 @@ const navGroups: NavGroup[] = [
       
       
       { icon: Flag, label: "Seguimiento", to: "/panel/seguimiento", roles: ["administrador"] },
-      { icon: Database, label: "Envío PeopleSoft", to: "/panel/peoplesoft", roles: ["administrador"] },
+
       { icon: Bell, label: "Notificaciones", to: "/panel/notificaciones", roles: ["supervisor", "administrador"] },
       { icon: ShieldCheck, label: "Auditoría", to: "/panel/auditoria", roles: ["supervisor", "administrador"] },
       { icon: Headphones, label: "Soporte", to: "/panel/soporte", roles: ["administrador"] },
