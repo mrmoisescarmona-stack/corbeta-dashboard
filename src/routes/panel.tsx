@@ -155,6 +155,61 @@ function DashboardLayout() {
                 {group.items.map((item) => {
                   const Icon = item.icon;
                   const active = isActive(item.to, item.exact);
+                  const hasChildren = !!item.children?.length;
+                  const childActive = hasChildren && item.children!.some((c) => isActive(c.to, c.exact));
+                  const isOpen = openMenus[item.label] ?? (active || childActive);
+                  if (hasChildren) {
+                    return (
+                      <div key={item.label} className="space-y-0.5">
+                        <button
+                          type="button"
+                          onClick={() => setOpenMenus((m) => ({ ...m, [item.label]: !isOpen }))}
+                          className={`group flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
+                            active || childActive
+                              ? "bg-sidebar-accent text-sidebar-accent-foreground"
+                              : "text-sidebar-foreground hover:bg-sidebar-accent/60"
+                          }`}
+                          aria-expanded={isOpen}
+                        >
+                          <Icon className={`h-4 w-4 ${active || childActive ? "text-primary" : "text-muted-foreground"}`} />
+                          <span className="flex-1 text-left">{item.label}</span>
+                          <ChevronRight className={`h-4 w-4 text-muted-foreground transition-transform ${isOpen ? "rotate-90" : ""}`} />
+                        </button>
+                        {isOpen && (
+                          <div className="ml-4 border-l border-sidebar-border pl-2 space-y-0.5">
+                            <Link
+                              to={item.to}
+                              className={`group flex w-full items-center gap-3 rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${
+                                active
+                                  ? "bg-sidebar-accent text-sidebar-accent-foreground"
+                                  : "text-sidebar-foreground hover:bg-sidebar-accent/60"
+                              }`}
+                            >
+                              <span className="flex-1 text-left">Resumen</span>
+                            </Link>
+                            {item.children!.map((child) => {
+                              const ChildIcon = child.icon;
+                              const childIsActive = isActive(child.to, child.exact);
+                              return (
+                                <Link
+                                  key={child.label}
+                                  to={child.to}
+                                  className={`group flex w-full items-center gap-3 rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${
+                                    childIsActive
+                                      ? "bg-sidebar-accent text-sidebar-accent-foreground"
+                                      : "text-sidebar-foreground hover:bg-sidebar-accent/60"
+                                  }`}
+                                >
+                                  <ChildIcon className={`h-3.5 w-3.5 ${childIsActive ? "text-primary" : "text-muted-foreground"}`} />
+                                  <span className="flex-1 text-left">{child.label}</span>
+                                </Link>
+                              );
+                            })}
+                          </div>
+                        )}
+                      </div>
+                    );
+                  }
                   return (
                     <Link
                       key={item.label}
@@ -171,6 +226,7 @@ function DashboardLayout() {
                   );
                 })}
               </div>
+
             ))}
           </nav>
           <div className="px-4 py-4 border-t border-sidebar-border space-y-3">
