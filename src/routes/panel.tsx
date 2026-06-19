@@ -178,7 +178,7 @@ function DashboardLayout() {
                           <ChevronDown className={`h-4 w-4 text-muted-foreground transition-transform ${isOpen ? "rotate-180" : ""}`} />
                         </button>
                         {isOpen && (
-                          <div className="space-y-0.5">
+                          <div className="ml-4 mt-0.5 space-y-0.5 border-l border-sidebar-border pl-3">
                             <Link
                               to={item.to}
                               className={`group flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
@@ -187,7 +187,7 @@ function DashboardLayout() {
                                   : "text-sidebar-foreground hover:bg-sidebar-accent/60"
                               }`}
                             >
-                              <Icon className={`h-4 w-4 ${active ? "text-primary" : "text-muted-foreground"}`} />
+                              <LayoutDashboard className={`h-4 w-4 ${active ? "text-primary" : "text-muted-foreground"}`} />
                               <span className="flex-1 text-left">Panel de Soporte</span>
                             </Link>
                             {item.children!.map((child) => {
