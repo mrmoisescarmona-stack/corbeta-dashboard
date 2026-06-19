@@ -1,4 +1,6 @@
 import { createFileRoute, Link, Outlet, redirect, useNavigate, useRouterState } from "@tanstack/react-router";
+import { useState } from "react";
+
 import {
   LayoutDashboard,
   Inbox,
@@ -9,6 +11,7 @@ import {
   Search,
   Menu,
   ChevronDown,
+  ChevronRight,
   LogOut,
   Flag,
   Database,
@@ -22,6 +25,7 @@ import {
   ShieldAlert,
   Workflow as WorkflowIcon,
 } from "lucide-react";
+
 import logoColor from "@/assets/corbeta_color.png.asset.json";
 import logoWhite from "@/assets/corbeta_white.png.asset.json";
 import { supabase } from "@/integrations/supabase/client";
@@ -49,7 +53,7 @@ export const Route = createFileRoute("/panel")({
   component: DashboardLayout,
 });
 
-type NavItem = { icon: any; label: string; to: string; exact?: boolean; roles: AppRole[] };
+type NavItem = { icon: any; label: string; to: string; exact?: boolean; roles: AppRole[]; children?: NavItem[] };
 type NavGroup = { title: string; items: NavItem[] };
 
 const ALL: AppRole[] = ["supervisor", "aprobador", "proveedor", "administrador"];
@@ -72,22 +76,29 @@ const navGroups: NavGroup[] = [
     items: [
       { icon: Tags, label: "Categorias de Productos", to: "/panel/aprobadores", roles: ["supervisor", "administrador"] },
       { icon: Users, label: "Proveedores", to: "/panel/proveedores", roles: ["supervisor", "administrador"] },
-      
-      
-      { icon: Flag, label: "Seguimiento", to: "/panel/seguimiento", roles: ["administrador"] },
-
-      { icon: Bell, label: "Notificaciones", to: "/panel/notificaciones", roles: ["supervisor", "administrador"] },
-      { icon: ShieldCheck, label: "Auditoría", to: "/panel/auditoria", roles: ["supervisor", "administrador"] },
-      { icon: Headphones, label: "Soporte", to: "/panel/soporte", roles: ["administrador"] },
+      {
+        icon: Headphones,
+        label: "Soporte",
+        to: "/panel/soporte",
+        roles: ["supervisor", "administrador"],
+        children: [
+          { icon: Flag, label: "Seguimiento", to: "/panel/seguimiento", roles: ["administrador"] },
+          { icon: Bell, label: "Notificaciones", to: "/panel/notificaciones", roles: ["supervisor", "administrador"] },
+          { icon: ShieldCheck, label: "Auditoría", to: "/panel/auditoria", roles: ["supervisor", "administrador"] },
+        ],
+      },
       { icon: Settings, label: "Configuración", to: "/panel/configuracion", roles: ["supervisor", "administrador"] },
     ],
   },
 ];
 
+
 function DashboardLayout() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const navigate = useNavigate();
   const auth = useAuth();
+  const [openMenus, setOpenMenus] = useState<Record<string, boolean>>({});
+
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
@@ -103,16 +114,18 @@ function DashboardLayout() {
 
   // Filter nav items by current user roles (administrador sees everything).
   // While auth is loading, show all items so the menu doesn't flash empty.
+  const roleVisible = (item: NavItem) =>
+    auth.loading ||
+    userRoles.length === 0 ||
+    userRoles.includes("administrador") ||
+    item.roles.some((r) => userRoles.includes(r));
+
   const visibleGroups = navGroups
     .map((g) => {
-      const filtered = g.items.filter((item) =>
-        auth.loading ||
-        userRoles.length === 0 ||
-        userRoles.includes("administrador") ||
-        item.roles.some((r) => userRoles.includes(r))
+      const filtered = g.items.filter(roleVisible).map((item) =>
+        item.children ? { ...item, children: item.children.filter(roleVisible) } : item
       );
-      // Deduplicate by label: keep the first entry whose roles match the
-      // user (preferred), otherwise the first occurrence.
+      // Deduplicate by label
       const seen = new Map<string, typeof filtered[number]>();
       for (const item of filtered) {
         const existing = seen.get(item.label);
@@ -124,6 +137,7 @@ function DashboardLayout() {
       return { ...g, items: Array.from(seen.values()) };
     })
     .filter((g) => g.items.length > 0);
+
 
 
   return (
@@ -143,6 +157,61 @@ function DashboardLayout() {
                 {group.items.map((item) => {
                   const Icon = item.icon;
                   const active = isActive(item.to, item.exact);
+                  const hasChildren = !!item.children?.length;
+                  const childActive = hasChildren && item.children!.some((c) => isActive(c.to, c.exact));
+                  const isOpen = openMenus[item.label] ?? (active || childActive);
+                  if (hasChildren) {
+                    return (
+                      <div key={item.label} className="space-y-0.5">
+                        <button
+                          type="button"
+                          onClick={() => setOpenMenus((m) => ({ ...m, [item.label]: !isOpen }))}
+                          className={`group flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
+                            active || childActive
+                              ? "bg-sidebar-accent text-sidebar-accent-foreground"
+                              : "text-sidebar-foreground hover:bg-sidebar-accent/60"
+                          }`}
+                          aria-expanded={isOpen}
+                        >
+                          <Icon className={`h-4 w-4 ${active || childActive ? "text-primary" : "text-muted-foreground"}`} />
+                          <span className="flex-1 text-left">{item.label}</span>
+                          <ChevronRight className={`h-4 w-4 text-muted-foreground transition-transform ${isOpen ? "rotate-90" : ""}`} />
+                        </button>
+                        {isOpen && (
+                          <div className="ml-4 border-l border-sidebar-border pl-2 space-y-0.5">
+                            <Link
+                              to={item.to}
+                              className={`group flex w-full items-center gap-3 rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${
+                                active
+                                  ? "bg-sidebar-accent text-sidebar-accent-foreground"
+                                  : "text-sidebar-foreground hover:bg-sidebar-accent/60"
+                              }`}
+                            >
+                              <span className="flex-1 text-left">Resumen</span>
+                            </Link>
+                            {item.children!.map((child) => {
+                              const ChildIcon = child.icon;
+                              const childIsActive = isActive(child.to, child.exact);
+                              return (
+                                <Link
+                                  key={child.label}
+                                  to={child.to}
+                                  className={`group flex w-full items-center gap-3 rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${
+                                    childIsActive
+                                      ? "bg-sidebar-accent text-sidebar-accent-foreground"
+                                      : "text-sidebar-foreground hover:bg-sidebar-accent/60"
+                                  }`}
+                                >
+                                  <ChildIcon className={`h-3.5 w-3.5 ${childIsActive ? "text-primary" : "text-muted-foreground"}`} />
+                                  <span className="flex-1 text-left">{child.label}</span>
+                                </Link>
+                              );
+                            })}
+                          </div>
+                        )}
+                      </div>
+                    );
+                  }
                   return (
                     <Link
                       key={item.label}
@@ -159,6 +228,7 @@ function DashboardLayout() {
                   );
                 })}
               </div>
+
             ))}
           </nav>
           <div className="px-4 py-4 border-t border-sidebar-border space-y-3">
