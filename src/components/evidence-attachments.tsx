@@ -76,22 +76,28 @@ export function EvidenceAttachments({
   files,
   onAdd,
   onRemove,
+  required = true,
 }: {
   files: EvidenceFile[];
   onAdd: (files: File[]) => void;
   onRemove?: (index: number) => void;
+  required?: boolean;
 }) {
   return (
     <div className="rounded-xl border border-border bg-background p-4">
       <div className="flex items-center gap-2 mb-1">
         <h5 className="text-sm font-semibold text-foreground">Adjuntar evidencia del proveedor</h5>
-        <span className="inline-flex items-center rounded-full bg-destructive/10 px-2 py-0.5 text-[11px] font-medium text-destructive">
-          Obligatorio
-        </span>
+        {required && (
+          <span className="inline-flex items-center rounded-full bg-destructive/10 px-2 py-0.5 text-[11px] font-medium text-destructive">
+            Obligatorio
+          </span>
+        )}
       </div>
-      <p className="text-xs text-muted-foreground">
-        Los soportes son obligatorios para continuar con el flujo de aprobación.
-      </p>
+      {required && (
+        <p className="text-xs text-muted-foreground">
+          Los soportes son obligatorios para continuar con el flujo de aprobación.
+        </p>
+      )}
 
       <FileDropzone onFiles={onAdd} />
 
