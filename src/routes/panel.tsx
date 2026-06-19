@@ -82,10 +82,10 @@ const navGroups: NavGroup[] = [
         to: "/panel/soporte",
         roles: ["supervisor", "administrador"],
         children: [
-          { icon: Flag, label: "Seguimiento", to: "/panel/seguimiento", roles: ["administrador"] },
           { icon: Bell, label: "Notificaciones", to: "/panel/notificaciones", roles: ["supervisor", "administrador"] },
           { icon: ShieldCheck, label: "Auditoría", to: "/panel/auditoria", roles: ["supervisor", "administrador"] },
         ],
+
       },
       { icon: Settings, label: "Configuración", to: "/panel/configuracion", roles: ["supervisor", "administrador"] },
     ],
