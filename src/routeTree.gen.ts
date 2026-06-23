@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as StyleguideRouteImport } from './routes/styleguide'
 import { Route as PanelRouteImport } from './routes/panel'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as IndexRouteImport } from './routes/index'
@@ -28,6 +29,11 @@ import { Route as PanelAprobadoresRouteImport } from './routes/panel.aprobadores
 import { Route as PanelPreordenesIndexRouteImport } from './routes/panel.preordenes.index'
 import { Route as PanelPreordenesIdRouteImport } from './routes/panel.preordenes.$id'
 
+const StyleguideRoute = StyleguideRouteImport.update({
+  id: '/styleguide',
+  path: '/styleguide',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PanelRoute = PanelRouteImport.update({
   id: '/panel',
   path: '/panel',
@@ -123,6 +129,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
   '/panel': typeof PanelRouteWithChildren
+  '/styleguide': typeof StyleguideRoute
   '/panel/aprobadores': typeof PanelAprobadoresRoute
   '/panel/auditoria': typeof PanelAuditoriaRoute
   '/panel/configuracion': typeof PanelConfiguracionRoute
@@ -142,6 +149,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
+  '/styleguide': typeof StyleguideRoute
   '/panel/aprobadores': typeof PanelAprobadoresRoute
   '/panel/auditoria': typeof PanelAuditoriaRoute
   '/panel/configuracion': typeof PanelConfiguracionRoute
@@ -163,6 +171,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
   '/panel': typeof PanelRouteWithChildren
+  '/styleguide': typeof StyleguideRoute
   '/panel/aprobadores': typeof PanelAprobadoresRoute
   '/panel/auditoria': typeof PanelAuditoriaRoute
   '/panel/configuracion': typeof PanelConfiguracionRoute
@@ -185,6 +194,7 @@ export interface FileRouteTypes {
     | '/'
     | '/login'
     | '/panel'
+    | '/styleguide'
     | '/panel/aprobadores'
     | '/panel/auditoria'
     | '/panel/configuracion'
@@ -204,6 +214,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/login'
+    | '/styleguide'
     | '/panel/aprobadores'
     | '/panel/auditoria'
     | '/panel/configuracion'
@@ -224,6 +235,7 @@ export interface FileRouteTypes {
     | '/'
     | '/login'
     | '/panel'
+    | '/styleguide'
     | '/panel/aprobadores'
     | '/panel/auditoria'
     | '/panel/configuracion'
@@ -245,10 +257,18 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   LoginRoute: typeof LoginRoute
   PanelRoute: typeof PanelRouteWithChildren
+  StyleguideRoute: typeof StyleguideRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/styleguide': {
+      id: '/styleguide'
+      path: '/styleguide'
+      fullPath: '/styleguide'
+      preLoaderRoute: typeof StyleguideRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/panel': {
       id: '/panel'
       path: '/panel'
@@ -420,6 +440,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   LoginRoute: LoginRoute,
   PanelRoute: PanelRouteWithChildren,
+  StyleguideRoute: StyleguideRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
